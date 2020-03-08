@@ -39,4 +39,9 @@ class User extends AbstractEntity
         $this->password = $password;
         $this->role = $role;
     }
+
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
 }
