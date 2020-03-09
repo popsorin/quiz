@@ -1,0 +1,34 @@
+{
+    "name": "sorinpop/quiz",
+    "authors": [
+        {
+            "name": "popsorin",
+            "email": "popsorin15@gmail.com"
+        }
+    ],
+
+
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/popsorin/mvc-framework-skeleton"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/popsorin/ORM"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/popsorin/codeHighlightLib"
+        }
+    ],
+    "require": {
+        "mvc-framework-skeleton/mvc-framework-skeleton": "dev-master",
+        "really-orm-skeleton": "dev-master",
+        "codehighlightlib/codehightlib": "dev-master",
+        "ext-pdo": "*"
+    },
+    "autoload": {
+        "psr-4": {"Quiz\\": "src"}
+    }
+}

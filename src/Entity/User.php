@@ -1,6 +1,6 @@
 <?php
 
-namespace Quiz\Entitie;
+namespace Quiz\Entity;
 
 use ReallyOrm\Entity\AbstractEntity;
 
@@ -40,8 +40,27 @@ class User extends AbstractEntity
         $this->role = $role;
     }
 
+    /**
+     * @return string|null
+     */
     public function getRole(): ?string
     {
         return $this->role;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
     }
 }

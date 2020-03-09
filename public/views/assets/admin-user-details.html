@@ -20,9 +20,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     <!--Custom css-->
-    <link rel="stylesheet" href="assets/css/custom-css.css">
+    <link rel="stylesheet" href="css/custom-css.css">
 
-    <title>Admin - Question details</title>
+    <title>Admin - User details</title>
 </head>
 
 <body>
@@ -32,41 +32,46 @@
         <nav class="my-2 my-md-0 mr-md-3">
             <span class="p-2 text-dark">Hello, Admin name!</span>
         </nav>
-        <a class="btn btn-secondary" href="#">Logout</a>
+        <a class="btn btn-danger" href="logout">Logout</a>
     </div>
 
     <!--Breadcrumbs-->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb px-3 py-0 mb-3">
             <li class="breadcrumb-item" ><a href="#">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Question details</li>
+            <li class="breadcrumb-item active" aria-current="page">User details</li>
         </ol>
     </nav>
 
     <div class="container">
         <!--Page title block-->
         <div class="text-center">
-            <h1>New question / Edit question</h1>
+            <h1>New user / Edit user</h1>
         </div>
 
-        <!--Question details form-->
+        <!--User details form-->
         <form>
             <div class="form-group">
-                <label for="questionText">Question text</label>
-                <textarea class="form-control" id="questionText" placeholder="Question text"></textarea>
+                <label for="userName">Name</label>
+                <input type="text" class="form-control" id="userName" placeholder="User name">
             </div>
             <div class="form-group">
-                <label for="quizzes">Quizzes</label>
-                <select class="form-control" id="quizzes" multiple>
+                <label for="userEmail">Email</label>
+                <input type="email" class="form-control" id="userEmail" placeholder="User email">
+            </div>
+            <div class="form-group">
+                <label for="userPassword">Password</label>
+                <input type="password" class="form-control" id="userPassword" placeholder="User password">
+            </div>
+            <div class="form-group">
+                <label for="userRole">Role</label>
+                <select class="form-control" id="userRole">
                     <option value="1">1</option>
                     <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
                 </select>
             </div>
             <div class="text-center">
-                <button type="submit" class="btn btn-primary">Save question</button>
+                <button type="submit" class="btn btn-primary">Save</button>
             </div>
         </form>
     </div>

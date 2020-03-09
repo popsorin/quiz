@@ -20,9 +20,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     <!--Custom css-->
-    <link rel="stylesheet" href="assets/css/custom-css.css">
+    <link rel="stylesheet" href="css/custom-css.css">
 
-    <title>Admin - Quiz details</title>
+    <title>Exceptions page</title>
 </head>
 
 <body>
@@ -30,49 +30,25 @@
     <div class="d-flex flex-column flex-md-row align-items-center p-3 mb-3 bg-light border-bottom shadow-sm">
         <h5 class="my-0 mr-md-auto font-weight-normal">Project name</h5>
         <nav class="my-2 my-md-0 mr-md-3">
-            <span class="p-2 text-dark">Hello, Admin name!</span>
+            <span class="p-2 text-dark">Hello, Candidate name!</span>
         </nav>
-        <a class="btn btn-secondary" href="#">Logout</a>
+        <a class="btn btn-danger" href="#">Logout</a>
     </div>
 
     <!--Breadcrumbs-->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb px-3 py-0 mb-3">
             <li class="breadcrumb-item" ><a href="#">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Quiz details</li>
+            <li class="breadcrumb-item active" aria-current="page">Exceptions page</li>
         </ol>
     </nav>
 
     <div class="container">
         <!--Page title block-->
         <div class="text-center">
-            <h1>New quiz / Edit quiz</h1>
+            <h1>Oops! something went wrong message</h1>
+            <img src="img/404.gif" alt="">
         </div>
-
-        <!--Quiz details form-->
-        <form>
-            <div class="form-group">
-                <label for="quizName">Name</label>
-                <input type="text" class="form-control" id="quizName" placeholder="Quiz name">
-            </div>
-            <div class="form-group">
-                <label for="quizDescription">Description</label>
-                <input type="text" class="form-control" id="quizDescription" placeholder="Quiz description">
-            </div>
-            <div class="form-group">
-                <label for="quizQuestions">Questions</label>
-                <select class="form-control" id="quizQuestions" multiple>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">Save quiz</button>
-            </div>
-        </form>
     </div>
 </body>
 </html>

@@ -20,7 +20,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     <!--Custom css-->
-    <link rel="stylesheet" href="assets/css/custom-css.css">
+    <link rel="stylesheet" href="views/assets/css/custom-css.css">
 
     <title>Sign in - page</title>
 </head>
@@ -32,15 +32,15 @@
     </div>
 
     <!--Sign in form-->
-    <form class="form-signin">
+    <form class="form-signin" METHOD="POST" action="login">
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
         <div>
-            <label for="inputEmail" class="sr-only">Email address</label>
-            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" autofocus>
+            <label for="inputEmail" class="sr-only">Name</label>
+            <input type="text" name="name" id="inputEmail" class="form-control" placeholder="Name" autofocus>
         </div>
         <div>
             <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" class="form-control" placeholder="Password">
+            <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password">
         </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
     </form>
