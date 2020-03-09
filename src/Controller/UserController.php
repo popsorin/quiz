@@ -6,6 +6,7 @@ use Framework\Contracts\RendererInterface;
 use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
+use Framework\Http\Response;
 use Quiz\Entity\User;
 use Quiz\Persistency\Repositories\UserRepository;
 use ReallyOrm\Repository\RepositoryInterface;
@@ -40,10 +41,20 @@ class UserController extends Controller
       //  return $this->renderer->renderView(,$attributes);
     }
 
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
     public function getAll(Request $request, array $attributes)
     {
         $results = $this->repository->getRepository(User::class)->findBy([], [], 0,4);
 
         return $this->renderer->renderView("admin-users-listing.phtml", ["users" =>$results]);
+    }
+
+    public function userDetails(Request $request, array $atributes)
+    {
+        return $this->renderer->renderView("admin-user-details.html", []);
     }
 }

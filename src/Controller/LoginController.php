@@ -59,7 +59,7 @@ class LoginController extends Controller
         $repository = $this->repository->getRepository(User::class);
         $credentials = self::extractArray($request);
         $entity = $repository->findOneBy([$credentials['name']]);
-        if($entity->getPassword() !== $credentials["password"]) {
+        if(!password_verify($credentials["password"], $entity->getPassword())) {
             //redirect back to the page
             throw new Exception("Wrong password");
         }
