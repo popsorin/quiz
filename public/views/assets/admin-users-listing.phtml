@@ -40,13 +40,13 @@
     <nav class="my-2 my-md-0 mr-md-3">
         <span class="p-2 text-dark">Hello, Admin name!</span>
     </nav>
-    <a class="btn btn-secondary" href="logout">Logout</a>
+    <a class="btn btn-secondary" href="/logout">Logout</a>
 </div>
 
 <!--Breadcrumbs-->
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb px-3 py-0 mb-3">
-        <li class="breadcrumb-item"><a href="">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
         <li class="breadcrumb-item active" aria-current="page">Users listing</li>
     </ol>
 </nav>
@@ -60,7 +60,7 @@
     <!--Table actions block-->
     <div class="row">
         <div class="col-12 col-md-6">
-            <form class="form-inline" action="/dashboard/users" method="GET">
+            <form class="form-inline" action="/dashboard/users" method="POST">
                 <div class="form-group">
                     <label for="roleSearch">User role select</label>
                     <select name="role" class="form-control" id="roleSearch">
@@ -94,12 +94,12 @@
             <tbody>
             <?php foreach ($users as $user): ?>
                  <tr>
-                    <th scope=\"row\"><?php echo $user->getId()?></th>
+                    <th scope="row"><?php echo $user->getId()?></th>
                     <td><?php echo $user->getName()?></td>
                     <td><?php echo $user->getRole()?></td>
-                    <td class=\"text-center\">
-                        <a class=\"btn btn-primary py-1\" href=\"#\">Edit</a>
-                        <a class=\"btn btn-danger py-1\" href=\"#\">Delete</a>
+                    <td class="text-center">
+                        <a class="btn btn-primary py-1" href="/dashboard/users/update/<?php echo $user->getId() ?>">Edit</a>
+                        <a class="btn btn-danger py-1" href="/dashboard/users/delete/<?php echo $user->getId() ?>">Delete</a>
                     </td>
                 </tr>
             <?php endforeach;?>
@@ -111,14 +111,14 @@
     <!--Pagination block-->
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="/dashboard/users?p=1">1</a></li>
-            <li class="page-item active"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
             <li class="page-item">
-                <a class="page-link" href="#">Next</a>
+                <a class="page-link" href="?page=<?php echo ($page < 2)? $page : $page-1?>">Previous</a>
+            </li>
+            <?php for($i = 0; $i <= ($entitiesNumber/$limit); $i++): ?>
+            <li class="page-item"><a class="page-link" href="?page=<?php echo $i+1?>"><?php echo $i+1?></a></li>
+            <?php endfor;?>
+            <li class="page-item">
+                <a class="page-link" href="?page=<?php echo ($page < ($entitiesNumber/$limit))? $page+1 : $page?>">Next</a>
             </li>
         </ul>
     </nav>

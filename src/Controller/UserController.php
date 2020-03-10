@@ -16,6 +16,8 @@ use ReflectionException;
 
 class UserController extends Controller
 {
+    const USERS_PER_PAGE = 4;
+    const LISTING_PAGE = "admin-users-listing.phtml";
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
@@ -26,19 +28,23 @@ class UserController extends Controller
         RendererInterface $renderer,
         RepositoryManager $repository,
         SessionInterface $session
-    ) {
+    )
+    {
         parent::__construct($renderer, $repository, $session);
     }
 
     /**
      * @param Request $request
      * @param array $attributes
+     * @return Response
+     * //maybe make getRepository configurable************************************************
      */
     public function add(Request $request, array $attributes)
     {
-        $user = $this->extractUser($request);
+        $user = $this->extractUser($request, User::class);
+        $user->setId(isset($attributes['id']) ? $attributes['id'] : null);
         $this->repository->getRepository(User::class)->insertOnDuplicateKeyUpdate($user);
-      //  return $this->renderer->renderView(,$attributes);
+        return self::createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
 
     /**
@@ -48,13 +54,42 @@ class UserController extends Controller
      */
     public function getAll(Request $request, array $attributes)
     {
-        $results = $this->repository->getRepository(User::class)->findBy([], [], 0,4);
+        $entitiesNumber = $this->repository->getRepository(User::class)->getCount();
+        $limit = self::USERS_PER_PAGE;
 
-        return $this->renderer->renderView("admin-users-listing.phtml", ["users" =>$results]);
+        $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
+        $offset = $limit * ($page - 1);
+
+        $results = $this->repository->getRepository(User::class)->findBy([], [], $offset, $limit);
+        return $this->renderer->renderView(
+            self::LISTING_PAGE,
+            [
+                "users" => $results,
+                "page" => $page,
+                "entitiesNumber" => $entitiesNumber,
+                "limit" => $limit
+            ]
+        );
     }
 
-    public function userDetails(Request $request, array $atributes)
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
+    public function userDetails(Request $request, array $attributes)
     {
-        return $this->renderer->renderView("admin-user-details.html", []);
+        if (!empty($attributes)) {
+            $user = $this->repository->getRepository(User::class)->find($attributes['id']);
+            return $this->renderer->renderView("admin-user-details.phtml", ["user" => $user]);
+        }
+        return $this->renderer->renderView("admin-user-details.phtml", ["user" => ""]);
+    }
+
+    public function delete(Request $request, array $attributes)
+    {
+        $user = $this->extractUserId($attributes, User::class);
+        $this->repository->getRepository(User::class)->delete($user);
+        return self::createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
 }

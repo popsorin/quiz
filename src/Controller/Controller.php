@@ -21,6 +21,7 @@ use ReflectionException;
 
 class Controller extends AbstractController
 {
+
     /**
      * @var RepositoryManager
      */
@@ -43,11 +44,25 @@ class Controller extends AbstractController
 
     /**
      * @param Request $request
+     * @param string $className
      * @return EntityInterface|null
      */
-    public function extractUser(Request $request): ?EntityInterface
+    public function extractUser(Request $request, string $className): ?EntityInterface
     {
-        return  new User($request->getParameter("name"), $request->getParameter("password"), $request->getParameter("role"));
+        return new $className($request->getParameter("name"), $request->getParameter("password"), $request->getParameter("role"));
+    }
+
+    /**
+     * @param array $attributes
+     * @param string $className
+     * @return EntityInterface|null
+     */
+    public function extractUserId(array $attributes, string $className): ?EntityInterface
+    {
+        $entity = new $className("", "", "");
+        $entity->setId($attributes['id']);
+
+        return $entity;
     }
 
     /**

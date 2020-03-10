@@ -32,7 +32,7 @@
         <nav class="my-2 my-md-0 mr-md-3">
             <span class="p-2 text-dark">Hello, Admin name!</span>
         </nav>
-        <a class="btn btn-danger" href="logout">Logout</a>
+        <a class="btn btn-danger" href="/logout">Logout</a>
     </div>
 
     <!--Breadcrumbs-->
@@ -49,30 +49,58 @@
             <h1>New user / Edit user</h1>
         </div>
 
+        <?php if($user !== ""): ?>
         <!--User details form-->
-        <form>
+        <form method="POST">
             <div class="form-group">
                 <label for="userName">Name</label>
-                <input type="text" name="name" class="form-control" id="userName" placeholder="User name">
+                <input type="text" name="name" value="<?php echo $user->getName() ?>" class="form-control" id="userName" placeholder="<?php echo $user->getName() ?>">
             </div>
-            <div class="form-group">
-                <label for="userEmail">Email</label>
-                <input type="email" class="form-control" id="userEmail" placeholder="User email">
-            </div>
+<!--            <div class="form-group">-->
+<!--                <label for="userEmail">Email</label>-->
+<!--                <input type="email" name="email" class="form-control" id="userEmail" placeholder="User email">-->
+<!--            </div>-->
             <div class="form-group">
                 <label for="userPassword">Password</label>
                 <input type="password" name="password" class="form-control" id="userPassword" placeholder="User password">
             </div>
             <div class="form-group">
                 <label for="userRole">Role</label>
-                <select class="form-control" id="userRole">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
+                <select name="role" class="form-control" id="userRole">
+                    <option value="admin">admin</option>
+                    <option value="user">user</option>
                 </select>
             </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">Save</button>
             </div>
+        </form>
+            <?php else: ?>
+        <!--User details form-->
+        <form method="POST">
+                <div class="form-group">
+                    <label for="userName">Name</label>
+                    <input type="text" name="name" class="form-control" id="userName" placeholder="name">
+                </div>
+<!--                <div class="form-group">-->
+<!--                    <label for="userEmail">Email</label>-->
+<!--                    <input type="email" name="email" class="form-control" id="userEmail" placeholder="User email">-->
+<!--                </div>-->
+                <div class="form-group">
+                    <label for="userPassword">Password</label>
+                    <input type="password" name="password" class="form-control" id="userPassword" placeholder="User password">
+                </div>
+                <div class="form-group">
+                    <label for="userRole">Role</label>
+                    <select name="role" class="form-control" id="userRole">
+                        <option value="admin">admin</option>
+                        <option value="admin">user</option>
+                    </select>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            <?php endif; ?>
         </form>
     </div>
 </body>

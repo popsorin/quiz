@@ -1,16 +1,18 @@
 <?php
 
+
 namespace Quiz\Persistency\Repositories;
+
 
 use PDO;
 use ReallyOrm\Hydrator\HydratorInterface;
 use ReallyOrm\Repository\AbstractRepository;
 
-class UserRepository extends AbstractRepository
+class QuestionsTemplateRepository extends AbstractRepository
 {
     /**
      * change AbstractRepository in orm
-     * UserRepository constructor.
+     * QuestionsTemplateRepository constructor.
      * @param PDO $pdo
      * @param string $entityName
      * @param HydratorInterface $hydrator

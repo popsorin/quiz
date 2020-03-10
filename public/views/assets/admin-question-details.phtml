@@ -49,6 +49,7 @@
             <h1>New question / Edit question</h1>
         </div>
 
+        <?php if($question !== ""): ?>
         <!--Question details form-->
         <form>
             <div class="form-group">
@@ -69,6 +70,20 @@
                 <button type="submit" class="btn btn-primary">Save question</button>
             </div>
         </form>
+        <?php else: ?>
+        <form>
+            <div class="form-group">
+                <label for="questionText">Question text</label>
+                <textarea class="form-control" id="questionText" placeholder="Question text"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="quizzes">Quizzes</label>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Save question</button>
+            </div>
+        </form>
+        <?php endif; ?>
     </div>
 </body>
 </html>
