@@ -14,9 +14,16 @@ use Framework\Dispatcher\Dispatcher;
 use Framework\Renderer\Renderer;
 use Framework\Router\Router;
 use Quiz\Entity\QuestionTemplate;
+use Quiz\Entity\QuizTemplate;
 use Quiz\Entity\User;
-use Quiz\Persistency\Repositories\QuestionsTemplateRepository;
+use Quiz\Persistency\Repositories\QuestionTemplateRepository;
+use Quiz\Persistency\Repositories\QuizTemplateRepository;
 use Quiz\Persistency\Repositories\UserRepository;
+use Quiz\Services\AdminService;
+use Quiz\Services\LoginService;
+use Quiz\Services\QuestionTemplateService;
+use Quiz\Services\QuizTemplateService;
+use Quiz\Services\UserService;
 use ReallyOrm\Hydrator\HydratorInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
 use ReallyOrm\Test\Hydrator\Hydrator;
@@ -53,13 +60,19 @@ $container->register(UserRepository::class, UserRepository::class)
     ->addArgument("user")
     ->addTag("repository");
 
-$container->register(QuestionsTemplateRepository::class, QuestionsTemplateRepository::class)
+$container->register(QuestionTemplateRepository::class, QuestionTemplateRepository::class)
     ->addArgument("%PDO%")
     ->addArgument(QuestionTemplate::class)
     ->addArgument(new Reference(HydratorInterface::class))
     ->addArgument("question_template")
     ->addTag("repository");
 
+$container->register(QuizTemplateRepository::class, QuizTemplateRepository::class)
+    ->addArgument("%PDO%")
+    ->addArgument(QuizTemplate::class)
+    ->addArgument(new Reference(HydratorInterface::class))
+    ->addArgument("quiz_template")
+    ->addTag("repository");
 
 foreach ($container->findTaggedServiceIds("repository") as $id => $attributes) {
     $repository = $container->findDefinition($id);
@@ -72,28 +85,40 @@ $container->findDefinition(HydratorInterface::class)
 
 $container->register(SessionInterface::class, Session::class);
 
+$container->register(LoginService::class, LoginService::class)
+    ->addArgument($container->findDefinition(RepositoryManagerInterface::class));
+$container->register(UserService::class, UserService::class)
+    ->addArgument($container->findDefinition(RepositoryManagerInterface::class));
+$container->register(QuestionTemplateService::class, QuestionTemplateService::class)
+    ->addArgument($container->findDefinition(RepositoryManagerInterface::class));
+$container->register(AdminService::class, AdminService::class)
+    ->addArgument($container->findDefinition(RepositoryManagerInterface::class));
+$container->register(QuizTemplateService::class, QuizTemplateService::class)
+    ->addArgument($container->findDefinition(RepositoryManagerInterface::class));
+
 $container->register(UserController::class, UserController::class)
     ->addArgument(new Reference(RendererInterface::class))
-    ->addArgument($container->findDefinition(RepositoryManagerInterface::class))
+    ->addArgument($container->findDefinition(UserService::class))
     ->addArgument(new Reference(SessionInterface::class))
     ->addTag("controller");
 
 $container->register(AdminController::class, AdminController::class)
     ->addArgument(new Reference(RendererInterface::class))
-    ->addArgument($container->findDefinition(RepositoryManagerInterface::class))
+    ->addArgument($container->findDefinition(AdminService::class))
     ->addArgument(new Reference(SessionInterface::class))
     ->addTag("controller");
 
 $container->register(LoginController::class, LoginController::class)
     ->addArgument(new Reference(RendererInterface::class))
-    ->addArgument($container->findDefinition(RepositoryManagerInterface::class))
+    ->addArgument($container->findDefinition(LoginService::class))
     ->addArgument(new Reference(SessionInterface::class))
     ->addTag("controller");
 
 $container->register(QuestionsTemplateController::class, QuestionsTemplateController::class)
     ->addArgument(new Reference(RendererInterface::class))
-    ->addArgument($container->findDefinition(RepositoryManagerInterface::class))
+    ->addArgument($container->findDefinition(QuestionTemplateService::class))
     ->addArgument(new Reference(SessionInterface::class))
+    ->addArgument($container->findDefinition(QuizTemplateService::class))
     ->addTag("controller");
 
 $container->setParameter('dispatcherConfig', $config[Dispatcher::CONFIG_KEY_DISPATCHER]);

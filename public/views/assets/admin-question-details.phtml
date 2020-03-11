@@ -38,7 +38,7 @@
     <!--Breadcrumbs-->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb px-3 py-0 mb-3">
-            <li class="breadcrumb-item" ><a href="#">Dashboard</a></li>
+            <li class="breadcrumb-item" ><a href="/dashboard">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">Question details</li>
         </ol>
     </nav>
@@ -59,11 +59,11 @@
             <div class="form-group">
                 <label for="quizzes">Quizzes</label>
                 <select class="form-control" id="quizzes" multiple>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
+<!--                    <option value="1">1</option>-->
+<!--                    <option value="2">2</option>-->
+<!--                    <option value="3">3</option>-->
+<!--                    <option value="4">4</option>-->
+<!--                    <option value="5">5</option>-->
                 </select>
             </div>
             <div class="text-center">
@@ -71,13 +71,31 @@
             </div>
         </form>
         <?php else: ?>
-        <form>
+        <form method="POST">
             <div class="form-group">
                 <label for="questionText">Question text</label>
-                <textarea class="form-control" id="questionText" placeholder="Question text"></textarea>
+                <textarea class="form-control" name="question" id="questionText" placeholder="Question text"></textarea>
             </div>
             <div class="form-group">
+                <label for="questionText">Answer</label>
+                <textarea class="form-control" name="answer" id="questionText" placeholder="Question text"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="quizzes">Type</label>
+            <select class="form-control" id="type" name="type">
+                    <option value="text">text</option>-->
+<!--                    <option value="multiple-choice">multiple-choice</option>-->-->
+            </select>
+            </div>
+
+            <div class="form-group">
                 <label for="quizzes">Quizzes</label>
+                <select class="form-control" id="quizzes" multiple name="quizzes">
+                    <?php foreach($quizzes as $quiz): ?>
+                        <option value="<?php echo $quiz->getId()?>"><?php echo $quiz->getName()?></option>-->
+                    <?php endforeach;?>
+                </select>
             </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">Save question</button>

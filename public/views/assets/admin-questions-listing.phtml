@@ -38,7 +38,7 @@
     <!--Breadcrumbs-->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb px-3 py-0 mb-3">
-            <li class="breadcrumb-item" ><a href="#">Dashboard</a></li>
+            <li class="breadcrumb-item" ><a href="/dashboard">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">Questions listing</li>
         </ol>
     </nav>
@@ -65,7 +65,7 @@
                 </form>
             </div>
             <div class="col-12 col-md-6 d-flex align-items-end justify-content-end">
-                <a class="btn btn-primary py-1" href="/dashboard/questions-template/add">Add new question</a>
+                <a class="btn btn-primary py-1" href="/dashboard/questions-template/add ">Add new question</a>
             </div>
         </div>
 
@@ -97,14 +97,14 @@
         <!--Pagination block-->
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
                 <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
+                    <a class="page-link" href="?page=<?php echo ($page < 2)? $page : $page-1?>">Previous</a>
+                </li>
+                <?php for($i = 0; $i <= ($entitiesNumber/$limit); $i++): ?>
+                    <li class="page-item"><a class="page-link" href="?page=<?php echo $i+1?>"><?php echo $i+1?></a></li>
+                <?php endfor;?>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<?php echo ($page < ($entitiesNumber/$limit))? $page+1 : $page?>">Next</a>
                 </li>
             </ul>
         </nav>

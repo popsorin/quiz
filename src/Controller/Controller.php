@@ -13,6 +13,7 @@ use Framework\Http\Session;
 use Framework\Http\Stream;
 use phpDocumentor\Reflection\DocBlock\Tags\Uses;
 use Quiz\Entity\User;
+use Quiz\Services\AbstractService;
 use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Repository\RepositoryInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
@@ -21,36 +22,29 @@ use ReflectionException;
 
 class Controller extends AbstractController
 {
-
-    /**
-     * @var RepositoryManager
-     */
-    protected $repository;
-
     /**
      * @var SessionInterface
      */
     protected $session;
 
+    /**
+     * @var AbstractService
+     */
+    protected $service;
+
     public function __construct(
         RendererInterface $renderer,
-        RepositoryManager $repository,
+        AbstractService $service,
         SessionInterface $session
+
     ) {
         parent::__construct($renderer);
-        $this->repository = $repository;
         $this->session = $session;
+        $this->service = $service;
     }
 
     /**
-     * @param Request $request
-     * @param string $className
-     * @return EntityInterface|null
-     */
-    public function extractUser(Request $request, string $className): ?EntityInterface
-    {
-        return new $className($request->getParameter("name"), $request->getParameter("password"), $request->getParameter("role"));
-    }
+
 
     /**
      * @param array $attributes
@@ -78,7 +72,7 @@ class Controller extends AbstractController
 
     public function createResponse(Request $request, int $code, string $header, array $value): Response
     {
-        $response = new Response(Stream::createFromString(" "),'1.1',"301");
+        $response = new Response(Stream::createFromString(" "),'1.1',$code);
 
         return $response->withAddedHeader($header, $value);
     }

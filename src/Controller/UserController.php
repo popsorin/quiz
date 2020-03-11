@@ -9,6 +9,8 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Entity\User;
 use Quiz\Persistency\Repositories\UserRepository;
+use Quiz\Services\AbstractService;
+use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Repository\RepositoryInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
 use ReflectionClass;
@@ -17,22 +19,30 @@ use ReflectionException;
 class UserController extends Controller
 {
     const USERS_PER_PAGE = 4;
-    const LISTING_PAGE = "admin-users-listing.phtml";
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
-     * @param RepositoryManager $repository
+     * @param AbstractService $service
      * @param SessionInterface $session
      */
     public function __construct(
         RendererInterface $renderer,
-        RepositoryManager $repository,
+        AbstractService $service,
         SessionInterface $session
     )
     {
-        parent::__construct($renderer, $repository, $session);
+        parent::__construct($renderer, $service, $session);
     }
 
+    /**
+    * @param Request $request
+    * @param string $className
+    * @return EntityInterface|null
+    */
+    public function extractUser(Request $request, string $className): ?EntityInterface
+    {
+        return new $className($request->getParameter("name"), $request->getParameter("password"), $request->getParameter("role"));
+    }
     /**
      * @param Request $request
      * @param array $attributes
@@ -41,9 +51,9 @@ class UserController extends Controller
      */
     public function add(Request $request, array $attributes)
     {
-        $user = $this->extractUser($request, User::class);
-        $user->setId(isset($attributes['id']) ? $attributes['id'] : null);
-        $this->repository->getRepository(User::class)->insertOnDuplicateKeyUpdate($user);
+        $user = self::extractUser($request, User::class);
+        $this->service->add($user, $attributes);
+
         return self::createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
 
@@ -54,20 +64,14 @@ class UserController extends Controller
      */
     public function getAll(Request $request, array $attributes)
     {
-        $entitiesNumber = $this->repository->getRepository(User::class)->getCount();
-        $limit = self::USERS_PER_PAGE;
-
-        $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
-        $offset = $limit * ($page - 1);
-
-        $results = $this->repository->getRepository(User::class)->findBy([], [], $offset, $limit);
+        $props = $this->service->getAll($request, $attributes, self::USERS_PER_PAGE);
         return $this->renderer->renderView(
-            self::LISTING_PAGE,
+            $props['listingPage'],
             [
-                "users" => $results,
-                "page" => $page,
-                "entitiesNumber" => $entitiesNumber,
-                "limit" => $limit
+                "users" => $props['users'],
+                "page" => $props['page'],
+                "entitiesNumber" => $props['entitiesNumber'],
+                "limit" => $props['limit']
             ]
         );
     }
@@ -79,17 +83,15 @@ class UserController extends Controller
      */
     public function userDetails(Request $request, array $attributes)
     {
-        if (!empty($attributes)) {
-            $user = $this->repository->getRepository(User::class)->find($attributes['id']);
-            return $this->renderer->renderView("admin-user-details.phtml", ["user" => $user]);
-        }
-        return $this->renderer->renderView("admin-user-details.phtml", ["user" => ""]);
+        $user = $this->service->userDetails($attributes);
+
+        return $this->renderer->renderView("admin-user-details.phtml", ["user" => $user]);
     }
 
     public function delete(Request $request, array $attributes)
     {
-        $user = $this->extractUserId($attributes, User::class);
-        $this->repository->getRepository(User::class)->delete($user);
+        $this->service->delete($attributes);
+
         return self::createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
 }

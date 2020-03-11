@@ -12,6 +12,7 @@ use Framework\Http\Response;
 use Framework\Http\Session;
 use Quiz\Entity\User;
 use Quiz\Persistency\Repositories\UserRepository;
+use Quiz\Services\AbstractService;
 use ReallyOrm\Repository\RepositoryInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
@@ -20,15 +21,15 @@ class LoginController extends Controller
     /**
      * LoginController constructor.
      * @param RendererInterface $renderer
-     * @param RepositoryManager $repository
+     * @param AbstractService $service
      * @param SessionInterface $session
      */
     public function __construct(
         RendererInterface $renderer,
-        RepositoryManager $repository,
+        AbstractService $service,
         SessionInterface $session
     ) {
-        parent::__construct($renderer, $repository, $session);
+        parent::__construct($renderer,$service, $session);
     }
 
     /**
@@ -56,14 +57,10 @@ class LoginController extends Controller
     public function login(Request $request, array $attributes)
     {
         $this->session->start();
-        $repository = $this->repository->getRepository(User::class);
         $credentials = self::extractArray($request);
-        $entity = $repository->findOneBy([$credentials['name']]);
-        if(!password_verify($credentials["password"], $entity->getPassword())) {
-            //redirect back to the page
-            throw new Exception("Wrong password");
-        }
-        $this->session->set("name", $credentials['name']);
+        $entity = $this->service->login($credentials);
+        $this->session->set("name", $entity->getName());
+
         if($entity->getRole() === "admin") {
 
             return self::createResponse($request, "301", "Location", ["dashboard"]);

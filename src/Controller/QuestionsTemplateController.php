@@ -2,10 +2,14 @@
 
 namespace Quiz\Controller;
 
+use Framework\Contracts\RendererInterface;
+use Framework\Contracts\SessionInterface;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Entity\QuestionTemplate;
 use Quiz\Entity\User;
+use Quiz\Services\AbstractService;
+use ReallyOrm\Entity\EntityInterface;
 
 /**
  * Class QuestionsTemplateController
@@ -13,8 +17,54 @@ use Quiz\Entity\User;
  */
 class QuestionsTemplateController extends Controller
 {
-     const LISTING_PAGE = 'admin-questions-listing.phtml';
-     const USERS_PER_PAGE = 4;
+    const LISTING_PAGE = 'admin-questions-listing.phtml';
+    const QUESTIONS_PER_PAGE = 4;
+
+    /**
+     * @var AbstractService
+     */
+    private $boundedService;
+
+    /**
+     * QuestionsTemplateController constructor.
+     * @param RendererInterface $renderer
+     * @param AbstractService $service
+     * @param SessionInterface $session
+     * @param AbstractService $boundedService
+     */
+    public function __construct(
+        RendererInterface $renderer,
+        AbstractService $service,
+        SessionInterface $session,
+        //change the name
+        AbstractService $boundedService
+    ) {
+        parent::__construct($renderer, $service, $session);
+        $this->boundedService = $boundedService;
+    }
+
+    /**
+     * @param Request $request
+     * @param string $className
+     * @return EntityInterface|null
+     */
+    public function extractQuestion(Request $request, string $className): ?EntityInterface
+    {
+        return new $className($request->getParameter("answer"), $request->getParameter("question"), $request->getParameter("type"));
+    }
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
+    public function add(Request $request, array $attributes)
+    {
+        $question = self::extractQuestion($request, QuestionTemplate::class);
+        $this->service->add($question, $attributes);
+
+        return self::createResponse($request, "301", "Location", ["/dashboard/questions"]);
+    }
+
     /**
      * @param Request $request
      * @param array $attributes
@@ -22,20 +72,14 @@ class QuestionsTemplateController extends Controller
      */
     public function getAll(Request $request, array $attributes)
     {
-        $entitiesNumber = $this->repository->getRepository(QuestionTemplate::class)->getCount();
-        $limit = self::USERS_PER_PAGE;
-
-        $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
-        $offset = $limit * ($page - 1);
-
-        $results = $this->repository->getRepository(QuestionTemplate::class)->findBy([], [], $offset, $limit);
+        $props = $this->service->getAll($request, $attributes, self::QUESTIONS_PER_PAGE );
         return $this->renderer->renderView(
-            self::LISTING_PAGE,
+            $props['listingPage'],
             [
-                "questions" => $results,
-                "page" => $page,
-                "entitiesNumber" => $entitiesNumber,
-                "limit" => $limit
+                "questions" => $props['questions'],
+                "page" => $props['page'],
+                "entitiesNumber" => $props['entitiesNumber'],
+                "limit" => $props['limit']
             ]
         );
     }
@@ -47,10 +91,13 @@ class QuestionsTemplateController extends Controller
      */
     public function questionDetails(Request $request, array $attributes)
     {
-        if (!empty($attributes)) {
-            $questions = $this->repository->getRepository(QuestionTemplate::class)->find($attributes['id']);
-            return $this->renderer->renderView("admin-question-details.phtml", ["question" => $questions]);
-        }
-        return $this->renderer->renderView("admin-question-details.phtml", ["question" => ""]);
+        $question = $this->service->questionDetails($request, $attributes);
+        $quizzes = $this->boundedService->getAll($request, $attributes, 0);
+
+        return $this->renderer->renderView("admin-question-details.phtml",
+            [
+                "question" => $question,
+                "quizzes" => $quizzes['quizzes'],
+            ]);
     }
 }

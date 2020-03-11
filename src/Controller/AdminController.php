@@ -8,6 +8,7 @@ use Framework\Contracts\RendererInterface;
 use Framework\Contracts\SessionInterface;
 use Framework\Http\Request;
 use Framework\Http\Response;
+use Quiz\Services\AbstractService;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
 class AdminController extends Controller
@@ -15,12 +16,15 @@ class AdminController extends Controller
     /**
      * AdminController constructor.
      * @param RendererInterface $renderer
-     * @param RepositoryManager $repository
+     * @param AbstractService $service
      * @param SessionInterface $session
      */
-    public function __construct(RendererInterface $renderer, RepositoryManager $repository, SessionInterface $session)
-    {
-        parent::__construct($renderer, $repository, $session);
+    public function __construct(
+        RendererInterface $renderer,
+        AbstractService $service,
+        SessionInterface $session
+    ) {
+        parent::__construct($renderer, $service, $session);
     }
 
     /**
