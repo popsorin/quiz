@@ -12,7 +12,7 @@ use Framework\Http\Response;
 use Framework\Http\Session;
 use Quiz\Entity\User;
 use Quiz\Persistency\Repositories\UserRepository;
-use Quiz\Services\AbstractService;
+use Quiz\Service\AbstractService;
 use ReallyOrm\Repository\RepositoryInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
@@ -57,8 +57,7 @@ class LoginController extends Controller
     public function login(Request $request, array $attributes)
     {
         $this->session->start();
-        $credentials = self::extractArray($request);
-        $entity = $this->service->login($credentials);
+        $entity = $this->service->login(["name" => $request->getParameter("name"), "password" => $request->getParameter("password")]);
         $this->session->set("name", $entity->getName());
 
         if($entity->getRole() === "admin") {

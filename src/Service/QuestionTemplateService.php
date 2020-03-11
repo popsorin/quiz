@@ -1,11 +1,12 @@
 <?php
 
 
-namespace Quiz\Services;
+namespace Quiz\Service;
 
 
 use Framework\Http\Request;
 use Quiz\Entity\QuestionTemplate;
+use Quiz\Persistency\Repositories\QuestionTemplateRepository;
 use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
@@ -31,17 +32,36 @@ class QuestionTemplateService extends AbstractService
         $this->repositoryManager->getRepository(QuestionTemplate::class)->insertIntoLinkTable($idQuestion, $idQuestion, "quiz_question_template");
     }
 
-    /**
-     * @param QuestionTemplate $questionTemplate
-     * @param array $attributes
-     * @return bool
-     */
-    public function add(QuestionTemplate $questionTemplate, array $attributes): bool
+
+    public function add(?int $entityId, array $entityData): bool
     {
+        $answer = isset($entityData['answer']) ? $entityData['answer'] : '';
+        $question = isset($entityData['question']) ?  $entityData['question'] : '';
+        $type = isset($entityData['type']) ?  $entityData['type'] : '';
 
-        $questionTemplate->setId(isset($attributes['id']) ? $attributes['id'] : null);
+        $questionTemplate = new QuestionTemplate($answer, $question, $type);
+        $questionTemplate->setId($entityId);
 
-        return $this->repositoryManager->getRepository(QuestionTemplate::class)->insertOnDuplicateKeyUpdate($questionTemplate);
+        /** @var QuestionTemplateRepository $repository */
+        $repository =  $this->repositoryManager->getRepository(QuestionTemplate::class);
+
+        $success = $repository->insertOnDuplicateKeyUpdate($questionTemplate);
+
+        // if the question could not be saved, we will not be able to save the associated quizzes
+        if (!$success) {
+            throw new \Exception("Cannot add question!");
+        }
+
+        // save associated quizzes one by one
+        // note: this should happen in a transaction (in a very very far away future iteration)
+        // alternative: use array of quiz IDs in a single insert statement
+        if (isset($entityData['quizzes'])) {
+            foreach ($entityData['quizzes'] as $quiz) {
+                $success = $repository->insertIntoLinkTable($questionTemplate->getId(), $quiz);
+            }
+        }
+
+        return $success;
     }
     /**
      * @param Request $request
@@ -65,6 +85,15 @@ class QuestionTemplateService extends AbstractService
             "entitiesNumber" => $entitiesNumber,
             "limit" => $limit
         ];
+    }
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function deleteById(int $id): bool
+    {
+        return $this->repositoryManager->getRepository(QuestionTemplate::class)->deleteById($id);
     }
     /**
      * @param Request $request

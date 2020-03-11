@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Quiz\Services;
+namespace Quiz\Service;
 
 
 use Framework\Contracts\SessionInterface;

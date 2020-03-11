@@ -8,14 +8,14 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Entity\QuestionTemplate;
 use Quiz\Entity\User;
-use Quiz\Services\AbstractService;
+use Quiz\Service\AbstractService;
 use ReallyOrm\Entity\EntityInterface;
 
 /**
- * Class QuestionsTemplateController
+ * Class QuestionTemplateController
  * @package Quiz\Controller
  */
-class QuestionsTemplateController extends Controller
+class QuestionTemplateController extends Controller
 {
     const LISTING_PAGE = 'admin-questions-listing.phtml';
     const QUESTIONS_PER_PAGE = 4;
@@ -26,7 +26,7 @@ class QuestionsTemplateController extends Controller
     private $boundedService;
 
     /**
-     * QuestionsTemplateController constructor.
+     * QuestionTemplateController constructor.
      * @param RendererInterface $renderer
      * @param AbstractService $service
      * @param SessionInterface $session
@@ -45,24 +45,23 @@ class QuestionsTemplateController extends Controller
 
     /**
      * @param Request $request
-     * @param string $className
-     * @return EntityInterface|null
-     */
-    public function extractQuestion(Request $request, string $className): ?EntityInterface
-    {
-        return new $className($request->getParameter("answer"), $request->getParameter("question"), $request->getParameter("type"));
-    }
-    /**
-     * @param Request $request
      * @param array $attributes
      * @return Response
      */
     public function add(Request $request, array $attributes)
     {
-        $question = self::extractQuestion($request, QuestionTemplate::class);
-        $this->service->add($question, $attributes);
+        $id = isset($attributes['id']) ? $attributes['id'] : null;
+        $this->service->add($id, $request->getParameters());
 
         return self::createResponse($request, "301", "Location", ["/dashboard/questions"]);
+    }
+
+
+    public function delete(Request $request, array $attributes)
+    {
+        $this->service->deleteById($attributes["id"]);
+
+        return self::createResponse($request, "301", "Location", ["/dashboard/questions?page="]);
     }
 
     /**

@@ -86,8 +86,8 @@
                         <th scope="row"><?php echo $question->getId()?></th>
                         <td><?php echo $question->getText()?></td>
                         <td class="text-center">
-                            <a class="btn btn-primary py-1" href="/dashboard/users/update/<?php echo $question->getId() ?>">Edit</a>
-                            <a class="btn btn-danger py-1" href="/dashboard/users/delete/<?php echo $question->getId() ?>">Delete</a>
+                            <a class="btn btn-primary py-1" href="/dashboard/questions/update/<?php echo $question->getId() ?>">Edit</a>
+                            <a class="btn btn-danger py-1" href="/dashboard/questions/delete/<?php echo $question->getId() ?>">Delete</a>
                         </td>
                     </tr>
                 <?php endforeach;?>
@@ -100,7 +100,7 @@
                 <li class="page-item">
                     <a class="page-link" href="?page=<?php echo ($page < 2)? $page : $page-1?>">Previous</a>
                 </li>
-                <?php for($i = 0; $i <= ($entitiesNumber/$limit); $i++): ?>
+                <?php for($i = 0; $i < ($entitiesNumber/$limit); $i++): ?>
                     <li class="page-item"><a class="page-link" href="?page=<?php echo $i+1?>"><?php echo $i+1?></a></li>
                 <?php endfor;?>
                 <li class="page-item">

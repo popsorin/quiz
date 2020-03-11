@@ -50,24 +50,31 @@ return [
                 Router::CONFIG_KEY_ACTION => 'getAll',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
-        'question_controller_questionsTemplateDetailsAdd' =>
+        'question_templates_controller_delete' =>
+            [
+                Router::CONFIG_KEY_PATH => '/dashboard/questions/delete/(?<id>\d+)',
+                Router::CONFIG_KEY_CONTROLLER_NAME => 'QuestionTemplate',
+                Router::CONFIG_KEY_ACTION => 'delete',
+                Router::CONFIG_KEY_METHOD => 'GET'
+            ],
+        'question_templates_controller_questionsTemplateDetailsAdd' =>
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/questions-template/add',
-                Router::CONFIG_KEY_CONTROLLER_NAME => 'QuestionsTemplate',
+                Router::CONFIG_KEY_CONTROLLER_NAME => 'QuestionTemplate',
                 Router::CONFIG_KEY_ACTION => 'questionDetails',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
-        'question_controller_questionsTemplateAdd' =>
+        'question_templates_controller_questionsTemplateAdd' =>
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/questions-template/add',
-                Router::CONFIG_KEY_CONTROLLER_NAME => 'QuestionsTemplate',
+                Router::CONFIG_KEY_CONTROLLER_NAME => 'QuestionTemplate',
                 Router::CONFIG_KEY_ACTION => 'add',
                 Router::CONFIG_KEY_METHOD => 'POST'
             ],
-        'question_controller_questions_getAll' =>
+        'question_templates_controller_questions_getAll' =>
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/questions',
-                Router::CONFIG_KEY_CONTROLLER_NAME => 'QuestionsTemplate',
+                Router::CONFIG_KEY_CONTROLLER_NAME => 'QuestionTemplate',
                 Router::CONFIG_KEY_ACTION => 'getAll',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],

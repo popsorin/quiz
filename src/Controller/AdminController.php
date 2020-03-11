@@ -8,7 +8,7 @@ use Framework\Contracts\RendererInterface;
 use Framework\Contracts\SessionInterface;
 use Framework\Http\Request;
 use Framework\Http\Response;
-use Quiz\Services\AbstractService;
+use Quiz\Service\AbstractService;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
 class AdminController extends Controller

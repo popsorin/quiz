@@ -7,7 +7,7 @@ use Framework\Contracts\SessionInterface;
 use Framework\Http\Session;
 use Quiz\Controller\AdminController;
 use Quiz\Controller\LoginController;
-use Quiz\Controller\QuestionsTemplateController;
+use Quiz\Controller\QuestionTemplateController;
 use Quiz\Controller\UserController;
 use Framework\DependencyInjection\SymfonyContainer;
 use Framework\Dispatcher\Dispatcher;
@@ -19,11 +19,11 @@ use Quiz\Entity\User;
 use Quiz\Persistency\Repositories\QuestionTemplateRepository;
 use Quiz\Persistency\Repositories\QuizTemplateRepository;
 use Quiz\Persistency\Repositories\UserRepository;
-use Quiz\Services\AdminService;
-use Quiz\Services\LoginService;
-use Quiz\Services\QuestionTemplateService;
-use Quiz\Services\QuizTemplateService;
-use Quiz\Services\UserService;
+use Quiz\Service\AdminService;
+use Quiz\Service\LoginService;
+use Quiz\Service\QuestionTemplateService;
+use Quiz\Service\QuizTemplateService;
+use Quiz\Service\UserService;
 use ReallyOrm\Hydrator\HydratorInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
 use ReallyOrm\Test\Hydrator\Hydrator;
@@ -114,7 +114,7 @@ $container->register(LoginController::class, LoginController::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addTag("controller");
 
-$container->register(QuestionsTemplateController::class, QuestionsTemplateController::class)
+$container->register(QuestionTemplateController::class, QuestionTemplateController::class)
     ->addArgument(new Reference(RendererInterface::class))
     ->addArgument($container->findDefinition(QuestionTemplateService::class))
     ->addArgument(new Reference(SessionInterface::class))

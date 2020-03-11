@@ -9,7 +9,7 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Entity\User;
 use Quiz\Persistency\Repositories\UserRepository;
-use Quiz\Services\AbstractService;
+use Quiz\Service\AbstractService;
 use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Repository\RepositoryInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
@@ -51,8 +51,8 @@ class UserController extends Controller
      */
     public function add(Request $request, array $attributes)
     {
-        $user = self::extractUser($request, User::class);
-        $this->service->add($user, $attributes);
+        $id = isset($attributes['id']) ? $attributes['id'] : null;
+        $this->service->add($id, $request->getParameters());
 
         return self::createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
@@ -90,7 +90,7 @@ class UserController extends Controller
 
     public function delete(Request $request, array $attributes)
     {
-        $this->service->delete($attributes);
+        $this->service->delete($attributes["id"]);
 
         return self::createResponse($request, "301", "Location", ["/dashboard/users"]);
     }

@@ -13,7 +13,7 @@ use Framework\Http\Session;
 use Framework\Http\Stream;
 use phpDocumentor\Reflection\DocBlock\Tags\Uses;
 use Quiz\Entity\User;
-use Quiz\Services\AbstractService;
+use Quiz\Service\AbstractService;
 use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Repository\RepositoryInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;

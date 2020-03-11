@@ -91,7 +91,7 @@
 
             <div class="form-group">
                 <label for="quizzes">Quizzes</label>
-                <select class="form-control" id="quizzes" multiple name="quizzes">
+                <select class="form-control" id="quizzes" multiple name="quizzes[]">
                     <?php foreach($quizzes as $quiz): ?>
                         <option value="<?php echo $quiz->getId()?>"><?php echo $quiz->getName()?></option>-->
                     <?php endforeach;?>

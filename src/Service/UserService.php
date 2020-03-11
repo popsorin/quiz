@@ -1,12 +1,13 @@
 <?php
 
 
-namespace Quiz\Services;
+namespace Quiz\Service;
 
 
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Entity\User;
+use Quiz\Persistency\Repositories\UserRepository;
 use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
@@ -24,16 +25,24 @@ class UserService extends AbstractService
     }
 
     /**
-     * @param EntityInterface $user
-     * @param array $attributes
+     * @param int|null $entityId
+     * @param array $entityData
      * @return bool //maybe make getRepository configurable************************************************
-     * //maybe make getRepository configurable*********************************************
+     * //maybe make getRepository configurable********************************************
      */
-    public function add(EntityInterface $user, array $attributes): bool
+    public function add(?int $entityId, array $entityData): bool
     {
-        $user->setId(isset($attributes['id']) ? $attributes['id'] : null);
+        $name = isset($entityData['name']) ? $entityData['name'] : '';
+        $password = isset($entityData['password']) ?  $entityData['password'] : '';
+        $role = isset($entityData['role']) ?  $entityData['role'] : '';
 
-        return $this->repositoryManager->getRepository(User::class)->insertOnDuplicateKeyUpdate($user);
+        $user = new User($name, $password, $role);
+        $user->setId($entityId);
+
+        /** @var UserRepository $repository */
+        $repository =  $this->repositoryManager->getRepository(User::class);
+
+        return $repository->insertOnDuplicateKeyUpdate($user);
     }
 
     /**
@@ -75,15 +84,12 @@ class UserService extends AbstractService
 
 
     /**
-     * @param EntityInterface $user
-     * @param array $attributes
+     * @param int $id
      * @return bool
      */
-    public function delete(EntityInterface $user, array $attributes)
+    public function delete(int $id)
     {
-        $user = $this->extractUserId($attributes, User::class);
-
-        return $this->repositoryManager->getRepository(User::class)->delete($user);
+        return $this->repositoryManager->getRepository(User::class)->deleteById($id);
     }
 
 }
