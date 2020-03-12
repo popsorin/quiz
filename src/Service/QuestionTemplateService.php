@@ -8,19 +8,25 @@ use Framework\Http\Request;
 use Quiz\Entity\QuestionTemplate;
 use Quiz\Persistency\Repositories\QuestionTemplateRepository;
 use ReallyOrm\Entity\EntityInterface;
+use ReallyOrm\Repository\RepositoryManagerInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
-class QuestionTemplateService extends AbstractService
+class QuestionTemplateService
 {
     const LISTING_PAGE = 'admin-questions-listing.phtml';
 
     /**
-     * QuestionTemplateService constructor.
-     * @param RepositoryManager $repositoryManager
+     * @var RepositoryManagerInterface
      */
-    public function __construct(RepositoryManager $repositoryManager)
+    private $repositoryManager;
+
+    /**
+     * QuestionTemplateService constructor.
+     * @param RepositoryManagerInterface $repositoryManager
+     */
+    public function __construct(RepositoryManagerInterface $repositoryManager)
     {
-        parent::__construct($repositoryManager);
+        $this->repositoryManager = $repositoryManager;
     }
 
     /**
@@ -63,28 +69,51 @@ class QuestionTemplateService extends AbstractService
 
         return $success;
     }
+
     /**
-     * @param Request $request
-     * @param array $attributes
+     * @param string $parameter
      * @param int $limit
      * @return array
      */
-    public function getAll(Request $request, array $attributes, int $limit): array
+    public function getAll(string $parameter, int $limit, int $quizTemplateId): array
     {
         $entitiesNumber = $this->repositoryManager->getRepository(QuestionTemplate::class)->getCount();
 
-        $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
+        $page = $parameter;
         $offset = $limit * ($page - 1);
 
-        $results = $this->repositoryManager->getRepository(QuestionTemplate::class)->findBy([], [], $offset, $limit);
+        $repository  = $this->repositoryManager->getRepository(QuestionTemplate::class);
+        $results = $repository
+            ->findBy([], [], $offset, $limit);
+        $questionIds = [];
+        if($quizTemplateId> 0) {
+            $questionIds = $repository->getQuestions($quizTemplateId);
+        }
+
 
         return [
             "listingPage" => self::LISTING_PAGE,
             "questions" => $results,
             "page" => $page,
             "entitiesNumber" => $entitiesNumber,
-            "limit" => $limit
+            "limit" => $limit,
+            'questionIds' => $questionIds,
         ];
+    }
+
+    /**
+     * @param array $parameter
+     * @return array
+     */
+    public function getAllFiltered(array $parameter): array
+    {
+        $result = [];
+        foreach ($parameter as $param) {
+            $aux = ["id" => $param];
+            $result = array_merge($result, $this->repositoryManager->getRepository(QuestionTemplate::class)->findBy($aux, [], 0, 0));
+        }
+
+        return $result;
     }
 
     /**
@@ -95,6 +124,7 @@ class QuestionTemplateService extends AbstractService
     {
         return $this->repositoryManager->getRepository(QuestionTemplate::class)->deleteById($id);
     }
+
     /**
      * @param Request $request
      * @param array $attributes
@@ -109,4 +139,12 @@ class QuestionTemplateService extends AbstractService
         return "";
     }
 
+    /**
+     * @param int|null $id
+     * @return mixed
+     */
+    public function getAllLinked(?int $id)
+    {
+        return $this->repositoryManager->getRepository(QuestionTemplate::class)->getQuestions($id);
+    }
 }

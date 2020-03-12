@@ -11,17 +11,13 @@ use Framework\Http\Response;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizTemplateService;
 
-/**
- * Class QuestionTemplateController
- * @package Quiz\Controller
- */
-class QuestionTemplateController extends AbstractController
+class QuizTemplateController extends AbstractController
 {
     const LISTING_PAGE = 'admin-questions-listing.phtml';
     const QUESTIONS_PER_PAGE = 4;
 
     /**
-     * @var QuizTemplateService
+     * @var QuestionTemplateService
      */
     private $boundedService;
 
@@ -31,25 +27,23 @@ class QuestionTemplateController extends AbstractController
     protected $session;
 
     /**
-     * @var QuestionTemplateService
+     * @var QuizTemplateService
      */
     protected $service;
 
     /**
-     * QuestionTemplateController constructor.
-     * @param RendererInterface $renderer
-     * @param QuizTemplateService $boundedService
+     * QuizTemplateController constructor.
+     * @param QuestionTemplateService $boundedService
      * @param SessionInterface $session
-     * @param QuestionTemplateService $service
+     * @param QuizTemplateService $service
      */
-    public function __construct(RendererInterface $renderer, QuestionTemplateService $service, SessionInterface $session,QuizTemplateService $boundedService)
+    public function __construct(RendererInterface $renderer,QuizTemplateService $service, SessionInterface $session, QuestionTemplateService $boundedService)
     {
         parent::__construct($renderer);
         $this->boundedService = $boundedService;
         $this->session = $session;
         $this->service = $service;
     }
-
 
     /**
      * @param Request $request
@@ -59,10 +53,11 @@ class QuestionTemplateController extends AbstractController
      */
     public function add(Request $request, array $attributes)
     {
-        $id = isset($attributes['id']) ? $attributes['id'] : null;
-        $this->service->add($id, $request->getParameters());
+        $this->session->start();
+        $updateId = isset($attributes['id']) ? $attributes['id'] : null;
+        $this->service->add($updateId, $this->session->get("id"), $request->getParameters());
 
-        return self::createResponse($request, "301", "Location", ["/dashboard/questions"]);
+        return self::createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
     }
 
 
@@ -70,7 +65,7 @@ class QuestionTemplateController extends AbstractController
     {
         $this->service->deleteById($attributes["id"]);
 
-        return self::createResponse($request, "301", "Location", ["/dashboard/questions?page="]);
+        return self::createResponse($request, "301", "Location", ["/dashboard/quizzes?page="]);
     }
 
     /**
@@ -81,11 +76,11 @@ class QuestionTemplateController extends AbstractController
     public function getAll(Request $request, array $attributes)
     {
         $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
-        $props = $this->service->getAll($page, self::QUESTIONS_PER_PAGE, 0 );
+        $props = $this->service->getAll($page, self::QUESTIONS_PER_PAGE);
         return $this->renderer->renderView(
             $props['listingPage'],
             [
-                "questions" => $props['questions'],
+                "quizzes" => $props['quizzes'],
                 "page" => $props['page'],
                 "entitiesNumber" => $props['entitiesNumber'],
                 "limit" => $props['limit']
@@ -98,17 +93,20 @@ class QuestionTemplateController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function questionDetails(Request $request, array $attributes)
+    public function quizDetails(Request $request, array $attributes)
     {
-        $question = $this->service->questionDetails($request, $attributes);
+        $quiz = $this->service->quizDetails($attributes);
         $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
-        $quizzes = $this->boundedService->getAll($page, 0);
+
+        $id = (isset($attributes['id']) ?? 0);
+        $questions = $this->boundedService->getAll($page, 0, $id);
 
         return $this->renderer->renderView(
-            "admin-question-details.phtml",
+            "admin-quiz-details.phtml",
             [
-                "question" => $question,
-                "quizzes" => $quizzes['quizzes'],
+                "quiz" => $quiz,
+                "questions" => $questions['questions'],
+                'questionIds' => $questions['questionIds']
             ]);
     }
 }

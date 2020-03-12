@@ -32,7 +32,7 @@
         <nav class="my-2 my-md-0 mr-md-3">
             <span class="p-2 text-dark">Hello, Admin name!</span>
         </nav>
-        <a class="btn btn-secondary" href="#">Logout</a>
+        <a class="btn btn-secondary" href="/logout">Logout</a>
     </div>
 
     <!--Breadcrumbs-->
@@ -51,21 +51,12 @@
 
         <?php if($question !== ""): ?>
         <!--Question details form-->
-        <form>
+        <form method="POST">
             <div class="form-group">
-                <label for="questionText">Question text</label>
-                <textarea class="form-control" id="questionText" placeholder="Question text"></textarea>
+                <input type="text" name="question" value="<?php echo $question->getText() ?>" class="form-control" id="userName" placeholder="<?php echo $question->getText() ?>">
+
             </div>
-            <div class="form-group">
-                <label for="quizzes">Quizzes</label>
-                <select class="form-control" id="quizzes" multiple>
-<!--                    <option value="1">1</option>-->
-<!--                    <option value="2">2</option>-->
-<!--                    <option value="3">3</option>-->
-<!--                    <option value="4">4</option>-->
-<!--                    <option value="5">5</option>-->
-                </select>
-            </div>
+
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">Save question</button>
             </div>
@@ -87,15 +78,6 @@
                     <option value="text">text</option>-->
 <!--                    <option value="multiple-choice">multiple-choice</option>-->-->
             </select>
-            </div>
-
-            <div class="form-group">
-                <label for="quizzes">Quizzes</label>
-                <select class="form-control" id="quizzes" multiple name="quizzes[]">
-                    <?php foreach($quizzes as $quiz): ?>
-                        <option value="<?php echo $quiz->getId()?>"><?php echo $quiz->getName()?></option>-->
-                    <?php endforeach;?>
-                </select>
             </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">Save question</button>

@@ -12,7 +12,8 @@ class QuestionTemplateRepository extends AbstractRepository implements LinkedEnt
         string $entityName,
         HydratorInterface $hydrator,
         string $tableName
-    ) {
+    )
+    {
         parent::__construct($pdo, $entityName, $hydrator);
         $this->tableName = $tableName;
     }
@@ -29,6 +30,19 @@ class QuestionTemplateRepository extends AbstractRepository implements LinkedEnt
         $query->bindValue(1, $id);
         $query->bindValue(2, $linkId);
         return $query->execute();
+    }
+
+    public function getQuestions(?int $id)
+    {
+        $query = $this->pdo->prepare(
+            "SELECT (question_template_id) FROM {$this->getLinkTableName()} WHERE quiz_template_id = ?");
+        $query->bindValue(1, $id);
+        $query->execute();
+        while ($row = $query->fetch()) {
+            $result[] = $row['question_template_id'];
+        }
+
+        return $result;
     }
 
     /**

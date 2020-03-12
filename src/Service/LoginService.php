@@ -1,24 +1,28 @@
 <?php
 
-
 namespace Quiz\Service;
-
 
 use Exception;
 use Framework\Http\Request;
 use Quiz\Entity\User;
 use ReallyOrm\Entity\EntityInterface;
+use ReallyOrm\Repository\RepositoryManagerInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
-class LoginService extends AbstractService
+class LoginService
 {
     /**
-     * LoginService constructor.
-     * @param RepositoryManager $repositoryManager
+     * @var RepositoryManagerInterface
      */
-    public function __construct(RepositoryManager $repositoryManager)
+    private $repositoryManager;
+
+    /**
+     * AdminService constructor.
+     * @param RepositoryManagerInterface $repositoryManager
+     */
+    public function __construct(RepositoryManagerInterface $repositoryManager)
     {
-        parent::__construct($repositoryManager);
+        $this->repositoryManager = $repositoryManager;
     }
 
     /**
@@ -29,7 +33,7 @@ class LoginService extends AbstractService
     public function login(array $credentials)
     {
         $repository = $this->repositoryManager->getRepository(User::class);
-        $entity = $repository->findOneBy([$credentials['name']]);
+        $entity = $repository->findOneBy(["name" =>$credentials['name']]);
         if(!password_verify($credentials["password"], $entity->getPassword())) {
             //redirect back to the page
             throw new Exception("Wrong password");

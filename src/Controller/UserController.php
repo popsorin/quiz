@@ -9,40 +9,40 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Entity\User;
 use Quiz\Persistency\Repositories\UserRepository;
-use Quiz\Service\AbstractService;
+use Quiz\Service\UserService;
 use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Repository\RepositoryInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
 use ReflectionClass;
 use ReflectionException;
 
-class UserController extends Controller
+class UserController extends AbstractController
 {
     const USERS_PER_PAGE = 4;
+
+    /**
+     * @var SessionInterface
+     */
+    protected $session;
+
+    /**
+     * @var UserService
+     */
+    protected $service;
+
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
-     * @param AbstractService $service
      * @param SessionInterface $session
+     * @param UserService $service
      */
-    public function __construct(
-        RendererInterface $renderer,
-        AbstractService $service,
-        SessionInterface $session
-    )
+    public function __construct(RendererInterface $renderer,UserService $service, SessionInterface $session)
     {
-        parent::__construct($renderer, $service, $session);
+        parent::__construct($renderer);
+        $this->session = $session;
+        $this->service = $service;
     }
 
-    /**
-    * @param Request $request
-    * @param string $className
-    * @return EntityInterface|null
-    */
-    public function extractUser(Request $request, string $className): ?EntityInterface
-    {
-        return new $className($request->getParameter("name"), $request->getParameter("password"), $request->getParameter("role"));
-    }
     /**
      * @param Request $request
      * @param array $attributes

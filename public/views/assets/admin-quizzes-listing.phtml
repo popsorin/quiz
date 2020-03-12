@@ -32,13 +32,13 @@
         <nav class="my-2 my-md-0 mr-md-3">
             <span class="p-2 text-dark">Hello, Admin name!</span>
         </nav>
-        <a class="btn btn-secondary" href="#">Logout</a>
+        <a class="btn btn-secondary" href="/logout">Logout</a>
     </div>
 
     <!--Breadcrumbs-->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb px-3 py-0 mb-3">
-            <li class="breadcrumb-item" ><a href="#">Dashboard</a></li>
+            <li class="breadcrumb-item" ><a href="/dashboard">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">Quizzes listing</li>
         </ol>
     </nav>
@@ -65,7 +65,7 @@
                 </form>
             </div>
             <div class="col-12 col-md-6 d-flex align-items-end justify-content-end">
-                <a class="btn btn-primary py-1" href="#">Add new quiz</a>
+                <a class="btn btn-primary py-1" href="/dashboard/quizzes/add">Add new quiz</a>
             </div>
         </div>
 
@@ -78,41 +78,21 @@
                     <th scope="col" class="sorting-header asc dsc">ID</th>
                     <th scope="col">Quiz</th>
                     <th scope="col">Description</th>
-                    <th scope="col">Questions number</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>asd asad asdadadsad</td>
-                    <td>azxczxc cxzc</td>
-                    <td>1</td>
-                    <td class="text-center">
-                        <a class="btn btn-primary py-1" href="#">Edit</a>
-                        <a class="btn btn-danger py-1" href="#">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>asd asad asdadadsad</td>
-                    <td>azxczxc cxzc</td>
-                    <td>2</td>
-                    <td class="text-center">
-                        <a class="btn btn-primary py-1" href="#">Edit</a>
-                        <a class="btn btn-danger py-1" href="#">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>asd asad asdadadsad</td>
-                    <td>azxczxc cxzc</td>
-                    <td>3</td>
-                    <td class="text-center">
-                        <a class="btn btn-primary py-1" href="#">Edit</a>
-                        <a class="btn btn-danger py-1" href="#">Delete</a>
-                    </td>
-                </tr>
+                <?php foreach ($quizzes as $quiz): ?>
+                    <tr>
+                        <th scope="row"><?php echo $quiz->getId()?></th>
+                        <td><?php echo $quiz->getName()?></td>
+                        <td><?php echo $quiz->getDescription()?></td>
+                        <td class="text-center">
+                            <a class="btn btn-primary py-1" href="/dashboard/quizzes/update/<?php echo $quiz->getId() ?>">Edit</a>
+                            <a class="btn btn-danger py-1" href="/dashboard/quizzes/delete/<?php echo $quiz->getId() ?>">Delete</a>
+                        </td>
+                    </tr>
+                <?php endforeach;?>
                 </tbody>
             </table>
         </div>
@@ -120,14 +100,14 @@
         <!--Pagination block-->
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
                 <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
+                    <a class="page-link" href="?page=<?php echo ($page < 2)? $page : $page-1?>">Previous</a>
+                </li>
+                <?php for($i = 0; $i < ($entitiesNumber/$limit); $i++): ?>
+                    <li class="page-item"><a class="page-link" href="?page=<?php echo $i+1?>"><?php echo $i+1?></a></li>
+                <?php endfor;?>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<?php echo ($page < ($entitiesNumber/$limit))? $page+1 : $page?>">Next</a>
                 </li>
             </ul>
         </nav>

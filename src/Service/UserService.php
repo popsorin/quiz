@@ -9,19 +9,26 @@ use Framework\Http\Response;
 use Quiz\Entity\User;
 use Quiz\Persistency\Repositories\UserRepository;
 use ReallyOrm\Entity\EntityInterface;
+use ReallyOrm\Repository\RepositoryManagerInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
-class UserService extends AbstractService
+class UserService
 {
 
     const LISTING_PAGE = "admin-users-listing.phtml";
+
     /**
-     * UserService constructor.
-     * @param RepositoryManager $repositoryManager
+     * @var RepositoryManagerInterface
      */
-    public function __construct(RepositoryManager $repositoryManager)
+    private $repositoryManager;
+
+    /**
+     * AdminService constructor.
+     * @param RepositoryManagerInterface $repositoryManager
+     */
+    public function __construct(RepositoryManagerInterface $repositoryManager)
     {
-        parent::__construct($repositoryManager);
+        $this->repositoryManager = $repositoryManager;
     }
 
     /**

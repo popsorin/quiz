@@ -6,25 +6,38 @@ namespace Quiz\Controller;
 
 use Framework\Contracts\RendererInterface;
 use Framework\Contracts\SessionInterface;
+use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
-use Quiz\Service\AbstractService;
+use Quiz\Service\AdminService;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
-class AdminController extends Controller
+class AdminController extends AbstractController
 {
+    /**
+     * @var SessionInterface
+     */
+    protected $session;
+
+    /**
+     * @var AdminService
+     */
+    protected $service;
+
     /**
      * AdminController constructor.
      * @param RendererInterface $renderer
-     * @param AbstractService $service
+     * @param AdminService $service
      * @param SessionInterface $session
      */
     public function __construct(
         RendererInterface $renderer,
-        AbstractService $service,
+        AdminService $service,
         SessionInterface $session
     ) {
-        parent::__construct($renderer, $service, $session);
+        parent::__construct($renderer);
+        $this->service = $service;
+        $this->session = $session;
     }
 
     /**
@@ -36,6 +49,7 @@ class AdminController extends Controller
     {
         $this->session->start();
         if(($this->session->get("name")) === null) {
+
             return self::createResponse($request, "301", "Location", ["/"]);
         }
             return $this->renderer->renderView("admin-dashboard.html", $attributes);

@@ -7,29 +7,42 @@ namespace Quiz\Controller;
 use Exception;
 use Framework\Contracts\RendererInterface;
 use Framework\Contracts\SessionInterface;
+use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Session;
 use Quiz\Entity\User;
 use Quiz\Persistency\Repositories\UserRepository;
-use Quiz\Service\AbstractService;
+use Quiz\Service\LoginService;
 use ReallyOrm\Repository\RepositoryInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
-class LoginController extends Controller
+class LoginController extends AbstractController
 {
+    /**
+     * @var SessionInterface
+     */
+    protected $session;
+
+    /**
+     * @var LoginService
+     */
+    protected $service;
+
     /**
      * LoginController constructor.
      * @param RendererInterface $renderer
-     * @param AbstractService $service
+     * @param LoginService $service
      * @param SessionInterface $session
      */
     public function __construct(
         RendererInterface $renderer,
-        AbstractService $service,
+        LoginService $service,
         SessionInterface $session
     ) {
-        parent::__construct($renderer,$service, $session);
+        parent::__construct($renderer);
+        $this->service = $service;
+        $this->session = $session;
     }
 
     /**
@@ -45,7 +58,12 @@ class LoginController extends Controller
         }
 
 
-        return self::createResponse($request, "301", "Location", ["dashboard"]);
+        if($this->session->get("role")=== "admin") {
+
+            return $this->createResponse($request, "301", "Location", ["/dashboard"]);
+        }
+
+        return $this->createResponse($request, "301", "Location", ["/homepage"]);
     }
 
     /**
@@ -59,21 +77,25 @@ class LoginController extends Controller
         $this->session->start();
         $entity = $this->service->login(["name" => $request->getParameter("name"), "password" => $request->getParameter("password")]);
         $this->session->set("name", $entity->getName());
+        $this->session->set("role", $entity->getRole());
+        $this->session->set("id", $entity->getId());
 
         if($entity->getRole() === "admin") {
 
-            return self::createResponse($request, "301", "Location", ["dashboard"]);
+            return $this->createResponse($request, "301", "Location", ["/dashboard"]);
         }
 
-        return self::createResponse($request, "301", "Location", ["homepage"]);
+        return $this->createResponse($request, "301", "Location", ["/homepage"]);
     }
 
     public function logout(Request $request, array $attributes)
     {
         $this->session->start();
+        //questionable if
         if($this->session->get("name")){
             $this->session->destroy();
-            return self::createResponse($request, "301", "Location", ["/"]);
         }
+            return $this->createResponse($request, "301", "Location", ["/"]);
+
     }
 }
