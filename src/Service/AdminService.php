@@ -3,19 +3,21 @@
 
 namespace Quiz\Service;
 
+use ReallyOrm\Repository\RepositoryManagerInterface;
 
-use Framework\Http\Request;
-use Framework\Http\Response;
-use ReallyOrm\Test\Repository\RepositoryManager;
-
-class AdminService extends AbstractService
+class AdminService
 {
     /**
-     * AdminService constructor.
-     * @param RepositoryManager $repositoryManager
+     * @var RepositoryManagerInterface
      */
-    public function __construct(RepositoryManager $repositoryManager)
+    private $repositoryManager;
+
+    /**
+     * AdminService constructor.
+     * @param RepositoryManagerInterface $repositoryManager
+     */
+    public function __construct(RepositoryManagerInterface $repositoryManager)
     {
-        parent::__construct($repositoryManager);
+        $this->repositoryManager = $repositoryManager;
     }
 }
