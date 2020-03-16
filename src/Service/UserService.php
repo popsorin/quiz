@@ -104,13 +104,11 @@ class UserService
      * @param array $filters
      * @return EntityInterface|null
      */
-    public function findOneByName(array $filters): ?EntityInterface
+    public function findOneByCredentials(array $filters): ?EntityInterface
     {
-        return $this->repositoryManager->getRepository(User::class)->findOneBy(["name" =>$filters["name"]]);
-    }
+        $credentials["name"] = $filters["name"];
+        $credentials["email"] = $filters["email"];
 
-    public function findOneByEmail(array $filters): ?EntityInterface
-    {
-        return $this->repositoryManager->getRepository(User::class)->findOneBy(["email" => $filters["email"]]);
+        return $this->repositoryManager->getRepository(User::class)->findOneByWithOrOperator($credentials);
     }
 }

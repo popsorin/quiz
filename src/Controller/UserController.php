@@ -20,7 +20,7 @@ class UserController extends AbstractController
 {
     const USERS_PER_PAGE = 4;
 
-    const LISTING_PAGE = "admin-users-listing.phtml";
+    const LISTING_PAGE = "admin-user-details.phtml";
 
     /**
      * @var SessionInterface
@@ -54,16 +54,28 @@ class UserController extends AbstractController
     public function add(Request $request, array $attributes)
     {
         $id = isset($attributes['id']) ? $attributes['id'] : null;
-        $entity = $this->service->findOneByName($request->getParameters());
-        if($entity !== null) {
+        $entity = $this->service->findOneByCredentials($request->getParameters());
+        $name = ($entity->getName() === $request->getParameter("name")) ? $entity->getName() : null;
+        $email = ($entity->getEmail() === $request->getParameter("email")) ? $entity->getEmail() : null;
+        if($entity->getName() !== null) {
             return $this->renderer->renderView(
                 self::LISTING_PAGE,
                 [
-                    "name" => $entity->getName(),
-                    "email" => $entity->getEmail()
+                    "action" => "add",
+                    "name"  => $name,
+                    "email" => $email
                 ]
             );
         }
+        $this->service->add($id, $request->getParameters());
+
+        return self::createResponse($request, "301", "Location", ["/dashboard/users"]);
+    }
+
+    public function update(Request $request, array $attributes)
+    {
+        $id = isset($attributes['id']) ? $attributes['id'] : null;
+
         $this->service->add($id, $request->getParameters());
 
         return self::createResponse($request, "301", "Location", ["/dashboard/users"]);
