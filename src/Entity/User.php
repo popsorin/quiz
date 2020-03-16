@@ -17,6 +17,12 @@ class User extends AbstractEntity
 
     /**
      * @var string
+     * @MappedOn email
+     */
+    private $email;
+
+    /**
+     * @var string
      * @MappedOn password
      */
     private $password;
@@ -32,12 +38,19 @@ class User extends AbstractEntity
      * @param string $name
      * @param string $password
      * @param string $role
+     * @param string $email
      */
-    public function __construct(string $name, string $password, string $role)
+    public function __construct(
+        string $name,
+        string $password,
+        string $role,
+        string $email
+    )
     {
         $this->name = $name;
         $this->password = $password;
         $this->role = $role;
+        $this->email = $email;
     }
 
     /**
@@ -62,5 +75,21 @@ class User extends AbstractEntity
     public function getName(): ?string
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     */
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
     }
 }

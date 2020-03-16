@@ -42,8 +42,9 @@ class UserService
         $name = isset($entityData['name']) ? $entityData['name'] : '';
         $password = isset($entityData['password']) ?  $entityData['password'] : '';
         $role = isset($entityData['role']) ?  $entityData['role'] : '';
+        $email = isset($entityData['email']) ? $entityData["email"] : "";
 
-        $user = new User($name, $password, $role);
+        $user = new User($name, $password, $role, $email);
         $user->setId($entityId);
 
         /** @var UserRepository $repository */
