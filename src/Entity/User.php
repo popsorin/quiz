@@ -3,6 +3,7 @@
 namespace Quiz\Entity;
 
 use ReallyOrm\Entity\AbstractEntity;
+use ReallyOrm\Entity\EntityInterface;
 
 /**
  * Class User
@@ -87,9 +88,12 @@ class User extends AbstractEntity
 
     /**
      * @param string $email
+     * @return EntityInterface|null
      */
-    public function setEmail(string $email): void
+    public function setEmail(string $email): ?EntityInterface
     {
         $this->email = $email;
+
+        return $this;
     }
 }

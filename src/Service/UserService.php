@@ -100,4 +100,17 @@ class UserService
         return $this->repositoryManager->getRepository(User::class)->deleteById($id);
     }
 
+    /**
+     * @param array $filters
+     * @return EntityInterface|null
+     */
+    public function findOneByName(array $filters): ?EntityInterface
+    {
+        return $this->repositoryManager->getRepository(User::class)->findOneBy(["name" =>$filters["name"]]);
+    }
+
+    public function findOneByEmail(array $filters): ?EntityInterface
+    {
+        return $this->repositoryManager->getRepository(User::class)->findOneBy(["email" => $filters["email"]]);
+    }
 }

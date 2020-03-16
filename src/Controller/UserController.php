@@ -20,6 +20,8 @@ class UserController extends AbstractController
 {
     const USERS_PER_PAGE = 4;
 
+    const LISTING_PAGE = "admin-users-listing.phtml";
+
     /**
      * @var SessionInterface
      */
@@ -52,6 +54,16 @@ class UserController extends AbstractController
     public function add(Request $request, array $attributes)
     {
         $id = isset($attributes['id']) ? $attributes['id'] : null;
+        $entity = $this->service->findOneByName($request->getParameters());
+        if($entity !== null) {
+            return $this->renderer->renderView(
+                self::LISTING_PAGE,
+                [
+                    "name" => $entity->getName(),
+                    "email" => $entity->getEmail()
+                ]
+            );
+        }
         $this->service->add($id, $request->getParameters());
 
         return self::createResponse($request, "301", "Location", ["/dashboard/users"]);

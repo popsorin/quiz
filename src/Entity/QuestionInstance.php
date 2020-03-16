@@ -5,6 +5,7 @@ namespace Quiz\Entity;
 
 
 use ReallyOrm\Entity\AbstractEntity;
+use ReallyOrm\Entity\EntityInterface;
 
 class QuestionInstance extends AbstractEntity
 {
@@ -56,22 +57,6 @@ class QuestionInstance extends AbstractEntity
     }
 
     /**
-     * @return int
-     */
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId(?int $id): void
-    {
-        $this->id = $id;
-    }
-
-    /**
      * @return string
      */
     public function getText(): string
@@ -81,10 +66,13 @@ class QuestionInstance extends AbstractEntity
 
     /**
      * @param string $text
+     * @return EntityInterface|null
      */
-    public function setText(string $text): void
+    public function setText(string $text): ?EntityInterface
     {
         $this->text = $text;
+
+        return $this;
     }
 
     /**
@@ -97,10 +85,13 @@ class QuestionInstance extends AbstractEntity
 
     /**
      * @param int $quizInstanceId
+     * @return EntityInterface|null
      */
-    public function setQuizInstanceId(int $quizInstanceId): void
+    public function setQuizInstanceId(int $quizInstanceId): ?EntityInterface
     {
         $this->quizInstanceId = $quizInstanceId;
+
+        return $this;
     }
 
     /**
@@ -113,10 +104,13 @@ class QuestionInstance extends AbstractEntity
 
     /**
      * @param string $type
+     * @return EntityInterface|null
      */
-    public function setType(string $type): void
+    public function setType(string $type): ?EntityInterface
     {
         $this->type = $type;
+
+        return $this;
     }
 
     /**
@@ -129,10 +123,13 @@ class QuestionInstance extends AbstractEntity
 
     /**
      * @param int $questionTemplateId
+     * @return EntityInterface|null
      */
-    public function setQuestionTemplateId(int $questionTemplateId): void
+    public function setQuestionTemplateId(int $questionTemplateId): ?EntityInterface
     {
         $this->questionTemplateId = $questionTemplateId;
+
+        return $this;
     }
 
     /**
@@ -145,9 +142,12 @@ class QuestionInstance extends AbstractEntity
 
     /**
      * @param string $answer
+     * @return EntityInterface|null
      */
-    public function setAnswer(string $answer): void
+    public function setAnswer(string $answer): ?EntityInterface
     {
         $this->answer = $answer;
+
+        return $this;
     }
 }
