@@ -11,4 +11,5 @@ require __DIR__ . "/../vendor/autoload.php";
 $application = Application::create($container);
 $request = Request::createFromGlobals();
 $response = $application->handle($request);
+
 $response->send();

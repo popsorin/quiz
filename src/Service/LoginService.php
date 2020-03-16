@@ -5,6 +5,7 @@ namespace Quiz\Service;
 use Exception;
 use Framework\Http\Request;
 use Quiz\Entity\User;
+use Quiz\Service\Exception\WrongPasswordException;
 use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
@@ -28,7 +29,7 @@ class LoginService
     /**
      * @param array $credentials
      * @return EntityInterface|null
-     * @throws Exception
+     * @throws WrongPasswordException
      */
     public function login(array $credentials)
     {
@@ -36,7 +37,7 @@ class LoginService
         $entity = $repository->findOneBy(["name" =>$credentials['name']]);
         if(!password_verify($credentials["password"], $entity->getPassword())) {
             //redirect back to the page
-            throw new Exception("Wrong password");
+            throw new WrongPasswordException("Wrong password");
         }
 
         return $entity;

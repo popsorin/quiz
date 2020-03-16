@@ -13,6 +13,7 @@ use Framework\Http\Response;
 use Framework\Http\Session;
 use Quiz\Entity\User;
 use Quiz\Persistency\Repositories\UserRepository;
+use Quiz\Service\Exception\WrongPasswordException;
 use Quiz\Service\LoginService;
 use ReallyOrm\Repository\RepositoryInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
@@ -75,7 +76,12 @@ class LoginController extends AbstractController
     public function login(Request $request, array $attributes)
     {
         $this->session->start();
-        $entity = $this->service->login(["name" => $request->getParameter("name"), "password" => $request->getParameter("password")]);
+        try {
+            $entity = $this->service->login(["name" => $request->getParameter("name"), "password" => $request->getParameter("password")]);
+        }
+        catch (WrongPasswordException $exception) {
+            return $this->createResponse($request, "301", "Location", ["/"]);
+        }
         $this->session->set("name", $entity->getName());
         $this->session->set("role", $entity->getRole());
         $this->session->set("id", $entity->getId());
