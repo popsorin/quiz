@@ -106,7 +106,7 @@ class QuestionInstance extends AbstractEntity
      * @param string $type
      * @return EntityInterface|null
      */
-    public function setType(string $type): ?EntityInterface
+    public function setType(string $type): self
     {
         $this->type = $type;
 
