@@ -144,7 +144,7 @@ class QuestionInstance extends AbstractEntity
      * @param string $answer
      * @return EntityInterface|null
      */
-    public function setAnswer(string $answer): ?EntityInterface
+    public function setAnswer(string $answer): self
     {
         $this->answer = $answer;
 
