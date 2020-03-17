@@ -8,6 +8,8 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Entity\User;
+use Quiz\Exception\UserAlreadyExistsException;
+use Quiz\Factory\UserFactory;
 use Quiz\Persistency\Repositories\UserRepository;
 use Quiz\Service\UserService;
 use ReallyOrm\Entity\EntityInterface;
@@ -52,22 +54,18 @@ class UserController extends AbstractController
      */
     public function add(Request $request, array $attributes)
     {
-        $id = isset($attributes['id']) ? $attributes['id'] : null;
-        $entity = $this->service->findOneByCredentials($request->getParameters());
-        $name = ($entity->getName() === $request->getParameter("name")) ? $entity->getName() : null;
-        $email = ($entity->getEmail() === $request->getParameter("email")) ? $entity->getEmail() : null;
-        if($entity->getName() !== null) {
+        $factory = new UserFactory();
+        $entity = $factory->createFromRequest($request, "name", "email", "password", "role");
+        try {
+            $this->service->add($entity);
+        } catch (UserAlreadyExistsException $exception) {
             return $this->renderer->renderView(
                 self::LISTING_PAGE,
                 [
-                    "action" => "add",
-                    "name"  => $name,
-                    "email" => $email
+                    "errorMessage" => $exception->getMessage()
                 ]
             );
         }
-        $this->service->add($id, $request->getParameters());
-
         return self::createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
 

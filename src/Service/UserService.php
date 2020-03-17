@@ -5,13 +5,13 @@ namespace Quiz\Service;
 
 
 use Framework\Http\Request;
-use Framework\Http\Response;
 use Quiz\Entity\User;
+use Quiz\Exception\UserAlreadyExistsException;
+use Quiz\Factory\UserFactory;
 use Quiz\Persistency\Repositories\UserRepository;
 use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
-
 class UserService
 {
 
@@ -32,23 +32,18 @@ class UserService
     }
 
     /**
-     * @param int|null $entityId
-     * @param array $entityData
+     * @param EntityInterface $user
      * @return bool
-     * //maybe make getRepository configurable********************************************
+     * //maybe make getRepository configurable******************************************
+     * @throws UserAlreadyExistsException
      */
-    public function add(?int $entityId, array $entityData): bool
+    public function add(EntityInterface $user): bool
     {
-        $name = isset($entityData['name']) ? $entityData['name'] : '';
-        $password = isset($entityData['password']) ?  $entityData['password'] : '';
-        $role = isset($entityData['role']) ?  $entityData['role'] : '';
-        $email = isset($entityData['email']) ? $entityData["email"] : "";
-
-        $user = new User($name, $password, $role, $email);
-        $user->setId($entityId);
-
         /** @var UserRepository $repository */
         $repository =  $this->repositoryManager->getRepository(User::class);
+        if($repository->ifExists(["name" => $user->getName(), "email" => $user->getEmail()])){
+            throw new UserAlreadyExistsException($user, "Name or email already exists");
+        }
 
         return $repository->insertOnDuplicateKeyUpdate($user);
     }
@@ -98,17 +93,5 @@ class UserService
     public function delete(int $id)
     {
         return $this->repositoryManager->getRepository(User::class)->deleteById($id);
-    }
-
-    /**
-     * @param array $filters
-     * @return EntityInterface|null
-     */
-    public function findOneByCredentials(array $filters): ?EntityInterface
-    {
-        $credentials["name"] = $filters["name"];
-        $credentials["email"] = $filters["email"];
-
-        return $this->repositoryManager->getRepository(User::class)->findOneByWithOrOperator($credentials);
     }
 }
