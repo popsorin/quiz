@@ -81,7 +81,7 @@ class CandidateController extends AbstractController
         $questions = $this->session->get("answeredQuestions");
         $answers = $this->session->get("answers");
         //need to implement a builder,for testing i will resume at making a new object
-        $this->service->add();
+      //  $this->service->add();
         return $this->renderer->renderView(
             "quiz-success-page.phtml",
             [

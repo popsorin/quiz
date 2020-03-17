@@ -34,7 +34,7 @@ class UserService
     /**
      * @param int|null $entityId
      * @param array $entityData
-     * @return bool //maybe make getRepository configurable************************************************
+     * @return bool
      * //maybe make getRepository configurable********************************************
      */
     public function add(?int $entityId, array $entityData): bool

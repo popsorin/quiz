@@ -49,7 +49,6 @@ class UserController extends AbstractController
      * @param Request $request
      * @param array $attributes
      * @return Response
-     * //maybe make getRepository configurable************************************************
      */
     public function add(Request $request, array $attributes)
     {
@@ -72,6 +71,11 @@ class UserController extends AbstractController
         return self::createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
 
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
     public function update(Request $request, array $attributes)
     {
         $id = isset($attributes['id']) ? $attributes['id'] : null;
@@ -112,6 +116,11 @@ class UserController extends AbstractController
         return $this->renderer->renderView("admin-user-details.phtml", ["user" => $user]);
     }
 
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
     public function delete(Request $request, array $attributes)
     {
         $this->service->delete($attributes["id"]);
