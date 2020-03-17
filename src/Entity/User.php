@@ -88,9 +88,9 @@ class User extends AbstractEntity
 
     /**
      * @param string $email
-     * @return EntityInterface
+     * @return self
      */
-    public function setEmail(string $email): EntityInterface
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 

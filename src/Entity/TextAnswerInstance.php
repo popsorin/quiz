@@ -32,9 +32,9 @@ class TextAnswerInstance implements EntityInterface
 
     /**
      * @param int $questionInstanceId
-     * @return TextAnswerInstance
+     * @return self
      */
-    public function setQuestionInstanceInterface(int $questionInstanceId): TextAnswerInstance
+    public function setQuestionInstanceInterface(int $questionInstanceId): self
     {
         $this->questionInstanceId = $questionInstanceId;
 
@@ -51,9 +51,9 @@ class TextAnswerInstance implements EntityInterface
 
     /**
      * @param string $text
-     * @return TextAnswerInstance
+     * @return self
      */
-    public function setText(string $text): TextAnswerInstance
+    public function setText(string $text): self
     {
         $this->text = $text;
 

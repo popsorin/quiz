@@ -5,7 +5,6 @@ namespace Quiz\Entity;
 
 
 use ReallyOrm\Entity\AbstractEntity;
-use ReallyOrm\Entity\EntityInterface;
 
 class QuestionInstance extends AbstractEntity
 {
@@ -66,9 +65,9 @@ class QuestionInstance extends AbstractEntity
 
     /**
      * @param string $text
-     * @return EntityInterface
+     * @return self
      */
-    public function setText(string $text): EntityInterface
+    public function setText(string $text): self
     {
         $this->text = $text;
 
@@ -85,9 +84,9 @@ class QuestionInstance extends AbstractEntity
 
     /**
      * @param int $quizInstanceId
-     * @return EntityInterface
+     * @return self
      */
-    public function setQuizInstanceId(int $quizInstanceId): EntityInterface
+    public function setQuizInstanceId(int $quizInstanceId): self
     {
         $this->quizInstanceId = $quizInstanceId;
 
@@ -104,9 +103,9 @@ class QuestionInstance extends AbstractEntity
 
     /**
      * @param string $type
-     * @return EntityInterface
+     * @return self
      */
-    public function setType(string $type): EntityInterface
+    public function setType(string $type): self
     {
         $this->type = $type;
 
@@ -123,9 +122,9 @@ class QuestionInstance extends AbstractEntity
 
     /**
      * @param int $questionTemplateId
-     * @return EntityInterface
+     * @return self
      */
-    public function setQuestionTemplateId(int $questionTemplateId): EntityInterface
+    public function setQuestionTemplateId(int $questionTemplateId): self
     {
         $this->questionTemplateId = $questionTemplateId;
 
@@ -142,9 +141,9 @@ class QuestionInstance extends AbstractEntity
 
     /**
      * @param string $answer
-     * @return EntityInterface
+     * @return self
      */
-    public function setAnswer(string $answer): EntityInterface
+    public function setAnswer(string $answer): self
     {
         $this->answer = $answer;
 
