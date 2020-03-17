@@ -3,7 +3,6 @@
 namespace Quiz\Entity;
 
 use ReallyOrm\Entity\AbstractEntity;
-use ReallyOrm\Entity\EntityInterface;
 
 class QuizTemplate extends AbstractEntity
 {
@@ -56,9 +55,9 @@ class QuizTemplate extends AbstractEntity
 
     /**
      * @param int $createdBy
-     * @return EntityInterface
+     * @return self
      */
-    public function setCreatedBy(int $createdBy): EntityInterface
+    public function setCreatedBy(int $createdBy): self
     {
         $this->createdBy = $createdBy;
 
@@ -75,9 +74,9 @@ class QuizTemplate extends AbstractEntity
 
     /**
      * @param string $name
-     * @return EntityInterface
+     * @return self
      */
-    public function setName(string $name): EntityInterface
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -94,9 +93,9 @@ class QuizTemplate extends AbstractEntity
 
     /**
      * @param string $description
-     * @return EntityInterface
+     * @return self
      */
-    public function setDescription(string $description): EntityInterface
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -113,9 +112,9 @@ class QuizTemplate extends AbstractEntity
 
     /**
      * @param int $nrQuestions
-     * @return EntityInterface|null
+     * @return self
      */
-    public function setNrQuestions(int $nrQuestions): ?EntityInterface
+    public function setNrQuestions(int $nrQuestions): self
     {
         $this->nrQuestions = $nrQuestions;
 

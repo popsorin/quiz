@@ -3,10 +3,7 @@
 
 namespace Quiz\Entity;
 
-
-use http\Exception;
 use ReallyOrm\Entity\AbstractEntity;
-use ReallyOrm\Entity\EntityInterface;
 
 class QuizInstance extends AbstractEntity
 {
@@ -64,18 +61,18 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getQuizId(): int
+    public function getQuizId(): ?int
     {
         return $this->quizId;
     }
 
     /**
      * @param int $quizId
-     * @return EntityInterface|null
+     * @return self
      */
-    public function setQuizId(int $quizId): ?EntityInterface
+    public function setQuizId(int $quizId): self
     {
         $this->quizId = $quizId;
 
@@ -83,18 +80,18 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getUserId(): int
+    public function getUserId(): ?int
     {
         return $this->userId;
     }
 
     /**
      * @param int $userId
-     * @return EntityInterface|null
+     * @return self
      */
-    public function setUserId(int $userId): ?EntityInterface
+    public function setUserId(int $userId): self
     {
         $this->userId = $userId;
 
@@ -102,18 +99,18 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getScore(): int
+    public function getScore(): ?int
     {
         return $this->score;
     }
 
     /**
      * @param int $score
-     * @return EntityInterface|null
+     * @return self
      */
-    public function setScore(int $score): ?EntityInterface
+    public function setScore(int $score): self
     {
         $this->score = $score;
 
@@ -121,18 +118,18 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
     /**
      * @param string $name
-     * @return EntityInterface|null
+     * @return self
      */
-    public function setName(string $name): ?EntityInterface
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -140,18 +137,18 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
     /**
      * @param string $description
-     * @return EntityInterface|null
+     * @return self
      */
-    public function setDescription(string $description): ?EntityInterface
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -159,18 +156,18 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getNrQuestions(): int
+    public function getNrQuestions(): ?int
     {
         return $this->nrQuestions;
     }
 
     /**
      * @param int $nrQuestions
-     * @return EntityInterface|null
+     * @return self
      */
-    public function setNrQuestions(int $nrQuestions): ?EntityInterface
+    public function setNrQuestions(int $nrQuestions): self
     {
         $this->nrQuestions = $nrQuestions;
 

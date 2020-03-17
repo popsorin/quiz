@@ -45,18 +45,18 @@ class QuestionTemplate extends AbstractEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getAnswer(): string
+    public function getAnswer(): ?string
     {
         return $this->answer;
     }
 
     /**
      * @param string $answer
-     * @return EntityInterface|null
+     * @return QuestionTemplate
      */
-    public function setAnswer(string $answer): ?EntityInterface
+    public function setAnswer(string $answer): self
     {
         $this->answer = $answer;
 
@@ -73,9 +73,9 @@ class QuestionTemplate extends AbstractEntity
 
     /**
      * @param string $text
-     * @return EntityInterface
+     * @return QuestionTemplate
      */
-    public function setText(string $text): EntityInterface
+    public function setText(string $text): self
     {
         $this->text = $text;
 
@@ -92,9 +92,9 @@ class QuestionTemplate extends AbstractEntity
 
     /**
      * @param string $type
-     * @return EntityInterface|null
+     * @return QuestionTemplate
      */
-    public function setType(string $type): ?EntityInterface
+    public function setType(string $type): self
     {
         $this->type = $type;
 
