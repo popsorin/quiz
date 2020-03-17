@@ -73,9 +73,9 @@ class QuizInstance extends AbstractEntity
 
     /**
      * @param int $quizId
-     * @return EntityInterface|null
+     * @return EntityInterface
      */
-    public function setQuizId(int $quizId): ?EntityInterface
+    public function setQuizId(int $quizId): EntityInterface
     {
         $this->quizId = $quizId;
 
@@ -92,9 +92,9 @@ class QuizInstance extends AbstractEntity
 
     /**
      * @param int $userId
-     * @return EntityInterface|null
+     * @return EntityInterface
      */
-    public function setUserId(int $userId): ?EntityInterface
+    public function setUserId(int $userId): EntityInterface
     {
         $this->userId = $userId;
 
@@ -111,9 +111,9 @@ class QuizInstance extends AbstractEntity
 
     /**
      * @param int $score
-     * @return EntityInterface|null
+     * @return EntityInterface
      */
-    public function setScore(int $score): ?EntityInterface
+    public function setScore(int $score): EntityInterface
     {
         $this->score = $score;
 
@@ -130,9 +130,9 @@ class QuizInstance extends AbstractEntity
 
     /**
      * @param string $name
-     * @return EntityInterface|null
+     * @return EntityInterface
      */
-    public function setName(string $name): ?EntityInterface
+    public function setName(string $name): EntityInterface
     {
         $this->name = $name;
 
@@ -149,9 +149,9 @@ class QuizInstance extends AbstractEntity
 
     /**
      * @param string $description
-     * @return EntityInterface|null
+     * @return EntityInterface
      */
-    public function setDescription(string $description): ?EntityInterface
+    public function setDescription(string $description): EntityInterface
     {
         $this->description = $description;
 
@@ -168,9 +168,9 @@ class QuizInstance extends AbstractEntity
 
     /**
      * @param int $nrQuestions
-     * @return EntityInterface|null
+     * @return EntityInterface
      */
-    public function setNrQuestions(int $nrQuestions): ?EntityInterface
+    public function setNrQuestions(int $nrQuestions): EntityInterface
     {
         $this->nrQuestions = $nrQuestions;
 

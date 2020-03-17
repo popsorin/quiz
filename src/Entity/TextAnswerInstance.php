@@ -22,12 +22,19 @@ class TextAnswerInstance implements EntityInterface
         $this->text = $text;
     }
 
+    /**
+     * @return int|null
+     */
     public function getQuestionInstanceId() : ?int
     {
         return $this->questionInstanceId;
     }
 
-    public function setQuestionInstanceInterface(int $questionInstanceId) :TextAnswerInstance
+    /**
+     * @param int $questionInstanceId
+     * @return TextAnswerInstance
+     */
+    public function setQuestionInstanceInterface(int $questionInstanceId): TextAnswerInstance
     {
         $this->questionInstanceId = $questionInstanceId;
 

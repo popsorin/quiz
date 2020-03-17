@@ -115,7 +115,7 @@ class QuizTemplate extends AbstractEntity
      * @param int $nrQuestions
      * @return EntityInterface|null
      */
-    public function setNrQuestions(int $nrQuestions): ?EntityInterface
+    public function setNrQuestions(int $nrQuestions): EntityInterface
     {
         $this->nrQuestions = $nrQuestions;
 

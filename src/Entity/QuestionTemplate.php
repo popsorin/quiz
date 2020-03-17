@@ -54,9 +54,9 @@ class QuestionTemplate extends AbstractEntity
 
     /**
      * @param string $answer
-     * @return EntityInterface|null
+     * @return EntityInterface
      */
-    public function setAnswer(string $answer): ?EntityInterface
+    public function setAnswer(string $answer): EntityInterface
     {
         $this->answer = $answer;
 
@@ -92,9 +92,9 @@ class QuestionTemplate extends AbstractEntity
 
     /**
      * @param string $type
-     * @return EntityInterface|null
+     * @return EntityInterface
      */
-    public function setType(string $type): ?EntityInterface
+    public function setType(string $type): EntityInterface
     {
         $this->type = $type;
 
