@@ -125,7 +125,7 @@ class QuestionInstance extends AbstractEntity
      * @param int $questionTemplateId
      * @return EntityInterface|null
      */
-    public function setQuestionTemplateId(int $questionTemplateId): ?EntityInterface
+    public function setQuestionTemplateId(int $questionTemplateId): self
     {
         $this->questionTemplateId = $questionTemplateId;
 
