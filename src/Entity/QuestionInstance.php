@@ -87,7 +87,7 @@ class QuestionInstance extends AbstractEntity
      * @param int $quizInstanceId
      * @return EntityInterface|null
      */
-    public function setQuizInstanceId(int $quizInstanceId): ?EntityInterface
+    public function setQuizInstanceId(int $quizInstanceId): self
     {
         $this->quizInstanceId = $quizInstanceId;
 
@@ -106,7 +106,7 @@ class QuestionInstance extends AbstractEntity
      * @param string $type
      * @return EntityInterface|null
      */
-    public function setType(string $type): ?EntityInterface
+    public function setType(string $type): self
     {
         $this->type = $type;
 
@@ -125,7 +125,7 @@ class QuestionInstance extends AbstractEntity
      * @param int $questionTemplateId
      * @return EntityInterface|null
      */
-    public function setQuestionTemplateId(int $questionTemplateId): ?EntityInterface
+    public function setQuestionTemplateId(int $questionTemplateId): self
     {
         $this->questionTemplateId = $questionTemplateId;
 
@@ -144,7 +144,7 @@ class QuestionInstance extends AbstractEntity
      * @param string $answer
      * @return EntityInterface|null
      */
-    public function setAnswer(string $answer): ?EntityInterface
+    public function setAnswer(string $answer): self
     {
         $this->answer = $answer;
 
