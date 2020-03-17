@@ -26,82 +26,56 @@
 </head>
 
 <body>
-    <!--Header-->
-    <div class="d-flex flex-column flex-md-row align-items-center p-3 mb-3 bg-light border-bottom shadow-sm">
-        <h5 class="my-0 mr-md-auto font-weight-normal">Quiz</h5>
-        <nav class="my-2 my-md-0 mr-md-3">
-            <span class="p-2 text-dark">Hello!</span>
-        </nav>
-        <a class="btn btn-danger" href="/logout">Logout</a>
-    </div>
-
-    <!--Breadcrumbs-->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb px-3 py-0 mb-3">
-            <li class="breadcrumb-item" ><a href="/dashboard">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">User details</li>
-        </ol>
+<!--Header-->
+<div class="d-flex flex-column flex-md-row align-items-center p-3 mb-3 bg-light border-bottom shadow-sm">
+    <h5 class="my-0 mr-md-auto font-weight-normal">Quiz</h5>
+    <nav class="my-2 my-md-0 mr-md-3">
+        <span class="p-2 text-dark">Hello!</span>
     </nav>
+    <a class="btn btn-danger" href="/logout">Logout</a>
+</div>
 
-    <div class="container">
-        <!--Page title block-->
-        <div class="text-center">
-            <h1>New user / Edit user</h1>
-        </div>
+<!--Breadcrumbs-->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb px-3 py-0 mb-3">
+        <li class="breadcrumb-item" ><a href="/dashboard">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">User details</li>
+    </ol>
+</nav>
 
-        <?php if($user !== ""): ?>
-        <!--User details form-->
-        <form method="POST">
-            <div class="form-group">
-                <label for="userName">Name</label>
-                <input type="text" name="name" value="<?php echo $user->getName() ?>" class="form-control" id="userName" placeholder="<?php echo $user->getName() ?>">
-            </div>
-            <div class="form-group">
-                <label for="userEmail">Email</label>
-                <input type="text" name="email" value="<?php echo $user->getEmail() ?>" class="form-control" id="userEmail" placeholder="<?php echo $user->getEmail() ?>">
-            </div>
-            <div class="form-group">
-                <label for="userPassword">Password</label>
-                <input type="password" name="password" class="form-control" id="userPassword" placeholder="User password">
-            </div>
-            <div class="form-group">
-                <label for="userRole">Role</label>
-                <select name="role" class="form-control" id="userRole">
-                    <option value="admin">admin</option>
-                    <option value="user">user</option>
-                </select>
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">Save</button>
-            </div>
-        </form>
-            <?php else: ?>
-        <!--User details form-->
-        <form method="POST">
-                <div class="form-group">
-                    <label for="userName">Name</label>
-                    <input type="text" name="name" class="form-control" id="userName" placeholder="name">
-                </div>
-                <div class="form-group">
-                    <label for="userEmail">Email</label>
-                    <input type="email" name="email" class="form-control" id="userEmail" placeholder="User email">
-                </div>
-                <div class="form-group">
-                    <label for="userPassword">Password</label>
-                    <input type="password" name="password" class="form-control" id="userPassword" placeholder="User password">
-                </div>
-                <div class="form-group">
-                    <label for="userRole">Role</label>
-                    <select name="role" class="form-control" id="userRole">
-                        <option value="admin">admin</option>
-                        <option value="user">user</option>
-                    </select>
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-            <?php endif; ?>
-        </form>
+<div class="container">
+    <!--Page title block-->
+    <div class="text-center">
+        <h1>New user / Edit user</h1>
     </div>
+
+    <?php $name = (isset($user) && $user !== "") ? $user->getName() : "" ?>
+    <?php $email = (isset($user) && $user !== "") ? $user->getEmail() : "" ?>
+    <!--User details form-->
+    <form method="POST">
+        <div class="form-group">
+            <label for="userName">Name</label>
+            <input type="text" name="name" value="<?php echo $name;?>" class="form-control" id="userName" placeholder="<?php echo $name?>">
+        </div>
+        <div class="form-group">
+            <label for="userEmail">Email</label>
+            <input type="text" name="email" value="<?php echo $email ?>" class="form-control" id="userEmail" placeholder="<?php echo $email ?>">
+        </div>
+        <div class="form-group">
+            <label for="userPassword">Password</label>
+            <input type="password" name="password" class="form-control" id="userPassword" placeholder="User password">
+        </div>
+        <div class="form-group">
+            <label for="userRole">Role</label>
+            <select name="role" class="form-control" id="userRole">
+                <option value="admin">admin</option>
+                <option value="user">user</option>
+            </select>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
 </body>
 </html>
