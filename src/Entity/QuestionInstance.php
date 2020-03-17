@@ -87,7 +87,7 @@ class QuestionInstance extends AbstractEntity
      * @param int $quizInstanceId
      * @return EntityInterface|null
      */
-    public function setQuizInstanceId(int $quizInstanceId): ?EntityInterface
+    public function setQuizInstanceId(int $quizInstanceId): self
     {
         $this->quizInstanceId = $quizInstanceId;
 
