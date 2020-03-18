@@ -3,7 +3,6 @@
 namespace Quiz\Entity;
 
 use ReallyOrm\Entity\AbstractEntity;
-use ReallyOrm\Entity\self;
 
 /**
  * Class User
