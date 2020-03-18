@@ -5,6 +5,7 @@ namespace Quiz\Service;
 
 
 use Framework\Http\Request;
+use Quiz\Adapter\QuestionTemplateAdapter;
 use Quiz\Entity\QuestionTemplate;
 use Quiz\Persistency\Repositories\QuestionTemplateRepository;
 use ReallyOrm\Entity\EntityInterface;
@@ -28,16 +29,6 @@ class QuestionTemplateService
     {
         $this->repositoryManager = $repositoryManager;
     }
-
-    /**
-     * @param int $idQuestion
-     * @param int $idQuiz
-     */
-    public function insertIntoLinkTable(int $idQuestion, int $idQuiz)
-    {
-        $this->repositoryManager->getRepository(QuestionTemplate::class)->insertIntoLinkTable($idQuestion, $idQuestion, "quiz_question_template");
-    }
-
 
     public function add(?int $entityId, array $entityData): bool
     {
@@ -141,10 +132,19 @@ class QuestionTemplateService
 
     /**
      * @param int|null $id
-     * @return mixed
+     * @return array
      */
-    public function getAllLinked(?int $id)
+    public function getQuestions(?int $id): array
     {
-        return $this->repositoryManager->getRepository(QuestionTemplate::class)->getQuestions($id);
+        /** @var QuestionTemplateRepository $repository*/
+        $repository =$this->repositoryManager->getRepository(QuestionTemplate::class);
+        $questionTemplateId = $repository->getQuestions($id);
+        $adapter = new QuestionTemplateAdapter();
+        $questionTemplate = [];
+        foreach ($questionTemplateId as $questionId) {
+            $aux = ["id" => $questionId];
+            $questionTemplate =array_merge($questionTemplate,  $repository->findBy($aux, [], 0, 0));
+        }
+        return $questionTemplate;
     }
 }

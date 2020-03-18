@@ -10,6 +10,7 @@ use Quiz\Entity\QuizTemplate;
 use Quiz\Entity\User;
 use Quiz\Persistency\Repositories\QuizTemplateRepository;
 use Quiz\Persistency\Repositories\UserRepository;
+use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
@@ -116,7 +117,11 @@ class QuizTemplateService
         return $this->repositoryManager->getRepository(QuizTemplate::class)->deleteById($id);
     }
 
-    public function getOneQuiz(array $filters)
+    /**
+     * @param array $filters
+     * @return EntityInterface|null
+     */
+    public function getOneQuiz(array $filters): ?EntityInterface
     {
         return $this->repositoryManager->getRepository(QuizTemplate::class)->findOneBy($filters);
     }

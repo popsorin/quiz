@@ -29,14 +29,11 @@ class QuizInstanceService
     }
 
     /**
-     * @param int|null $quizId
-     * @param EntityInterface $entityData
+     * @param EntityInterface $quizInstance
      * @return bool
      */
-    public function add(?int $quizId, EntityInterface $entityData): ?bool
+    public function add(EntityInterface $quizInstance): ?bool
     {
-        $quizInstance = new QuizInstance($quizId, $entityData->getId(), 0, $entityData->getName(), $entityData->getDescription(), 0);
-        /** @var QuestionTemplateRepository $repository */
         $repository =  $this->repositoryManager->getRepository(QuizInstance::class);
 
         return $repository->insertOnDuplicateKeyUpdate($quizInstance);

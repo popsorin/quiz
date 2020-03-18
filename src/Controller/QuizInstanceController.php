@@ -8,6 +8,7 @@ use Framework\Contracts\RendererInterface;
 use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
+use Quiz\Adapter\QuizTemplateAdapter;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizInstanceService;
 use Quiz\Service\QuizTemplateService;
@@ -60,26 +61,15 @@ class QuizInstanceController extends AbstractController
     public function getQuiz(Request $request, array $attributes)
     {
         $this->session->start();
-        $quizTemplate = $this->quizTemplateService->getOneQuiz(["id" =>$attributes["id"]]);
+        $id = $attributes["id"];
+        $quizTemplate = $this->quizTemplateService->getOneQuiz(["id" => $id]);
+        $adaptor = new QuizTemplateAdapter();
+        $quizInstance = $adaptor->getQuizInstance($quizTemplate, $id);
+        $this->service->add($quizInstance);
+        $this->session->set("quizInstanceId", $quizInstance);
 
-        $this->service->add($attributes["id"], $quizTemplate);
+        return self::createResponse($request, 301, "Location", ["/homepage/quiz/$id/instance/questions/"]);
 
-        $questionsId = $this->questionTemplateService->getAllLinked($quizTemplate->getId());
-
-        $questions = $this->questionTemplateService->getAllFiltered($questionsId);
-
-        $this->session->set("questions", $questions);
-
-        $this->session->set("answeredQuestions", []);
-        $this->session->set("answers", []);
-
-        return $this->renderer->renderView(
-            self::LISTING_PAGE,
-            [
-                "name" => $this->session->get("name"),
-                "question" => $questions[count($questions) -1]
-            ]
-        );
     }
 
     public function save(Request $request, array  $attributes)

@@ -4,7 +4,7 @@ namespace Quiz\Entity;
 
 use ReallyOrm\Entity\AbstractEntity;
 
-class QuizTemplate extends AbstractEntity
+class QuizTemplate extends AbstractEntity implements QuizTemplateInterface
 {
     /**
      * @var int
@@ -26,7 +26,7 @@ class QuizTemplate extends AbstractEntity
 
     /**
      * @var int
-     * @MappedOn
+     * @MappedOn nrQuestions
      */
     private $nrQuestions;
 
@@ -43,6 +43,14 @@ class QuizTemplate extends AbstractEntity
         $this->name = $name;
         $this->description = $description;
         $this->nrQuestions = $nrQuestions;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     /**

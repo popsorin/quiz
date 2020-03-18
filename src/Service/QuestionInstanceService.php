@@ -4,9 +4,11 @@
 namespace Quiz\Service;
 
 
+use Quiz\Adapter\QuestionTemplateAdapter;
 use Quiz\Entity\QuestionInstance;
 use Quiz\Entity\QuestionTemplate;
 use Quiz\Persistency\Repositories\QuestionTemplateRepository;
+use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
 
 class QuestionInstanceService
@@ -25,20 +27,16 @@ class QuestionInstanceService
         $this->repositoryManager = $repositoryManager;
     }
 
-    public function add(array $entityData): bool
+    public function add(array $questionTemplate, int $id): bool
     {
-        $text = isset($entityData['text']) ?  $entityData['text'] : '';
-        $answer = isset($entityData['answer']) ? $entityData['answer'] : '';
-        $questionId = isset($entityData['questionTemplateId']) ?  $entityData['questionTemplateId'] : '';
-        $type = isset($entityData['type']) ?  $entityData['type'] : '';
-        $quizId= isset($entityData['quizInstanceId']) ?  $entityData['quizInstanceId'] : '';
-
-        $questionTemplate = new QuestionInstance($text, $quizId, $type, $questionId, $answer);
 
         /** @var QuestionTemplateRepository $repository */
         $repository =  $this->repositoryManager->getRepository(QuestionInstance::class);
-
-        $success = $repository->insertOnDuplicateKeyUpdate($questionTemplate);
+        $adaptor = new QuestionTemplateAdapter();
+        foreach ($questionTemplate as $key => $value) {
+            $quizInstance = $adaptor->getQuestionInstance($value, $id);
+            $success = $repository->insertOnDuplicateKeyUpdate($quizInstance);
+        }
 
         // if the question could not be saved, we will not be able to save the associated quizzes
         if (!$success) {

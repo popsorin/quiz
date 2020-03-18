@@ -33,9 +33,10 @@ class QuizTemplateController extends AbstractController
 
     /**
      * QuizTemplateController constructor.
-     * @param QuestionTemplateService $boundedService
-     * @param SessionInterface $session
+     * @param RendererInterface $renderer
      * @param QuizTemplateService $service
+     * @param SessionInterface $session
+     * @param QuestionTemplateService $boundedService
      */
     public function __construct(RendererInterface $renderer,QuizTemplateService $service, SessionInterface $session, QuestionTemplateService $boundedService)
     {

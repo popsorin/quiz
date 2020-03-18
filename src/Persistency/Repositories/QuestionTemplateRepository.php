@@ -32,12 +32,17 @@ class QuestionTemplateRepository extends AbstractRepository implements LinkedEnt
         return $query->execute();
     }
 
-    public function getQuestions(?int $id)
+    /**
+     * @param int|null $id
+     * @return array
+     */
+    public function getQuestions(?int $id): array
     {
         $query = $this->pdo->prepare(
             "SELECT (question_template_id) FROM {$this->getLinkTableName()} WHERE quiz_template_id = ?");
         $query->bindValue(1, $id);
         $query->execute();
+        $result = [];
         while ($row = $query->fetch()) {
             $result[] = $row['question_template_id'];
         }
