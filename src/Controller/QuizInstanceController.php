@@ -81,4 +81,9 @@ class QuizInstanceController extends AbstractController
             ]
         );
     }
+
+    public function save(Request $request, array  $attributes)
+    {
+
+    }
 }

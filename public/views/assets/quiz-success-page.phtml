@@ -47,33 +47,42 @@
         <!--Page title block-->
         <div class="text-center">
             <h1>Congrats!</h1>
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <!--Sorting arrow are displayed using the 'asc','dsc' classes-->
-                    <th scope="col">Question</th>
-                    <th scope="col">Answer</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php for($i = 0 ; $i < count($questions);$i++): ?>
-                <tr>
-                    <td>
-                    <div class="card-header">
-                        <span>
-                    <?php echo $questions[$i]->getText() ?>
-                    </span>
-                    </div>
-                    </td>
-                    <td>
-                    <div class="card-body">
-                        <span><?php echo $answers[$i] ?></span>
-                    </div>
-                    </td>
-                <?php endfor; ?>
-                </tr>
-                </tbody>
+            <form action="/homepage/save/results" method="POST">
+                <div class="form-group">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <!--Sorting arrow are displayed using the 'asc','dsc' classes-->
+                        <th scope="col">Question</th>
+                        <th scope="col">Answer</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php for($i = 0 ; $i < count($questions);$i++): ?>
+                    <tr>
+                        <td>
+                        <div class="card-header">
+                            <span>
+                        <?php echo $questions[$i]->getText() ?>
+                        </span>
+                        </div>
+                        </td>
+                        <td>
+                        <div class="card-body">
+                           <?php echo $answers[$i] ?>
+                        </div>
+                        </td>
+                    <?php endfor; ?>
+                    </tr>
+                    </tbody>
+                    </table>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
         </div>
+    </div>
+    <div>
+
     </div>
 </body>
 </html>
