@@ -3,7 +3,6 @@
 
 namespace Quiz\Entity;
 
-
 use ReallyOrm\Entity\AbstractEntity;
 
 class QuizInstance extends AbstractEntity
@@ -62,114 +61,116 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId(?int $id): void
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return int
-     */
-    public function getQuizId(): int
+    public function getQuizId(): ?int
     {
         return $this->quizId;
     }
 
     /**
      * @param int $quizId
+     * @return self
      */
-    public function setQuizId(int $quizId): void
+    public function setQuizId(int $quizId): self
     {
         $this->quizId = $quizId;
+
+        return $this;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getUserId(): int
+    public function getUserId(): ?int
     {
         return $this->userId;
     }
 
     /**
      * @param int $userId
+     * @return self
      */
-    public function setUserId(int $userId): void
+    public function setUserId(int $userId): self
     {
         $this->userId = $userId;
+
+        return $this;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getScore(): int
+    public function getScore(): ?int
     {
         return $this->score;
     }
 
     /**
      * @param int $score
+     * @return self
      */
-    public function setScore(int $score): void
+    public function setScore(int $score): self
     {
         $this->score = $score;
+
+        return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
     /**
      * @param string $name
+     * @return self
      */
-    public function setName(string $name): void
+    public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
     /**
      * @param string $description
+     * @return self
      */
-    public function setDescription(string $description): void
+    public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getNrQuestions(): int
+    public function getNrQuestions(): ?int
     {
         return $this->nrQuestions;
     }
 
     /**
      * @param int $nrQuestions
+     * @return self
      */
-    public function setNrQuestions(int $nrQuestions): void
+    public function setNrQuestions(int $nrQuestions): self
     {
         $this->nrQuestions = $nrQuestions;
+
+        return $this;
     }
 }

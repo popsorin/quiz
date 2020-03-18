@@ -55,10 +55,13 @@ class QuizTemplate extends AbstractEntity
 
     /**
      * @param int $createdBy
+     * @return self
      */
-    public function setCreatedBy(int $createdBy): void
+    public function setCreatedBy(int $createdBy): self
     {
         $this->createdBy = $createdBy;
+
+        return $this;
     }
 
     /**
@@ -71,10 +74,13 @@ class QuizTemplate extends AbstractEntity
 
     /**
      * @param string $name
+     * @return self
      */
-    public function setName(string $name): void
+    public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -87,10 +93,13 @@ class QuizTemplate extends AbstractEntity
 
     /**
      * @param string $description
+     * @return self
      */
-    public function setDescription(string $description): void
+    public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
     }
 
     /**
@@ -103,9 +112,12 @@ class QuizTemplate extends AbstractEntity
 
     /**
      * @param int $nrQuestions
+     * @return self
      */
-    public function setNrQuestions(int $nrQuestions): void
+    public function setNrQuestions(int $nrQuestions): self
     {
         $this->nrQuestions = $nrQuestions;
+
+        return $this;
     }
 }

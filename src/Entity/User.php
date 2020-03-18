@@ -3,6 +3,7 @@
 namespace Quiz\Entity;
 
 use ReallyOrm\Entity\AbstractEntity;
+use ReallyOrm\Entity\self;
 
 /**
  * Class User
@@ -14,6 +15,12 @@ class User extends AbstractEntity
      * @MappedOn name
      */
     private $name;
+
+    /**
+     * @var string
+     * @MappedOn email
+     */
+    private $email;
 
     /**
      * @var string
@@ -32,12 +39,19 @@ class User extends AbstractEntity
      * @param string $name
      * @param string $password
      * @param string $role
+     * @param string $email
      */
-    public function __construct(string $name, string $password, string $role)
+    public function __construct(
+        string $name,
+        string $password,
+        string $role,
+        string $email
+    )
     {
         $this->name = $name;
         $this->password = $password;
         $this->role = $role;
+        $this->email = $email;
     }
 
     /**
@@ -57,10 +71,29 @@ class User extends AbstractEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getName(): ?string
     {
         return $this->name;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     * @return self
+     */
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
     }
 }

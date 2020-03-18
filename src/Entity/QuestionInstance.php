@@ -56,22 +56,6 @@ class QuestionInstance extends AbstractEntity
     }
 
     /**
-     * @return int
-     */
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId(?int $id): void
-    {
-        $this->id = $id;
-    }
-
-    /**
      * @return string
      */
     public function getText(): string
@@ -81,10 +65,13 @@ class QuestionInstance extends AbstractEntity
 
     /**
      * @param string $text
+     * @return self|null
      */
-    public function setText(string $text): void
+    public function setText(string $text): ?self
     {
         $this->text = $text;
+
+        return $this;
     }
 
     /**
@@ -97,57 +84,69 @@ class QuestionInstance extends AbstractEntity
 
     /**
      * @param int $quizInstanceId
+     * @return self|null
      */
-    public function setQuizInstanceId(int $quizInstanceId): void
+    public function setQuizInstanceId(int $quizInstanceId): self
     {
         $this->quizInstanceId = $quizInstanceId;
+
+        return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getType(): string
+    public function getType(): ?string
     {
         return $this->type;
     }
 
     /**
      * @param string $type
+     * @return self
      */
-    public function setType(string $type): void
+    public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getQuestionTemplateId(): int
+    public function getQuestionTemplateId(): ?int
     {
         return $this->questionTemplateId;
     }
 
     /**
      * @param int $questionTemplateId
+     * @return self
      */
-    public function setQuestionTemplateId(int $questionTemplateId): void
+    public function setQuestionTemplateId(int $questionTemplateId): self
     {
         $this->questionTemplateId = $questionTemplateId;
+
+        return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getAnswer(): string
+    public function getAnswer(): ?string
     {
         return $this->answer;
     }
 
     /**
      * @param string $answer
+     * @return self
      */
-    public function setAnswer(string $answer): void
+    public function setAnswer(string $answer): self
     {
         $this->answer = $answer;
+
+        return $this;
     }
 }
