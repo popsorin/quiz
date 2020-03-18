@@ -3,9 +3,9 @@
 
 namespace Quiz\Entity;
 
-
 use ReallyOrm\Entity\AbstractEntity;
 use ReallyOrm\Entity\self;
+
 
 class QuizInstance extends AbstractEntity
 {
@@ -63,9 +63,9 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getQuizId(): int
+    public function getQuizId(): ?int
     {
         return $this->quizId;
     }
@@ -82,9 +82,9 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getUserId(): int
+    public function getUserId(): ?int
     {
         return $this->userId;
     }
@@ -101,9 +101,9 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getScore(): int
+    public function getScore(): ?int
     {
         return $this->score;
     }
@@ -120,9 +120,9 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -139,9 +139,9 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -158,9 +158,9 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getNrQuestions(): int
+    public function getNrQuestions(): ?int
     {
         return $this->nrQuestions;
     }
