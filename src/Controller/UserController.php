@@ -74,11 +74,11 @@ class UserController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function update(Request $request, array $attributes)
+    public function update(Request $request, array $attributes): Response
     {
-        $id = isset($attributes['id']) ? $attributes['id'] : null;
-
-        $this->service->add($id, $request->getParameters());
+        $factory = new UserFactory();
+        $entity = $factory->createFromRequest($request, "name", "email", "password","role");
+        $this->service->update($entity);
 
         return self::createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
@@ -106,12 +106,31 @@ class UserController extends AbstractController
      * @param Request $request
      * @param array $attributes
      * @return Response
+     * Returns the page for the add functionality with a set name and a set email
      */
     public function userDetails(Request $request, array $attributes)
     {
         $user = $this->service->userDetails($attributes);
+        $this->session->start();
+        $this->session->set("updateName", $user->getName());
+        $this->session->set("updateEmail", $user->getEmail());
+        return $this->renderer->renderView(
+            "admin-user-details.phtml",
+            [
+            "action" => "update",
+            "name" => $user->getName(),
+            "email" => $user->getEmail()
+            ]
+        );
+    }
 
-        return $this->renderer->renderView("admin-user-details.phtml", ["user" => $user]);
+    /**
+     * @return Response
+     * Returns the page for the add functionality with the name and email unset
+     */
+    public function userView()
+    {
+        return $this->renderer->renderView("admin-user-details.phtml", []);
     }
 
     /**

@@ -48,6 +48,11 @@ class UserService
         return $repository->insertOnDuplicateKeyUpdate($user);
     }
 
+    public function update(EntityInterface $user): bool
+    {
+        return $this->repositoryManager->getRepository(User::class)->insertOnDuplicateKeyUpdate($user);
+    }
+
     /**
      * @param Request $request
      * @param array $attributes
