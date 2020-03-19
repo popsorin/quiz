@@ -112,7 +112,8 @@ class QuizTemplate extends AbstractEntity
 
     /**
      * @param int $nrQuestions
-     * @return self
+     * @return self|null
+
      */
     public function setNrQuestions(int $nrQuestions): self
     {

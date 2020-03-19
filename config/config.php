@@ -26,7 +26,7 @@ return [
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/users/add',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'User',
-                Router::CONFIG_KEY_ACTION => 'userDetails',
+                Router::CONFIG_KEY_ACTION => 'userView',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
         'user_controller_add' =>
@@ -40,7 +40,7 @@ return [
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/users/update/(?<id>\d+)',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'User',
-                Router::CONFIG_KEY_ACTION => 'add',
+                Router::CONFIG_KEY_ACTION => 'update',
                 Router::CONFIG_KEY_METHOD => 'POST'
             ],
         'user_controller_users_getAll' =>

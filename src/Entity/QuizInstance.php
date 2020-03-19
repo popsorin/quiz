@@ -5,6 +5,7 @@ namespace Quiz\Entity;
 
 use ReallyOrm\Entity\AbstractEntity;
 
+
 class QuizInstance extends AbstractEntity
 {
     /**

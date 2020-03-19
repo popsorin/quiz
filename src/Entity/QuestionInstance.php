@@ -65,9 +65,9 @@ class QuestionInstance extends AbstractEntity
 
     /**
      * @param string $text
-     * @return self|null
+     * @return self
      */
-    public function setText(string $text): ?self
+    public function setText(string $text): self
     {
         $this->text = $text;
 
@@ -84,7 +84,7 @@ class QuestionInstance extends AbstractEntity
 
     /**
      * @param int $quizInstanceId
-     * @return self|null
+     * @return self
      */
     public function setQuizInstanceId(int $quizInstanceId): self
     {

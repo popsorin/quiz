@@ -8,6 +8,7 @@ use Framework\Contracts\RendererInterface;
 use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
+use Framework\Http\Response;
 use Quiz\Entity\QuestionInstance;
 use Quiz\Persistency\Repositories\QuizTemplateRepository;
 use Quiz\Service\QuestionInstanceService;
@@ -74,13 +75,16 @@ class CandidateController extends AbstractController
 
     }
 
-    //success
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
     public function success(Request $request, array $attributes)
     {
         $this->session->start();
         $questions = $this->session->get("answeredQuestions");
         $answers = $this->session->get("answers");
-
         return $this->renderer->renderView(
             "quiz-success-page.phtml",
             [

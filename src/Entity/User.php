@@ -3,7 +3,6 @@
 namespace Quiz\Entity;
 
 use ReallyOrm\Entity\AbstractEntity;
-use ReallyOrm\Entity\self;
 
 /**
  * Class User
@@ -43,11 +42,10 @@ class User extends AbstractEntity
      */
     public function __construct(
         string $name,
+        string $email,
         string $password,
-        string $role,
-        string $email
-    )
-    {
+        string $role
+    ) {
         $this->name = $name;
         $this->password = $password;
         $this->role = $role;

@@ -5,7 +5,6 @@ namespace Quiz\Entity;
 
 
 use ReallyOrm\Entity\AbstractEntity;
-use ReallyOrm\Entity\EntityInterface;
 
 class QuestionTemplate extends AbstractEntity
 {
@@ -54,7 +53,7 @@ class QuestionTemplate extends AbstractEntity
 
     /**
      * @param string $answer
-     * @return QuestionTemplate
+     * @return self
      */
     public function setAnswer(string $answer): self
     {
@@ -73,7 +72,7 @@ class QuestionTemplate extends AbstractEntity
 
     /**
      * @param string $text
-     * @return QuestionTemplate
+     * @return self
      */
     public function setText(string $text): self
     {
@@ -92,7 +91,7 @@ class QuestionTemplate extends AbstractEntity
 
     /**
      * @param string $type
-     * @return QuestionTemplate
+     * @return self
      */
     public function setType(string $type): self
     {

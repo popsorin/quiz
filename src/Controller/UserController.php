@@ -7,7 +7,10 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
+use Prophecy\Comparator\Factory;
 use Quiz\Entity\User;
+use Quiz\Exception\UserAlreadyExistsException;
+use Quiz\Factory\UserFactory;
 use Quiz\Persistency\Repositories\UserRepository;
 use Quiz\Service\UserService;
 use ReallyOrm\Entity\EntityInterface;
@@ -20,51 +23,72 @@ class UserController extends AbstractController
 {
     const USERS_PER_PAGE = 4;
 
-    const LISTING_PAGE = "admin-users-listing.phtml";
+    const LISTING_PAGE = "admin-user-details.phtml";
 
     /**
      * @var SessionInterface
      */
-    protected $session;
+    private $session;
 
     /**
      * @var UserService
      */
-    protected $service;
+    private $service;
+
+    /**
+     * @var UserFactory
+     */
+    private $factory;
 
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
-     * @param SessionInterface $session
      * @param UserService $service
+     * @param SessionInterface $session
+     * @param UserFactory $factory
      */
-    public function __construct(RendererInterface $renderer,UserService $service, SessionInterface $session)
-    {
+    public function __construct(
+        RendererInterface $renderer,
+        UserService $service,
+        SessionInterface $session,
+        UserFactory $factory
+    ) {
         parent::__construct($renderer);
         $this->session = $session;
         $this->service = $service;
+        $this->factory = $factory;
     }
 
     /**
      * @param Request $request
      * @param array $attributes
      * @return Response
-     * //maybe make getRepository configurable************************************************
      */
     public function add(Request $request, array $attributes)
     {
-        $id = isset($attributes['id']) ? $attributes['id'] : null;
-        $entity = $this->service->findOneByName($request->getParameters());
-        if($entity !== null) {
+        $entity = $this->factory->createFromRequest($request, "name", "email", "password", "role");
+        try {
+            $this->service->add($entity);
+        } catch (UserAlreadyExistsException $exception) {
             return $this->renderer->renderView(
                 self::LISTING_PAGE,
                 [
-                    "name" => $entity->getName(),
-                    "email" => $entity->getEmail()
+                    "errorMessage" => $exception->getMessage()
                 ]
             );
         }
-        $this->service->add($id, $request->getParameters());
+        return self::createResponse($request, "301", "Location", ["/dashboard/users"]);
+    }
+
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
+    public function update(Request $request, array $attributes): Response
+    {
+        $entity = $this->factory->createFromRequest($request, "name", "email", "password","role");
+        $this->service->update($entity);
 
         return self::createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
@@ -92,14 +116,38 @@ class UserController extends AbstractController
      * @param Request $request
      * @param array $attributes
      * @return Response
+     * Returns the page for the add functionality with a set name and a set email
      */
     public function userDetails(Request $request, array $attributes)
     {
         $user = $this->service->userDetails($attributes);
-
-        return $this->renderer->renderView("admin-user-details.phtml", ["user" => $user]);
+        $this->session->start();
+        $this->session->set("updateName", $user->getName());
+        $this->session->set("updateEmail", $user->getEmail());
+        return $this->renderer->renderView(
+            "admin-user-details.phtml",
+            [
+            "action" => "update",
+            "name" => $user->getName(),
+            "email" => $user->getEmail()
+            ]
+        );
     }
 
+    /**
+     * @return Response
+     * Returns the page for the add functionality with the name and email unset
+     */
+    public function userView()
+    {
+        return $this->renderer->renderView("admin-user-details.phtml", []);
+    }
+
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
     public function delete(Request $request, array $attributes)
     {
         $this->service->delete($attributes["id"]);

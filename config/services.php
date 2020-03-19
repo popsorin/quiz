@@ -22,6 +22,7 @@ use Quiz\Entity\QuestionTemplate;
 use Quiz\Entity\QuizInstance;
 use Quiz\Entity\QuizTemplate;
 use Quiz\Entity\User;
+use Quiz\Factory\UserFactory;
 use Quiz\Persistency\Repositories\QuestionInstanceRepository;
 use Quiz\Persistency\Repositories\QuestionTemplateRepository;
 use Quiz\Persistency\Repositories\QuizInstanceRepository;
@@ -124,10 +125,13 @@ $container->register(QuizInstanceService::class, QuizInstanceService::class)
 $container->register(QuestionInstanceService::class, QuestionInstanceService::class)
     ->addArgument($container->findDefinition(RepositoryManagerInterface::class));
 
+$container->register(UserFactory::class, UserFactory::class);
+
 $container->register(UserController::class, UserController::class)
     ->addArgument(new Reference(RendererInterface::class))
     ->addArgument($container->findDefinition(UserService::class))
     ->addArgument(new Reference(SessionInterface::class))
+    ->addArgument(new Reference(UserFactory::class))
     ->addTag("controller");
 
 $container->register(AdminController::class, AdminController::class)
