@@ -15,6 +15,7 @@ class QuizInstanceRepository extends AbstractRepository
      * @param PDO $pdo
      * @param string $entityName
      * @param HydratorInterface $hydrator
+     * @param string $tableName
      */
     public function __construct(PDO $pdo, string $entityName, HydratorInterface $hydrator, string $tableName)
     {

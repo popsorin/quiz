@@ -4,7 +4,7 @@
 namespace Quiz\Validator\Rules;
 
 
-interface RulesInterface
+interface RuleInterface
 {
     public function getMessageError(): string;
     public function checkRule(): bool;

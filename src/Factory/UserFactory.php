@@ -7,8 +7,16 @@ namespace Quiz\Factory;
 use Framework\Http\Request;
 use Quiz\Entity\User;
 
-class UserFactory implements InterfaceFactory
+class UserFactory
 {
+    /**
+     * @param Request $request
+     * @param string $nameKey
+     * @param string $emailKey
+     * @param string $passwordKey
+     * @param string $roleKey
+     * @return User
+     */
     public function createFromRequest(
         Request $request,
         string $nameKey,
