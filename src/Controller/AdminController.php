@@ -10,7 +10,6 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Service\AdminService;
-use ReallyOrm\Test\Repository\RepositoryManager;
 
 class AdminController extends AbstractController
 {

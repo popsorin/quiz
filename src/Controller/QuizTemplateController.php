@@ -55,7 +55,7 @@ class QuizTemplateController extends AbstractController
     public function add(Request $request, array $attributes): Response
     {
         $this->session->start();
-        $updateId = isset($attributes['id']) ? $attributes['id'] : null;
+        $updateId = isset($attributes['id']) ?? null;
         $this->service->add($updateId, $this->session->get("id"), $request->getParameters());
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
@@ -70,7 +70,7 @@ class QuizTemplateController extends AbstractController
     {
         $this->service->deleteById($attributes["id"]);
 
-        return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes?page="]);
+        return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
     }
 
     /**
@@ -80,7 +80,7 @@ class QuizTemplateController extends AbstractController
      */
     public function getAll(Request $request, array $attributes): Response
     {
-        $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
+        $page = $request->getParameter("page") ?? 1;
         $props = $this->service->getAll($page, self::QUESTIONS_PER_PAGE);
 
         return $this->renderer->renderView(

@@ -77,7 +77,8 @@ class UserController extends AbstractController
                 ]
             );
         }
-        return $this->reateResponse($request, "301", "Location", ["/dashboard/users"]);
+
+        return $this->createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
 
     /**

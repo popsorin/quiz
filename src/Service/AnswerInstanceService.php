@@ -59,7 +59,7 @@ class AnswerInstanceService
      * @param string $questionType
      * @return RepositoryInterface
      */
-    private function getRepository(string $questionType)
+    private function getRepository(string $questionType): RepositoryInterface
     {
         if($questionType === "choice") {
             return $this->repositoryManager->getRepository(AnswerChoiceInstance::class);

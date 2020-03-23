@@ -4,6 +4,7 @@
 namespace Quiz\Service;
 
 
+use Exception;
 use Framework\Http\Request;
 use Quiz\Entity\QuestionTemplate;
 use Quiz\Entity\QuizTemplate;
@@ -38,7 +39,7 @@ class QuizTemplateService
      * @param array $entityData
      * @return bool //maybe make getRepository configurable************************************************
      * //maybe make getRepository configurable*******************************************
-     * @throws \Exception
+     * @throws Exception
      */
     public function add(?int $updateId, ?int $userId, array $entityData): bool
     {
@@ -55,7 +56,7 @@ class QuizTemplateService
 
         // if the question could not be saved, we will not be able to save the associated quizzes
         if (!$success) {
-            throw new \Exception("Cannot add quiz!");
+            throw new Exception("Cannot add quiz!");
         }
 
         // save associated quizzes one by one

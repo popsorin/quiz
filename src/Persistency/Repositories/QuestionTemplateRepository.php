@@ -23,12 +23,13 @@ class QuestionTemplateRepository extends AbstractRepository implements LinkedEnt
      * @param int $linkId
      * @return bool
      */
-    public function insertIntoLinkTable(int $id, int $linkId)
+    public function insertIntoLinkTable(int $id, int $linkId): bool
     {
         $query = $this->pdo->prepare(
             "INSERT INTO {$this->getLinkTableName()} (question_template_id, quiz_template_id) VALUES (?, ?)");
         $query->bindValue(1, $id);
         $query->bindValue(2, $linkId);
+
         return $query->execute();
     }
 

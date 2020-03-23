@@ -57,12 +57,12 @@ class QuestionTemplateController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function add(Request $request, array $attributes)
+    public function add(Request $request, array $attributes): Response
     {
         $id = isset($attributes['id']) ?? null;
         $this->service->add($id, $request->getParameters());
 
-        return self::createResponse($request, "301", "Location", ["/dashboard/questions"]);
+        return $this->createResponse($request, "301", "Location", ["/dashboard/questions"]);
     }
 
     /**
@@ -74,7 +74,7 @@ class QuestionTemplateController extends AbstractController
     {
         $this->service->deleteById($attributes["id"]);
 
-        return self::createResponse($request, "301", "Location", ["/dashboard/questions?page="]);
+        return $this->createResponse($request, "301", "Location", ["/dashboard/questions"]);
     }
 
     /**
@@ -106,7 +106,7 @@ class QuestionTemplateController extends AbstractController
     public function questionDetails(Request $request, array $attributes): Response
     {
         $question = $this->service->questionDetails($request, $attributes);
-        $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
+        $page = $request->getParameter("page") ?? 1;
         $quizzes = $this->boundedService->getAll($page, 0);
 
         return $this->renderer->renderView(

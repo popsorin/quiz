@@ -22,7 +22,7 @@ class AnswerChoiceInstanceFactory
         string $questionInstanceIdKey,
         string $isSelectedKey,
         string $isCorrectKey
-    ) {
+    ): AnswerChoiceInstance {
         $parameters = $request->getParameters();
         $questionInstanceId = 0;
         $text = "";

@@ -42,7 +42,7 @@ class UserService
         /** @var UserRepository $repository */
         $repository =  $this->repositoryManager->getRepository(User::class);
 
-        if($repository->findBy(["name" => $user->getName(), "email" => $user->getEmail()],[],0,0)) {
+        if($repository->findBy(["name" => $user->getName(), "email" => $user->getEmail()],[],0, 0)) {
             throw new UserAlreadyExistsException($user, "Name or email already exists");
         }
 
@@ -64,7 +64,7 @@ class UserService
     {
         $entitiesNumber = $this->repositoryManager->getRepository(User::class)->getCount();
 
-        $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
+        $page = $request->getParameter("page") ?? 1;
         $offset = $limit * ($page - 1);
 
         $results = $this->repositoryManager->getRepository(User::class)->findBy([], [], $offset, $limit);

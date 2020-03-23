@@ -20,7 +20,7 @@ class UserAlreadyExistsException extends Exception
      * @param int $code
      * @param Throwable|null $previous
      */
-    public function __construct(EntityInterface $entity, $message = "", $code = 0, Throwable $previous = null)
+    public function __construct(EntityInterface $entity, $message = "Email or username already exists", $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->entity = $entity;
@@ -29,7 +29,7 @@ class UserAlreadyExistsException extends Exception
     /**
      * @return EntityInterface|null
      */
-    public function getEntity(): ?EntityInterface
+    public function getEntity(): EntityInterface
     {
         return $this->entity;
     }

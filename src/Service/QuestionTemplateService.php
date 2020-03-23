@@ -32,9 +32,9 @@ class QuestionTemplateService
 
     public function add(?int $entityId, array $entityData): bool
     {
-        $answer = isset($entityData['answer']) ? $entityData['answer'] : '';
-        $question = isset($entityData['question']) ?  $entityData['question'] : '';
-        $type = isset($entityData['type']) ?  $entityData['type'] : '';
+        $answer = isset($entityData['answer']) ?? '';
+        $question = isset($entityData['question']) ?? '';
+        $type = isset($entityData['type']) ?? '';
 
         $questionTemplate = new QuestionTemplate($answer, $question, $type);
         $questionTemplate->setId($entityId);
@@ -142,7 +142,7 @@ class QuestionTemplateService
         $questionTemplateId = $repository->getQuestionIds($id);
         $questionTemplate = [];
         foreach ($questionTemplateId as $questionId) {
-            $questionTemplate =array_merge($questionTemplate,  $repository->findBy(["id" => $questionId], [], 0,0));
+            $questionTemplate =array_merge($questionTemplate,  $repository->findBy(["id" => $questionId], [], 0, 0));
         }
         return $questionTemplate;
     }
