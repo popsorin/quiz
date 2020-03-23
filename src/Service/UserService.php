@@ -41,8 +41,8 @@ class UserService
     {
         /** @var UserRepository $repository */
         $repository =  $this->repositoryManager->getRepository(User::class);
-
-        if($repository->findBy(["name" => $user->getName(), "email" => $user->getEmail()],[],0,0)) {
+      
+        if($repository->findBy(["name" => $user->getName(), "email" => $user->getEmail()], [], 0, 0)){
             throw new UserAlreadyExistsException($user, "Name or email already exists");
         }
 

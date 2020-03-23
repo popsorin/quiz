@@ -95,7 +95,6 @@ class CandidateController extends AbstractController
      * @param Request $request
      * @param array $attributes
      * @return Response
-     * Display the results page to the contestant
      */
     public function success(Request $request, array $attributes)
     {
@@ -103,7 +102,7 @@ class CandidateController extends AbstractController
         $quizInstanceId = $this->session->get("quizInstanceId");
         $questions = $this->questionInstanceService->getAll($quizInstanceId,0,0);
         $answers = $this->answerInstanceServoce->getAll($questions);
-
+      
         return $this->renderer->renderView(
             "quiz-success-page.phtml",
             [

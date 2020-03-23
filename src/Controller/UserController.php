@@ -7,6 +7,7 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
+use Prophecy\Comparator\Factory;
 use Quiz\Entity\User;
 use Quiz\Exception\UserAlreadyExistsException;
 use Quiz\Factory\UserFactory;
@@ -86,8 +87,7 @@ class UserController extends AbstractController
      */
     public function update(Request $request, array $attributes): Response
     {
-        $factory = new UserFactory();
-        $entity = $factory->createFromRequest($request, "name", "email", "password","role");
+        $entity = $this->factory->createFromRequest($request, "name", "email", "password","role");
         $this->service->update($entity);
 
         return self::createResponse($request, "301", "Location", ["/dashboard/users"]);

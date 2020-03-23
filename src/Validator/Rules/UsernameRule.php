@@ -4,7 +4,7 @@
 namespace Quiz\Validator\Rules;
 
 
-class UsernameRule implements RulesInterface
+class UsernameRule implements RuleInterface
 {
 
     public function getMessageError(): string
