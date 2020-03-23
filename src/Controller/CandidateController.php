@@ -9,13 +9,8 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
-use Quiz\Entity\QuestionInstance;
-use Quiz\Factory\AnswerChoiceInstanceFactory;
-use Quiz\Persistency\Repositories\QuizTemplateRepository;
 use Quiz\Service\AnswerInstanceService;
-use Quiz\Service\AnswerTextInstanceService;
 use Quiz\Service\QuestionInstanceService;
-use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizTemplateService;
 
 class CandidateController extends AbstractController
@@ -76,7 +71,7 @@ class CandidateController extends AbstractController
             return self::createResponse($request, "301", "Location", ["/"]);
         }
 
-        $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
+        $page = ($request->getParameter("page")) ?? 1;
         $props = $this->service->getAll($page, self::QUESTIONS_PER_PAGE);
 
         return $this->renderer->renderView(
@@ -100,7 +95,7 @@ class CandidateController extends AbstractController
     public function success(Request $request, array $attributes)
     {
         $this->session->start();
-        $quizInstanceId = $this->session->get("quizInstanceId");
+        $quizInstanceId = $attributes["quizInstanceId"];
         $questions = $this->questionInstanceService->getAll($quizInstanceId,0,0);
         $answers = $this->answerInstanceServoce->getAll($questions);
 

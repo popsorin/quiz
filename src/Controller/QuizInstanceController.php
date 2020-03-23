@@ -9,6 +9,7 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
+use Quiz\Service\QuestionInstanceService;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizInstanceService;
 use Quiz\Service\QuizTemplateService;
@@ -37,25 +38,33 @@ class QuizInstanceController extends AbstractController
     private $service;
 
     /**
+     * @var QuestionInstanceService
+     */
+    private $questionInstanceService;
+
+    /**
      * QuizInstanceController constructor.
      * @param RendererInterface $renderer
      * @param QuizTemplateService $quizTemplateService
      * @param SessionInterface $session
      * @param QuestionTemplateService $questionTemplateService
      * @param QuizInstanceService $service
+     * @param QuestionInstanceService $questionInstanceService
      */
     public function __construct(
         RendererInterface $renderer,
         QuizTemplateService $quizTemplateService,
         SessionInterface $session,
         QuestionTemplateService $questionTemplateService,
-        QuizInstanceService $service
+        QuizInstanceService $service,
+        QuestionInstanceService $questionInstanceService
     ) {
         parent::__construct($renderer);
         $this->quizTemplateService = $quizTemplateService;
         $this->session = $session;
         $this->questionTemplateService = $questionTemplateService;
         $this->service = $service;
+        $this->questionInstanceService = $questionInstanceService;
     }
 
     /**
@@ -65,7 +74,7 @@ class QuizInstanceController extends AbstractController
      * Retrieves a quiz that was chosen by the candidate from the database
      * and redirects to the instance so the first question can be displayed
      */
-    public function getQuiz(Request $request, array $attributes)
+    public function startQuiz(Request $request, array $attributes)
     {
         $this->session->start();
 
@@ -74,12 +83,15 @@ class QuizInstanceController extends AbstractController
         $quizInstance = $this->service->makeQuizInstance($quizTemplate, $quizTemplateId, $this->session->get("id"));
         $this->service->add($quizInstance);
 
-        $this->session->set("quizInstanceId", $quizInstance->getId());
-        $this->session->set("quizTemplateId", $quizTemplateId);
-        $this->session->set("offset", 0);
-        $this->session->set("limit", 1);
+        $quizInstanceId = $quizInstance->getId();
+        $questionsTemplate = $this->questionTemplateService->getQuestions($quizTemplateId);
+        foreach ($questionsTemplate as $questionTemplate)
+        {
+            $questionInstance =$this->questionInstanceService->getQuestionInstance($questionTemplate, $quizInstanceId, $questionTemplate->getId());
+            $this->questionInstanceService->add($questionInstance);
+        }
 
-        return self::createResponse($request, 301, "Location", ["/homepage/quiz/instance"]);
+        return self::createResponse($request, 301, "Location", ["/homepage/quiz/$quizInstanceId/question/1"]);
 
     }
 

@@ -8,6 +8,7 @@ use Quiz\Entity\AnswerChoiceInstance;
 use Quiz\Entity\AnswerTextInstance;
 use Quiz\Persistency\Repositories\AnswerChoiceInstanceRepository;
 use ReallyOrm\Entity\EntityInterface;
+use ReallyOrm\Repository\RepositoryInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
 
 class AnswerInstanceService
@@ -28,17 +29,12 @@ class AnswerInstanceService
 
     /**
      * @param EntityInterface $answerInstance
-     * @param EntityInterface $questionInstance
+     * @param string $questionType
      * @return bool
      */
-    public function add(EntityInterface $answerInstance, EntityInterface $questionInstance): bool
+    public function add(EntityInterface $answerInstance, string $questionType): bool
     {
-        ($questionInstance->getType() === "choice") ?
-        /** @var AnswerChoiceInstanceRepository $repository */
-        $repository = $this->repositoryManager->getRepository(AnswerChoiceInstance::class)  :
-        /** @var AnswerChoiceInstanceRepository $repository */
-        $repository = $this->repositoryManager->getRepository(AnswerTextInstance::class);
-
+        $repository = $this->getRepository($questionType);
 
         return $repository->insertOnDuplicateKeyUpdate($answerInstance);
     }
@@ -50,16 +46,25 @@ class AnswerInstanceService
     public function getAll(array $questions): array
     {
         $answers = [];
-        /** @var AnswerChoiceInstanceRepository $repository */
-        $repositoryChoice = $this->repositoryManager->getRepository(AnswerChoiceInstance::class);
-        /** @var AnswerChoiceInstanceRepository $repository */
-        $repositoryText = $this->repositoryManager->getRepository(AnswerTextInstance::class);
         foreach ($questions as $question) {
-            ($question->getType() === "text") ? $answer = $repositoryText->findOneBy(["question_instance_id" => $question->getId()]) :
-                                                $answer = $repositoryChoice->findOneBy(["question_instance_id" => $question->getId()]);
+            $repository = $this->getRepository($question->getType());
+            $answer = $repository->findOneBy(["question_instance_id" => $question->getId()]);
             $answers[] = $answer;
         }
 
         return $answers;
+    }
+
+    /**
+     * @param string $questionType
+     * @return RepositoryInterface
+     */
+    private function getRepository(string $questionType)
+    {
+        if($questionType === "choice") {
+            return $this->repositoryManager->getRepository(AnswerChoiceInstance::class);
+        }
+
+        return $this->repositoryManager->getRepository(AnswerTextInstance::class);
     }
 }

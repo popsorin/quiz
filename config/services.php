@@ -218,6 +218,7 @@ $container->register(QuizInstanceController::class, QuizInstanceController::clas
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument($container->findDefinition(QuestionTemplateService::class))
     ->addArgument($container->findDefinition(QuizInstanceService::class))
+    ->addArgument($container->findDefinition(QuestionInstanceService::class))
     ->addTag("controller");
 
 $container->register(QuestionInstanceController::class, QuestionInstanceController::class)
@@ -225,6 +226,7 @@ $container->register(QuestionInstanceController::class, QuestionInstanceControll
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument($container->findDefinition(QuestionInstanceService::class))
     ->addArgument($container->findDefinition(QuestionTemplateService::class))
+    ->addArgument($container->findDefinition(QuizInstanceService::class))
     ->addTag("controller");
 
 $container->register(AnswerInstanceController::class, AnswerInstanceController::class)

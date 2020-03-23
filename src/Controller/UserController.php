@@ -123,8 +123,6 @@ class UserController extends AbstractController
     {
         $user = $this->service->userDetails($attributes);
         $this->session->start();
-        $this->session->set("updateName", $user->getName());
-        $this->session->set("updateEmail", $user->getEmail());
 
         return $this->renderer->renderView(
             "admin-user-details.phtml",

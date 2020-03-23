@@ -9,6 +9,8 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
+use Quiz\Entity\AnswerChoiceInstance;
+use Quiz\Entity\AnswerTextInstance;
 use Quiz\Factory\AnswerChoiceInstanceFactory;
 use Quiz\Factory\AnswerTextInstanceFactory;
 use Quiz\Service\AnswerInstanceService;
@@ -76,21 +78,29 @@ class AnswerInstanceController extends AbstractController
     public function add(Request $request, array $attributes): Response
     {
         $this->session->start();
-        $offset= $this->session->get("offset");
-        $limit = $this->session->get("limit");
-        $quizInstanceId = $this->session->get("quizInstanceId");
+        $offset = (int)$attributes["currentQuestionInstanceNumber"];
+        $quizInstanceId = (int)$attributes["quizInstanceId"];
 
-        $questionInstance = $this->questionInstanceService->getOne($quizInstanceId, $offset++, $limit++);
-        $type = $questionInstance->getType();
-        $answer = ($type === "text") ?
-            $this->answerTextInstanceFactory->createFromRequest($request, "questionInstanceId", "answer") :
-            $this->answerChoiceInstanceFactory->createFromRequest($request,"answer", "questionInstance", "isSelected", "isCorrect");
+        $questionInstance = $this->questionInstanceService->getOne($quizInstanceId, $offset-1);
+        $answer = $this->makeAnswer($request, $questionInstance->getType());
         $answer->setQuestionInstanceId($questionInstance->getId());
-        $this->answerInstanceService->add($answer, $questionInstance);
+        $this->answerInstanceService->add($answer, $questionInstance->getType());
+        $offset++;
 
-        $this->session->set("offset", $offset);
-        $this->session->set("limit", $limit);
+        return self::createResponse($request, 301, "Location", ["/homepage/quiz/$quizInstanceId/question/$offset"]);
+    }
 
-        return self::createResponse($request, 301, "Location", ["/homepage/quiz/questions"]);
+    /**
+     * @param Request $request
+     * @param string $answerType
+     * @return AnswerChoiceInstance|AnswerTextInstance
+     */
+    private function makeAnswer(Request $request, string $answerType)
+    {
+        if($answerType === "text") {
+           return $this->answerTextInstanceFactory->createFromRequest($request, "questionInstanceId", "answer") ;
+        }
+
+        return $this->answerChoiceInstanceFactory->createFromRequest($request,"answer", "questionInstance", "isSelected", "isCorrect");
     }
 }

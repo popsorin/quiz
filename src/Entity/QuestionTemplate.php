@@ -46,7 +46,7 @@ class QuestionTemplate extends AbstractEntity
     /**
      * @return string|null
      */
-    public function getAnswer(): ?string
+    public function getAnswer(): string
     {
         return $this->answer;
     }

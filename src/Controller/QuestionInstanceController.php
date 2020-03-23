@@ -11,6 +11,7 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Service\QuestionInstanceService;
 use Quiz\Service\QuestionTemplateService;
+use Quiz\Service\QuizInstanceService;
 
 class QuestionInstanceController extends AbstractController
 {
@@ -30,6 +31,11 @@ class QuestionInstanceController extends AbstractController
      */
     private $questionTemplateService;
 
+    /**
+     * @var QuizInstanceService
+     */
+    private $quizInstanceService;
+
 
     /**
      * QuestionInstanceController constructor.
@@ -37,40 +43,20 @@ class QuestionInstanceController extends AbstractController
      * @param SessionInterface $session
      * @param QuestionInstanceService $service
      * @param QuestionTemplateService $questionTemplateService
+     * @param QuizInstanceService $quizInstanceService
      */
     public function __construct(
         RendererInterface $renderer,
         SessionInterface $session,
         QuestionInstanceService $service,
-        QuestionTemplateService $questionTemplateService
+        QuestionTemplateService $questionTemplateService,
+        QuizInstanceService $quizInstanceService
     ) {
         parent::__construct($renderer);
         $this->session = $session;
         $this->service = $service;
         $this->questionTemplateService = $questionTemplateService;
-    }
-
-    /**
-     * @param Request $request
-     * @param array $attributes
-     * @return Response
-     * Saves the questionInstances found in the quizInstance and displays the first one
-     */
-    public function instanceQuestions(Request $request, array $attributes): Response
-    {
-        $this->session->start();
-        $quizTemplateId = $this->session->get("quizTemplateId");
-        $quizInstanceId = $this->session->get("quizInstanceId");
-        $questionsTemplate = $this->questionTemplateService->getQuestions($quizTemplateId);
-        $this->session->set("nrQuestionsInstance", count($questionsTemplate));
-
-        foreach ($questionsTemplate as $questionTemplate)
-        {
-            $questionInstance =$this->service->getQuestionInstance($questionTemplate, $quizInstanceId, $questionTemplate->getId());
-            $this->service->add($questionInstance);
-        }
-
-        return self::createResponse($request, 301, "Location", ["/homepage/quiz/questions"]);
+        $this->quizInstanceService = $quizInstanceService;
     }
 
     /**
@@ -81,16 +67,15 @@ class QuestionInstanceController extends AbstractController
     public function displayQuestion(Request $request, array  $attributes): Response
     {
         $this->session->start();
-        $offset= $this->session->get("offset");
-        $limit = $this->session->get("limit");
-        $nrQuestions = $this->session->get("nrQuestionsInstance");
+        $currentQuestionInstanceNumber = $attributes["currentQuestionInstanceNumber"];
+        $quizInstanceId = $attributes["quizInstanceId"];
+        $nrQuestions = $this->quizInstanceService->getNumberOfQuestions($quizInstanceId);
 
-        if($nrQuestions < $limit) {
-            return self::createResponse($request, 301,"Location", ["/homepage/success"]);
+        if($nrQuestions < $currentQuestionInstanceNumber) {
+            return self::createResponse($request, 301,"Location", ["/homepage/success/$quizInstanceId"]);
         }
 
-        $quizInstanceId = $this->session->get("quizInstanceId");
-        $questionInstance = $this->service->getOne($quizInstanceId, $offset, $limit);
+        $questionInstance = $this->service->getOne($quizInstanceId, $currentQuestionInstanceNumber-1);
 
         return $this->renderer->renderView(
             self::LISTING_PAGE,

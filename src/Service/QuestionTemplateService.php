@@ -79,7 +79,7 @@ class QuestionTemplateService
             ->findBy([], [], $offset, $limit);
         $questionIds = [];
         if($quizTemplateId> 0) {
-            $questionIds = $repository->getQuestionsId($quizTemplateId);
+            $questionIds = $repository->getQuestionIds($quizTemplateId);
         }
 
 
@@ -139,7 +139,7 @@ class QuestionTemplateService
     {
         /** @var QuestionTemplateRepository $repository*/
         $repository =$this->repositoryManager->getRepository(QuestionTemplate::class);
-        $questionTemplateId = $repository->getQuestionsId($id);
+        $questionTemplateId = $repository->getQuestionIds($id);
         $questionTemplate = [];
         foreach ($questionTemplateId as $questionId) {
             $aux = ["id" => $questionId];

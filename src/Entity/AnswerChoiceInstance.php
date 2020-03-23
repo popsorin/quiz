@@ -46,7 +46,7 @@ class AnswerChoiceInstance extends AbstractEntity
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getText(): ?string
     {
@@ -84,9 +84,9 @@ class AnswerChoiceInstance extends AbstractEntity
     }
 
     /**
-     * @return bool|null
+     * @return bool
      */
-    public function isSelected(): ?bool
+    public function isSelected(): bool
     {
         return $this->isSelected;
     }
@@ -103,9 +103,9 @@ class AnswerChoiceInstance extends AbstractEntity
     }
 
     /**
-     * @return bool|null
+     * @return bool
      */
-    public function isCorrect(): ?bool
+    public function isCorrect(): bool
     {
         return $this->isCorrect;
     }

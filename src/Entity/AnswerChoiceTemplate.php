@@ -76,9 +76,9 @@ class AnswerChoiceTemplate extends AbstractEntity
     }
 
     /**
-     * @return bool|null
+     * @return bool
      */
-    public function isCorrect(): ?bool
+    public function isCorrect(): bool
     {
         return $this->isCorrect;
     }

@@ -159,7 +159,7 @@ class QuizInstance extends AbstractEntity
     /**
      * @return int|null
      */
-    public function getNrQuestions(): ?int
+    public function getNrQuestions(): int
     {
         return $this->nrQuestions;
     }

@@ -98,12 +98,12 @@ class QuizTemplateController extends AbstractController
      * @param Request $request
      * @param array $attributes
      * @return Response
-     * Returns the page for the add functionality with a set name and a set description
+     * Returns the page for the edit functionality for the quizzes
      */
     public function quizDetails(Request $request, array $attributes)
     {
         $quiz = $this->service->quizDetails($attributes);
-        $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
+        $page = $request->getParameter("page") ?? 1;
 
         $id = (isset($attributes['id']) ?? 0);
         $questions = $this->boundedService->getAll($page, 0, $id);

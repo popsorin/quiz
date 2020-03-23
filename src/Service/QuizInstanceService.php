@@ -4,13 +4,7 @@
 namespace Quiz\Service;
 
 
-use Quiz\Entity\QuestionInstance;
-use Quiz\Entity\QuestionTemplate;
 use Quiz\Entity\QuizInstance;
-use Quiz\Entity\QuizTemplate;
-use Quiz\Entity\QuizTemplateInterface;
-use Quiz\Persistency\Repositories\QuestionTemplateRepository;
-use ReallyOrm\Entity\AbstractEntity;
 use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
 
@@ -36,9 +30,7 @@ class QuizInstanceService
      */
     public function add(EntityInterface $quizInstance): bool
     {
-        $repository =  $this->repositoryManager->getRepository(QuizInstance::class);
-
-        return $repository->insertOnDuplicateKeyUpdate($quizInstance);
+        return $this->repositoryManager->getRepository(QuizInstance::class)->insertOnDuplicateKeyUpdate($quizInstance);
     }
 
     /**
@@ -54,5 +46,17 @@ class QuizInstanceService
         $nrQuestions = $quizTemplate->getNrQuestions();
 
         return new QuizInstance($quizId, $userId, 0, $name, $description, $nrQuestions);
+    }
+
+    /**
+     * @param int $quizInstanceId
+     * @return int
+     */
+    public function getNumberOfQuestions(int $quizInstanceId): int
+    {
+        /** @var  QuizInstance $quizInstance */
+        $quizInstance = $this->repositoryManager->getRepository(QuizInstance::class)->findOneBy(["id" => $quizInstanceId]);
+
+        return $quizInstance->getNrQuestions();
     }
 }

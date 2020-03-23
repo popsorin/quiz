@@ -53,12 +53,11 @@ class QuestionInstanceService
     /**
      * @param int $quizInstanceId
      * @param int $offset
-     * @param int $size
-     * @return array
+     * @return QuestionInstance
      */
-    public function getOne(int $quizInstanceId, int $offset, int $size): QuestionInstance
+    public function getOne(int $quizInstanceId, int $offset): QuestionInstance
     {
-        return $this->repositoryManager->getRepository(QuestionInstance::class)->findBy(["quiz_instance_id" => $quizInstanceId], [], $offset, $size)[0];
+        return $this->repositoryManager->getRepository(QuestionInstance::class)->findBy(["quiz_instance_id" => $quizInstanceId], [], $offset, 1)[0];
     }
 
     /**

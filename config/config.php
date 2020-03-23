@@ -15,14 +15,14 @@ return [
                 Router::CONFIG_KEY_ACTION => 'delete',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
-        'user_controller_userDetailsUpdate' =>
+        'user_controller_userDetails_update' =>
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/users/update/(?<id>\d+)',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'User',
                 Router::CONFIG_KEY_ACTION => 'userDetails',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
-        'user_controller_userDetailsAdd' =>
+        'user_controller_userDetails_add' =>
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/users/add',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'User',
@@ -57,14 +57,14 @@ return [
                 Router::CONFIG_KEY_ACTION => 'delete',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
-        'question_templates_controller_DetailsAdd' =>
+        'question_templates_controller_questionDetails_add' =>
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/questions/add',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'QuestionTemplate',
                 Router::CONFIG_KEY_ACTION => 'questionDetails',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
-        'question_templates_controller_DetailsUpdate' =>
+        'question_templates_controller_questionDetails_update' =>
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/questions/update/(?<id>\d+)',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'QuestionTemplate',
@@ -92,42 +92,35 @@ return [
                 Router::CONFIG_KEY_ACTION => 'getAll',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
-        'question_instance_controller_instanceQuestions' =>
-            [
-                Router::CONFIG_KEY_PATH => '/homepage/quiz/instance',
-                Router::CONFIG_KEY_CONTROLLER_NAME => 'QuestionInstance',
-                Router::CONFIG_KEY_ACTION => 'instanceQuestions',
-                Router::CONFIG_KEY_METHOD => 'GET'
-            ],
         'answer_instance_controller_displayQuestion' =>
             [
-                Router::CONFIG_KEY_PATH => '/homepage/quiz/questions',
+                Router::CONFIG_KEY_PATH => '/homepage/quiz/(?<quizInstanceId>\d+)/question/(?<currentQuestionInstanceNumber>\d+)',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'QuestionInstance',
                 Router::CONFIG_KEY_ACTION => 'displayQuestion',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
         'answer_instance_controller_add' =>
             [
-                Router::CONFIG_KEY_PATH => '/homepage/quiz/questions',
+                Router::CONFIG_KEY_PATH => '/homepage/quiz/(?<quizInstanceId>\d+)/question/(?<currentQuestionInstanceNumber>\d+)',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'AnswerInstance',
                 Router::CONFIG_KEY_ACTION => 'add',
                 Router::CONFIG_KEY_METHOD => 'POST'
             ],
-        'quiz_templates_controller_users_getAll' =>
+        'quiz_templates_controller_getAll' =>
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/quizzes',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'QuizTemplate',
                 Router::CONFIG_KEY_ACTION => 'getAll',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
-        'quiz_templates_controller_userDetailsAdd' =>
+        'quiz_templates_controller_getQuizDetails_add' =>
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/quizzes/add',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'QuizTemplate',
                 Router::CONFIG_KEY_ACTION => 'quizDetails',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
-        'quiz_templates_controller_userDetailsUpdate' =>
+        'quiz_templates_controller_getQuizDetails_update' =>
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/quizzes/update/(?<id>\d+)',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'QuizTemplate',
@@ -162,11 +155,11 @@ return [
                 Router::CONFIG_KEY_ACTION => 'instance',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
-        'quiz_instance_controller_quizStart' =>
+        'quiz_instance_controller_getQuiz' =>
             [
                 Router::CONFIG_KEY_PATH => '/homepage/quiz/(?<quizTemplateId>\d+)',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'QuizInstance',
-                Router::CONFIG_KEY_ACTION => 'getQuiz',
+                Router::CONFIG_KEY_ACTION => 'startQuiz',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
         'quiz_instance_controller_save' =>
@@ -197,14 +190,14 @@ return [
                 Router::CONFIG_KEY_ACTION => 'logout',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
-        'admin_controller_dashboard' =>
+        'admin_controller_showDashboard' =>
             [
                 Router::CONFIG_KEY_PATH => '/dashboard',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'Admin',
                 Router::CONFIG_KEY_ACTION => 'showDashboard',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
-        'candidate_controller_homepage' =>
+        'candidate_controller_showHomepage' =>
             [
                 Router::CONFIG_KEY_PATH => '/homepage',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'Candidate',
@@ -213,7 +206,7 @@ return [
             ],
         'candidate_controller_success' =>
             [
-                Router::CONFIG_KEY_PATH => '/homepage/success',
+                Router::CONFIG_KEY_PATH => '/homepage/success/(?<quizInstanceId>\d+)',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'Candidate',
                 Router::CONFIG_KEY_ACTION => 'success',
                 Router::CONFIG_KEY_METHOD => 'GET'
