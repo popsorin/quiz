@@ -15,6 +15,7 @@ use Quiz\Factory\AnswerChoiceInstanceFactory;
 use Quiz\Factory\AnswerTextInstanceFactory;
 use Quiz\Service\AnswerInstanceService;
 use Quiz\Service\QuestionInstanceService;
+use ReallyOrm\Entity\EntityInterface;
 
 class AnswerInstanceController extends AbstractController
 {
@@ -87,7 +88,7 @@ class AnswerInstanceController extends AbstractController
         $this->answerInstanceService->add($answer, $questionInstance->getType());
         $offset++;
 
-        return self::createResponse($request, 301, "Location", ["/homepage/quiz/$quizInstanceId/question/$offset"]);
+        return $this->createResponse($request, 301, "Location", ["/homepage/quiz/$quizInstanceId/question/$offset"]);
     }
 
     /**
@@ -95,7 +96,7 @@ class AnswerInstanceController extends AbstractController
      * @param string $answerType
      * @return AnswerChoiceInstance|AnswerTextInstance
      */
-    private function makeAnswer(Request $request, string $answerType)
+    private function makeAnswer(Request $request, string $answerType): EntityInterface
     {
         if($answerType === "text") {
            return $this->answerTextInstanceFactory->createFromRequest($request, "questionInstanceId", "answer") ;

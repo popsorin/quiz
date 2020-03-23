@@ -64,7 +64,7 @@ class UserController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function add(Request $request, array $attributes)
+    public function add(Request $request, array $attributes): Response
     {
         $entity = $this->factory->createFromRequest($request, "name", "email", "password", "role");
         try {
@@ -77,7 +77,7 @@ class UserController extends AbstractController
                 ]
             );
         }
-        return self::createResponse($request, "301", "Location", ["/dashboard/users"]);
+        return $this->reateResponse($request, "301", "Location", ["/dashboard/users"]);
     }
 
     /**
@@ -90,7 +90,7 @@ class UserController extends AbstractController
         $entity = $this->factory->createFromRequest($request, "name", "email", "password","role");
         $this->service->update($entity);
 
-        return self::createResponse($request, "301", "Location", ["/dashboard/users"]);
+        return $this->createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
 
     /**
@@ -98,7 +98,7 @@ class UserController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function getAll(Request $request, array $attributes)
+    public function getAll(Request $request, array $attributes): Response
     {
         $props = $this->service->getAll($request, $attributes, self::USERS_PER_PAGE);
 
@@ -119,7 +119,7 @@ class UserController extends AbstractController
      * @return Response
      * Returns the page for the add functionality with a set name and a set email
      */
-    public function userDetails(Request $request, array $attributes)
+    public function userDetails(Request $request, array $attributes): Response
     {
         $user = $this->service->userDetails($attributes);
         $this->session->start();
@@ -138,7 +138,7 @@ class UserController extends AbstractController
      * @return Response
      * Returns the page for the add functionality with the name and email unset
      */
-    public function userView()
+    public function userView(): Response
     {
         return $this->renderer->renderView("admin-user-details.phtml", []);
     }
@@ -148,10 +148,10 @@ class UserController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function delete(Request $request, array $attributes)
+    public function delete(Request $request, array $attributes): Response
     {
         $this->service->delete($attributes["id"]);
 
-        return self::createResponse($request, "301", "Location", ["/dashboard/users"]);
+        return $this->createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
 }

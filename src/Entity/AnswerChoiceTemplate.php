@@ -38,9 +38,9 @@ class AnswerChoiceTemplate extends AbstractEntity
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getQuestionTemplateId(): ?int
+    public function getQuestionTemplateId(): int
     {
         return $this->questionTemplateId;
     }

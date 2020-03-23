@@ -63,7 +63,7 @@ class CandidateController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function showHomepage(Request $request, array $attributes)
+    public function showHomepage(Request $request, array $attributes): Response
     {
         $this->session->start();
         if (($this->session->get("name")) === null) {
@@ -92,7 +92,7 @@ class CandidateController extends AbstractController
      * @return Response
      * Display the results page to the contestant
      */
-    public function success(Request $request, array $attributes)
+    public function success(Request $request, array $attributes): Response
     {
         $this->session->start();
         $quizInstanceId = $attributes["quizInstanceId"];

@@ -59,14 +59,18 @@ class QuestionTemplateController extends AbstractController
      */
     public function add(Request $request, array $attributes)
     {
-        $id = isset($attributes['id']) ? $attributes['id'] : null;
+        $id = isset($attributes['id']) ?? null;
         $this->service->add($id, $request->getParameters());
 
         return self::createResponse($request, "301", "Location", ["/dashboard/questions"]);
     }
 
-
-    public function delete(Request $request, array $attributes)
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
+    public function delete(Request $request, array $attributes): Response
     {
         $this->service->deleteById($attributes["id"]);
 
@@ -78,9 +82,9 @@ class QuestionTemplateController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function getAll(Request $request, array $attributes)
+    public function getAll(Request $request, array $attributes): Response
     {
-        $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
+        $page = $request->getParameter("page") ?? 1;
         $props = $this->service->getAll($page, self::QUESTIONS_PER_PAGE, 0 );
 
         return $this->renderer->renderView(
@@ -99,7 +103,7 @@ class QuestionTemplateController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function questionDetails(Request $request, array $attributes)
+    public function questionDetails(Request $request, array $attributes): Response
     {
         $question = $this->service->questionDetails($request, $attributes);
         $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");

@@ -45,11 +45,11 @@ class AdminController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function showDashboard(Request $request, array $attributes)
+    public function showDashboard(Request $request, array $attributes): Response
     {
         $this->session->start();
         if(($this->session->get("name")) === null) {
-            return self::createResponse($request, "301", "Location", ["/"]);
+            return $this->createResponse($request, "301", "Location", ["/"]);
         }
 
         return $this->renderer->renderView("admin-dashboard.html", $attributes);

@@ -52,13 +52,13 @@ class QuizTemplateController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function add(Request $request, array $attributes)
+    public function add(Request $request, array $attributes): Response
     {
         $this->session->start();
         $updateId = isset($attributes['id']) ? $attributes['id'] : null;
         $this->service->add($updateId, $this->session->get("id"), $request->getParameters());
 
-        return self::createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
+        return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
     }
 
     /**
@@ -66,11 +66,11 @@ class QuizTemplateController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function delete(Request $request, array $attributes)
+    public function delete(Request $request, array $attributes): Response
     {
         $this->service->deleteById($attributes["id"]);
 
-        return self::createResponse($request, "301", "Location", ["/dashboard/quizzes?page="]);
+        return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes?page="]);
     }
 
     /**
@@ -78,7 +78,7 @@ class QuizTemplateController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function getAll(Request $request, array $attributes)
+    public function getAll(Request $request, array $attributes): Response
     {
         $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
         $props = $this->service->getAll($page, self::QUESTIONS_PER_PAGE);
@@ -100,7 +100,7 @@ class QuizTemplateController extends AbstractController
      * @return Response
      * Returns the page for the edit functionality for the quizzes
      */
-    public function quizDetails(Request $request, array $attributes)
+    public function getQuizDetails(Request $request, array $attributes): Response
     {
         $quiz = $this->service->quizDetails($attributes);
         $page = $request->getParameter("page") ?? 1;

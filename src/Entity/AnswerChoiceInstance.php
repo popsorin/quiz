@@ -48,7 +48,7 @@ class AnswerChoiceInstance extends AbstractEntity
     /**
      * @return string
      */
-    public function getText(): ?string
+    public function getText(): string
     {
         return $this->text;
     }
@@ -65,9 +65,9 @@ class AnswerChoiceInstance extends AbstractEntity
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getQuestionInstanceId(): ?int
+    public function getQuestionInstanceId(): int
     {
         return $this->questionInstanceId;
     }

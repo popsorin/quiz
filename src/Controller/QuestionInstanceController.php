@@ -72,7 +72,7 @@ class QuestionInstanceController extends AbstractController
         $nrQuestions = $this->quizInstanceService->getNumberOfQuestions($quizInstanceId);
 
         if($nrQuestions < $currentQuestionInstanceNumber) {
-            return self::createResponse($request, 301,"Location", ["/homepage/success/$quizInstanceId"]);
+            return $this->createResponse($request, 301,"Location", ["/homepage/success/$quizInstanceId"]);
         }
 
         $questionInstance = $this->service->getOne($quizInstanceId, $currentQuestionInstanceNumber-1);
@@ -80,7 +80,7 @@ class QuestionInstanceController extends AbstractController
         return $this->renderer->renderView(
             self::LISTING_PAGE,
             [
-                "question"=>$questionInstance
+                "question" => $questionInstance
             ]
         );
     }

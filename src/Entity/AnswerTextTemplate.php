@@ -32,9 +32,9 @@ class AnswerTextTemplate extends AbstractEntity
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getQuestionTemplateId(): ?int
+    public function getQuestionTemplateId(): int
     {
         return $this->questionTemplateId;
     }
@@ -51,9 +51,9 @@ class AnswerTextTemplate extends AbstractEntity
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getText(): ?string
+    public function getText(): string
     {
         return $this->text;
     }

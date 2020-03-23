@@ -51,7 +51,7 @@ class LoginController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function displayLogin(Request $request, array $attributes)
+    public function displayLogin(Request $request, array $attributes): Response
     {
         $this->session->start();
         if ($this->session->get("name") === null) {
@@ -73,7 +73,7 @@ class LoginController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function login(Request $request, array $attributes)
+    public function login(Request $request, array $attributes): Response
     {
         $this->session->start();
         try {
@@ -99,7 +99,7 @@ class LoginController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function logout(Request $request, array $attributes)
+    public function logout(Request $request, array $attributes): Response
     {
         $this->session->start();
         if($this->session->get("name")) {

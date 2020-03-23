@@ -74,7 +74,7 @@ class QuizInstanceController extends AbstractController
      * Retrieves a quiz that was chosen by the candidate from the database
      * and redirects to the instance so the first question can be displayed
      */
-    public function startQuiz(Request $request, array $attributes)
+    public function startQuiz(Request $request, array $attributes): Response
     {
         $this->session->start();
 
@@ -84,14 +84,14 @@ class QuizInstanceController extends AbstractController
         $this->service->add($quizInstance);
 
         $quizInstanceId = $quizInstance->getId();
-        $questionsTemplate = $this->questionTemplateService->getQuestions($quizTemplateId);
-        foreach ($questionsTemplate as $questionTemplate)
+        $questionTemplates = $this->questionTemplateService->getQuestions($quizTemplateId);
+        foreach ($questionTemplates as $questionTemplate)
         {
             $questionInstance =$this->questionInstanceService->getQuestionInstance($questionTemplate, $quizInstanceId, $questionTemplate->getId());
             $this->questionInstanceService->add($questionInstance);
         }
 
-        return self::createResponse($request, 301, "Location", ["/homepage/quiz/$quizInstanceId/question/1"]);
+        return $this->createResponse($request, 301, "Location", ["/homepage/quiz/$quizInstanceId/question/1"]);
 
     }
 
@@ -100,8 +100,8 @@ class QuizInstanceController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function save(Request $request, array  $attributes)
+    public function save(Request $request, array  $attributes): Response
     {
-        return self::createResponse($request, 301, "Location", ["/homepage/quiz/questions"]);
+        return $this->createResponse($request, 301, "Location", ["/homepage/quiz/questions"]);
     }
 }

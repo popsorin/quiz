@@ -142,8 +142,7 @@ class QuestionTemplateService
         $questionTemplateId = $repository->getQuestionIds($id);
         $questionTemplate = [];
         foreach ($questionTemplateId as $questionId) {
-            $aux = ["id" => $questionId];
-            $questionTemplate =array_merge($questionTemplate,  $repository->findBy($aux, [], 0,0));
+            $questionTemplate =array_merge($questionTemplate,  $repository->findBy(["id" => $questionId], [], 0,0));
         }
         return $questionTemplate;
     }

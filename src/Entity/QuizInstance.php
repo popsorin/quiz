@@ -64,7 +64,7 @@ class QuizInstance extends AbstractEntity
     /**
      * @return int|null
      */
-    public function getQuizId(): ?int
+    public function getQuizId(): int
     {
         return $this->quizId;
     }
@@ -83,7 +83,7 @@ class QuizInstance extends AbstractEntity
     /**
      * @return int|null
      */
-    public function getUserId(): ?int
+    public function getUserId(): int
     {
         return $this->userId;
     }
@@ -121,7 +121,7 @@ class QuizInstance extends AbstractEntity
     /**
      * @return string|null
      */
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
