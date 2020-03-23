@@ -6,7 +6,7 @@ namespace Quiz\Entity;
 use ReallyOrm\Entity\AbstractEntity;
 
 
-class QuizInstance extends AbstractEntity implements QuizInstanceInterface
+class QuizInstance extends AbstractEntity
 {
     /**
      * @var int

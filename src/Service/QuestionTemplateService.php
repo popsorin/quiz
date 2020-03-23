@@ -64,6 +64,7 @@ class QuestionTemplateService
     /**
      * @param string $parameter
      * @param int $limit
+     * @param int $quizTemplateId
      * @return array
      */
     public function getAll(string $parameter, int $limit, int $quizTemplateId): array
@@ -78,7 +79,7 @@ class QuestionTemplateService
             ->findBy([], [], $offset, $limit);
         $questionIds = [];
         if($quizTemplateId> 0) {
-            $questionIds = $repository->getQuestions($quizTemplateId);
+            $questionIds = $repository->getQuestionsId($quizTemplateId);
         }
 
 
@@ -138,12 +139,11 @@ class QuestionTemplateService
     {
         /** @var QuestionTemplateRepository $repository*/
         $repository =$this->repositoryManager->getRepository(QuestionTemplate::class);
-        $questionTemplateId = $repository->getQuestions($id);
-        $adapter = new QuestionTemplateAdapter();
+        $questionTemplateId = $repository->getQuestionsId($id);
         $questionTemplate = [];
         foreach ($questionTemplateId as $questionId) {
             $aux = ["id" => $questionId];
-            $questionTemplate =array_merge($questionTemplate,  $repository->findBy($aux, [], 0, 0));
+            $questionTemplate =array_merge($questionTemplate,  $repository->findBy($aux, [], 0,0));
         }
         return $questionTemplate;
     }

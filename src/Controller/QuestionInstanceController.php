@@ -8,8 +8,7 @@ use Framework\Contracts\RendererInterface;
 use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
-use Quiz\Adapter\QuestionTemplateAdapter;
-use Quiz\Adapter\QuizTemplateAdapter;
+use Framework\Http\Response;
 use Quiz\Service\QuestionInstanceService;
 use Quiz\Service\QuestionTemplateService;
 
@@ -31,6 +30,7 @@ class QuestionInstanceController extends AbstractController
      */
     private $questionTemplateService;
 
+
     /**
      * QuestionInstanceController constructor.
      * @param RendererInterface $renderer
@@ -50,58 +50,52 @@ class QuestionInstanceController extends AbstractController
         $this->questionTemplateService = $questionTemplateService;
     }
 
-    public function instance(Request $request, array $attributes)
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     * Saves the questionInstances found in the quizInstance and displays the first one
+     */
+    public function instanceQuestions(Request $request, array $attributes): Response
     {
-        $id = $attributes["id"];
-        $questionTemplate = $this->questionTemplateService->getQuestions($id);
-        $this->service->add($questionTemplate, $id);
-        $questionNumber = 0;
         $this->session->start();
-        $this->session->set("questionNumber",$questionNumber);
+        $quizTemplateId = $this->session->get("quizTemplateId");
+        $quizInstanceId = $this->session->get("quizInstanceId");
+        $questionsTemplate = $this->questionTemplateService->getQuestions($quizTemplateId);
+        $this->session->set("nrQuestionsInstance", count($questionsTemplate));
 
-        return $this->renderer->renderView(
-            self::LISTING_PAGE,
-            [
-                "question"=>$questionTemplate[0]
-            ]
-        );
+        foreach ($questionsTemplate as $questionTemplate)
+        {
+            $questionInstance =$this->service->getQuestionInstance($questionTemplate, $quizInstanceId, $questionTemplate->getId());
+            $this->service->add($questionInstance);
+        }
+
+        return self::createResponse($request, 301, "Location", ["/homepage/quiz/questions"]);
     }
 
-    public function save(Request $request, array $attributes)
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
+    public function displayQuestion(Request $request, array  $attributes): Response
     {
         $this->session->start();
-        $questions = $this->session->get("questions");
-        $answers = $this->session->get("answers");
-        $answeredQuestions = $this->session->get("answeredQuestions");
-        $questionLength = count($questions) -1;
-        $text = $questions[$questionLength]->getText();
-        $type = $questions[$questionLength]->getType();
+        $offset= $this->session->get("offset");
+        $limit = $this->session->get("limit");
+        $nrQuestions = $this->session->get("nrQuestionsInstance");
 
-        $this->service->add(
-            ["text" => $text ,
-                "quizInstanceId" => $attributes["id"],
-                "type" => $type,
-                "questionTemplateId" => $questionLength,
-                "answer" => $request->getParameter("answer")
-            ]
-        );
-
-        $answeredQuestions[] = $questions[$questionLength];
-        $this->session->set("answeredQuestions", $answeredQuestions);
-        $answers[] = $request->getParameter("answer");
-        $this->session->set("answers", $answers);
-        unset($questions[$questionLength]);
-        shuffle($questions);
-        if(count($questions) <= 0){
-            return self::createResponse($request, "301", "Location", ["/homepage/success/" . $attributes["id"]]);
+        if($nrQuestions < $limit) {
+            return self::createResponse($request, 301,"Location", ["/homepage/success"]);
         }
-        $this->session->set("questions", $questions);
+
+        $quizInstanceId = $this->session->get("quizInstanceId");
+        $questionInstance = $this->service->getOne($quizInstanceId, $offset, $limit);
 
         return $this->renderer->renderView(
             self::LISTING_PAGE,
             [
-                "name" => $this->session->get("name"),
-                "question" => $questions[$questionLength-1]
+                "question"=>$questionInstance
             ]
         );
     }

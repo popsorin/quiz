@@ -61,7 +61,11 @@ class QuizTemplateController extends AbstractController
         return self::createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
     }
 
-
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
     public function delete(Request $request, array $attributes)
     {
         $this->service->deleteById($attributes["id"]);
@@ -78,6 +82,7 @@ class QuizTemplateController extends AbstractController
     {
         $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
         $props = $this->service->getAll($page, self::QUESTIONS_PER_PAGE);
+
         return $this->renderer->renderView(
             $props['listingPage'],
             [
@@ -93,6 +98,7 @@ class QuizTemplateController extends AbstractController
      * @param Request $request
      * @param array $attributes
      * @return Response
+     * Returns the page for the add functionality with a set name and a set description
      */
     public function quizDetails(Request $request, array $attributes)
     {

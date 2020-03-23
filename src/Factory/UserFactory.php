@@ -9,6 +9,14 @@ use Quiz\Entity\User;
 
 class UserFactory implements InterfaceFactory
 {
+    /**
+     * @param Request $request
+     * @param string $nameKey
+     * @param string $emailKey
+     * @param string $passwordKey
+     * @param string $roleKey
+     * @return User
+     */
     public function createFromRequest(
         Request $request,
         string $nameKey,

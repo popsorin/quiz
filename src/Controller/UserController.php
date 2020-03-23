@@ -27,24 +27,35 @@ class UserController extends AbstractController
     /**
      * @var SessionInterface
      */
-    protected $session;
+    private $session;
 
     /**
      * @var UserService
      */
-    protected $service;
+    private $service;
+
+    /**
+     * @var UserFactory
+     */
+    private $factory;
 
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
-     * @param SessionInterface $session
      * @param UserService $service
+     * @param SessionInterface $session
+     * @param UserFactory $factory
      */
-    public function __construct(RendererInterface $renderer,UserService $service, SessionInterface $session)
-    {
+    public function __construct(
+        RendererInterface $renderer,
+        UserService $service,
+        SessionInterface $session,
+        UserFactory $factory
+    ) {
         parent::__construct($renderer);
         $this->session = $session;
         $this->service = $service;
+        $this->factory = $factory;
     }
 
     /**
@@ -54,8 +65,7 @@ class UserController extends AbstractController
      */
     public function add(Request $request, array $attributes)
     {
-        $factory = new UserFactory();
-        $entity = $factory->createFromRequest($request, "name", "email", "password", "role");
+        $entity = $this->factory->createFromRequest($request, "name", "email", "password", "role");
         try {
             $this->service->add($entity);
         } catch (UserAlreadyExistsException $exception) {
@@ -91,6 +101,7 @@ class UserController extends AbstractController
     public function getAll(Request $request, array $attributes)
     {
         $props = $this->service->getAll($request, $attributes, self::USERS_PER_PAGE);
+
         return $this->renderer->renderView(
             $props['listingPage'],
             [
@@ -114,6 +125,7 @@ class UserController extends AbstractController
         $this->session->start();
         $this->session->set("updateName", $user->getName());
         $this->session->set("updateEmail", $user->getEmail());
+
         return $this->renderer->renderView(
             "admin-user-details.phtml",
             [

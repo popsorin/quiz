@@ -38,7 +38,7 @@
     <!--Breadcrumbs-->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb px-3 py-0 mb-3">
-            <li class="breadcrumb-item" ><a href="/homepage">Dashboard</a></li>
+            <li class="breadcrumb-item" ><a href="/homepage">Homepage</a></li>
             <li class="breadcrumb-item active" aria-current="page">Quiz success page</li>
         </ol>
     </nav>
@@ -47,12 +47,10 @@
         <!--Page title block-->
         <div class="text-center">
             <h1>Congrats!</h1>
-            <form action="/homepage/save/results" method="POST">
                 <div class="form-group">
                 <table class="table table-bordered">
                     <thead>
                     <tr>
-                        <!--Sorting arrow are displayed using the 'asc','dsc' classes-->
                         <th scope="col">Question</th>
                         <th scope="col">Answer</th>
                     </tr>
@@ -69,7 +67,7 @@
                         </td>
                         <td>
                         <div class="card-body">
-                           <?php echo $answers[$i] ?>
+                           <?php echo $answers[$i]->getText() ?>
                         </div>
                         </td>
                     <?php endfor; ?>
@@ -77,12 +75,7 @@
                     </tbody>
                     </table>
                 </div>
-                <button type="submit" class="btn btn-primary">Save</button>
-            </form>
         </div>
-    </div>
-    <div>
-
     </div>
 </body>
 </html>

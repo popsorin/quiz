@@ -82,6 +82,7 @@ class QuestionTemplateController extends AbstractController
     {
         $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
         $props = $this->service->getAll($page, self::QUESTIONS_PER_PAGE, 0 );
+
         return $this->renderer->renderView(
             $props['listingPage'],
             [

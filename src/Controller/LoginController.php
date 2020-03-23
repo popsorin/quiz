@@ -94,14 +94,19 @@ class LoginController extends AbstractController
         return $this->createResponse($request, "301", "Location", ["/homepage"]);
     }
 
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
     public function logout(Request $request, array $attributes)
     {
         $this->session->start();
-        //questionable if
-        if($this->session->get("name")){
+        if($this->session->get("name")) {
             $this->session->destroy();
         }
-            return $this->createResponse($request, "301", "Location", ["/"]);
+
+        return $this->createResponse($request, "301", "Location", ["/"]);
 
     }
 }
