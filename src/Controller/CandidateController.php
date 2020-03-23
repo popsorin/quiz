@@ -90,6 +90,7 @@ class CandidateController extends AbstractController
      * @param Request $request
      * @param array $attributes
      * @return Response
+     * Display the results page to the contestant
      */
     public function success(Request $request, array $attributes)
     {
