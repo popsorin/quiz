@@ -7,7 +7,7 @@ namespace Quiz\Factory;
 use Framework\Http\Request;
 use Quiz\Entity\User;
 
-class UserFactory implements InterfaceFactory
+class UserFactory
 {
     /**
      * @param Request $request

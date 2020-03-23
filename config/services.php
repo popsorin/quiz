@@ -171,6 +171,8 @@ $container->register(QuestionInstanceService::class, QuestionInstanceService::cl
 $container->register(AnswerInstanceService::class, AnswerInstanceService::class)
     ->addArgument($container->findDefinition(RepositoryManagerInterface::class));
 
+$container->register(UserFactory::class, UserFactory::class);
+
 $container->register(UserController::class, UserController::class)
     ->addArgument(new Reference(RendererInterface::class))
     ->addArgument($container->findDefinition(UserService::class))
