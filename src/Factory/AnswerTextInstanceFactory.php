@@ -7,7 +7,7 @@ namespace Quiz\Factory;
 use Framework\Http\Request;
 use Quiz\Entity\AnswerTextInstance;
 
-class AnswerTextInstanceFactory implements InterfaceFactory
+class AnswerTextInstanceFactory
 {
     /**
      * @param Request $request
