@@ -6,6 +6,7 @@ use Framework\Contracts\RouterInterface;
 use Framework\Contracts\SessionInterface;
 use Framework\Http\Session;
 use Quiz\Controller\AdminController;
+use Quiz\Controller\AnswerInstanceController;
 use Quiz\Controller\CandidateController;
 use Quiz\Controller\LoginController;
 use Quiz\Controller\QuestionInstanceController;
@@ -17,18 +18,29 @@ use Framework\DependencyInjection\SymfonyContainer;
 use Framework\Dispatcher\Dispatcher;
 use Framework\Renderer\Renderer;
 use Framework\Router\Router;
+use Quiz\Entity\AnswerChoiceInstance;
+use Quiz\Entity\AnswerChoiceTemplate;
+use Quiz\Entity\AnswerTextInstance;
+use Quiz\Entity\AnswerTextTemplate;
 use Quiz\Entity\QuestionInstance;
 use Quiz\Entity\QuestionTemplate;
 use Quiz\Entity\QuizInstance;
 use Quiz\Entity\QuizTemplate;
 use Quiz\Entity\User;
+use Quiz\Factory\AnswerChoiceInstanceFactory;
+use Quiz\Factory\AnswerTextInstanceFactory;
 use Quiz\Factory\UserFactory;
+use Quiz\Persistency\Repositories\AnswerChoiceInstanceRepository;
+use Quiz\Persistency\Repositories\AnswerChoiceTemplateRepository;
+use Quiz\Persistency\Repositories\AnswerTextInstanceRepository;
+use Quiz\Persistency\Repositories\AnswerTextTemplateRepository;
 use Quiz\Persistency\Repositories\QuestionInstanceRepository;
 use Quiz\Persistency\Repositories\QuestionTemplateRepository;
 use Quiz\Persistency\Repositories\QuizInstanceRepository;
 use Quiz\Persistency\Repositories\QuizTemplateRepository;
 use Quiz\Persistency\Repositories\UserRepository;
 use Quiz\Service\AdminService;
+use Quiz\Service\AnswerInstanceService;
 use Quiz\Service\LoginService;
 use Quiz\Service\QuestionInstanceService;
 use Quiz\Service\QuestionTemplateService;
@@ -99,6 +111,34 @@ $container->register(QuestionInstanceRepository::class, QuestionInstanceReposito
     ->addArgument("question_instance")
     ->addTag("repository");
 
+$container->register(AnswerTextTemplateRepository::class, AnswerTextTemplateRepository::class)
+    ->addArgument("%PDO%")
+    ->addArgument(AnswerTextTemplate::class)
+    ->addArgument(new Reference(HydratorInterface::class))
+    ->addArgument("answer_text_template")
+    ->addTag("repository");
+
+$container->register(AnswerChoiceTemplateRepository::class, AnswerChoiceTemplateRepository::class)
+    ->addArgument("%PDO%")
+    ->addArgument(AnswerChoiceTemplate::class)
+    ->addArgument(new Reference(HydratorInterface::class))
+    ->addArgument("answer_choice_template")
+    ->addTag("repository");
+
+$container->register(AnswerTextInstanceRepository::class, AnswerTextInstanceRepository::class)
+    ->addArgument("%PDO%")
+    ->addArgument(AnswerTextInstance::class)
+    ->addArgument(new Reference(HydratorInterface::class))
+    ->addArgument("answer_text_instance")
+    ->addTag("repository");
+
+$container->register(AnswerChoiceInstanceRepository::class, AnswerChoiceInstanceRepository::class)
+    ->addArgument("%PDO%")
+    ->addArgument(AnswerChoiceInstance::class)
+    ->addArgument(new Reference(HydratorInterface::class))
+    ->addArgument("answer_text_instance")
+    ->addTag("repository");
+
 foreach ($container->findTaggedServiceIds("repository") as $id => $attributes) {
     $repository = $container->findDefinition($id);
     $container->findDefinition(RepositoryManagerInterface::class)
@@ -107,6 +147,10 @@ foreach ($container->findTaggedServiceIds("repository") as $id => $attributes) {
 
 $container->findDefinition(HydratorInterface::class)
     ->addArgument(new Reference(RepositoryManagerInterface::class));
+
+$container->register(UserFactory::class, UserFactory::class);
+$container->register(AnswerChoiceInstanceFactory::class, AnswerChoiceInstanceFactory::class);
+$container->register(AnswerTextInstanceFactory::class, AnswerTextInstanceFactory::class);
 
 $container->register(SessionInterface::class, Session::class);
 
@@ -123,6 +167,8 @@ $container->register(QuizTemplateService::class, QuizTemplateService::class)
 $container->register(QuizInstanceService::class, QuizInstanceService::class)
     ->addArgument($container->findDefinition(RepositoryManagerInterface::class));
 $container->register(QuestionInstanceService::class, QuestionInstanceService::class)
+    ->addArgument($container->findDefinition(RepositoryManagerInterface::class));
+$container->register(AnswerInstanceService::class, AnswerInstanceService::class)
     ->addArgument($container->findDefinition(RepositoryManagerInterface::class));
 
 $container->register(UserFactory::class, UserFactory::class);
@@ -165,6 +211,7 @@ $container->register(CandidateController::class, CandidateController::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument($container->findDefinition(QuizTemplateService::class))
     ->addArgument($container->findDefinition(QuestionInstanceService::class))
+    ->addArgument($container->findDefinition(AnswerInstanceService::class))
     ->addTag("controller");
 
 $container->register(QuizInstanceController::class, QuizInstanceController::class)
@@ -173,15 +220,25 @@ $container->register(QuizInstanceController::class, QuizInstanceController::clas
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument($container->findDefinition(QuestionTemplateService::class))
     ->addArgument($container->findDefinition(QuizInstanceService::class))
+    ->addArgument($container->findDefinition(QuestionInstanceService::class))
     ->addTag("controller");
 
 $container->register(QuestionInstanceController::class, QuestionInstanceController::class)
     ->addArgument(new Reference(RendererInterface::class))
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument($container->findDefinition(QuestionInstanceService::class))
+    ->addArgument($container->findDefinition(QuestionTemplateService::class))
+    ->addArgument($container->findDefinition(QuizInstanceService::class))
     ->addTag("controller");
 
-
+$container->register(AnswerInstanceController::class, AnswerInstanceController::class)
+    ->addArgument(new Reference(RendererInterface::class))
+    ->addArgument($container->findDefinition(AnswerInstanceService::class))
+    ->addArgument($container->findDefinition(QuestionInstanceService::class))
+    ->addArgument(new Reference(SessionInterface::class))
+    ->addArgument(new Reference(AnswerChoiceInstanceFactory::class))
+    ->addArgument(new Reference(AnswerTextInstanceFactory::class))
+    ->addTag("controller");
 
 
 $container->setParameter('dispatcherConfig', $config[Dispatcher::CONFIG_KEY_DISPATCHER]);

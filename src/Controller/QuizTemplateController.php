@@ -33,9 +33,10 @@ class QuizTemplateController extends AbstractController
 
     /**
      * QuizTemplateController constructor.
-     * @param QuestionTemplateService $boundedService
-     * @param SessionInterface $session
+     * @param RendererInterface $renderer
      * @param QuizTemplateService $service
+     * @param SessionInterface $session
+     * @param QuestionTemplateService $boundedService
      */
     public function __construct(RendererInterface $renderer,QuizTemplateService $service, SessionInterface $session, QuestionTemplateService $boundedService)
     {
@@ -51,21 +52,13 @@ class QuizTemplateController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function add(Request $request, array $attributes)
+    public function add(Request $request, array $attributes): Response
     {
         $this->session->start();
-        $updateId = isset($attributes['id']) ? $attributes['id'] : null;
+        $updateId = isset($attributes['id']) ?? null;
         $this->service->add($updateId, $this->session->get("id"), $request->getParameters());
 
-        return self::createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
-    }
-
-
-    public function delete(Request $request, array $attributes)
-    {
-        $this->service->deleteById($attributes["id"]);
-
-        return self::createResponse($request, "301", "Location", ["/dashboard/quizzes?page="]);
+        return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
     }
 
     /**
@@ -73,10 +66,23 @@ class QuizTemplateController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function getAll(Request $request, array $attributes)
+    public function delete(Request $request, array $attributes): Response
     {
-        $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
+        $this->service->deleteById($attributes["id"]);
+
+        return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
+    }
+
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
+    public function getAll(Request $request, array $attributes): Response
+    {
+        $page = $request->getParameter("page") ?? 1;
         $props = $this->service->getAll($page, self::QUESTIONS_PER_PAGE);
+
         return $this->renderer->renderView(
             $props['listingPage'],
             [
@@ -92,11 +98,12 @@ class QuizTemplateController extends AbstractController
      * @param Request $request
      * @param array $attributes
      * @return Response
+     * Returns the page for the edit functionality for the quizzes
      */
-    public function quizDetails(Request $request, array $attributes)
+    public function getQuizDetails(Request $request, array $attributes): Response
     {
         $quiz = $this->service->quizDetails($attributes);
-        $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
+        $page = $request->getParameter("page") ?? 1;
 
         $id = (isset($attributes['id']) ?? 0);
         $questions = $this->boundedService->getAll($page, 0, $id);

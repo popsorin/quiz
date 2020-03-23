@@ -26,7 +26,7 @@ class QuizTemplate extends AbstractEntity
 
     /**
      * @var int
-     * @MappedOn
+     * @MappedOn nrQuestions
      */
     private $nrQuestions;
 
@@ -48,7 +48,7 @@ class QuizTemplate extends AbstractEntity
     /**
      * @return int
      */
-    public function getCreatedBy(): ?int
+    public function getCreatedBy(): int
     {
         return $this->createdBy;
     }
@@ -67,7 +67,7 @@ class QuizTemplate extends AbstractEntity
     /**
      * @return string
      */
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -86,7 +86,7 @@ class QuizTemplate extends AbstractEntity
     /**
      * @return string
      */
-    public function getDescription(): ?string
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -103,9 +103,9 @@ class QuizTemplate extends AbstractEntity
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getNrQuestions(): ?int
+    public function getNrQuestions(): int
     {
         return $this->nrQuestions;
     }

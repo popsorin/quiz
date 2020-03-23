@@ -94,9 +94,9 @@ class QuestionInstance extends AbstractEntity
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getType(): ?string
+    public function getType(): string
     {
         return $this->type;
     }
@@ -113,9 +113,9 @@ class QuestionInstance extends AbstractEntity
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getQuestionTemplateId(): ?int
+    public function getQuestionTemplateId(): int
     {
         return $this->questionTemplateId;
     }

@@ -10,9 +10,6 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
-use Framework\Http\Session;
-use Quiz\Entity\User;
-use Quiz\Persistency\Repositories\UserRepository;
 use Quiz\Service\Exception\WrongPasswordException;
 use Quiz\Service\LoginService;
 use ReallyOrm\Repository\RepositoryInterface;
@@ -51,7 +48,7 @@ class LoginController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function displayLogin(Request $request, array $attributes)
+    public function displayLogin(Request $request, array $attributes): Response
     {
         $this->session->start();
         if ($this->session->get("name") === null) {
@@ -73,7 +70,7 @@ class LoginController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function login(Request $request, array $attributes)
+    public function login(Request $request, array $attributes): Response
     {
         $this->session->start();
         try {
@@ -94,14 +91,19 @@ class LoginController extends AbstractController
         return $this->createResponse($request, "301", "Location", ["/homepage"]);
     }
 
-    public function logout(Request $request, array $attributes)
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
+    public function logout(Request $request, array $attributes): Response
     {
         $this->session->start();
-        //questionable if
-        if($this->session->get("name")){
+        if($this->session->get("name")) {
             $this->session->destroy();
         }
-            return $this->createResponse($request, "301", "Location", ["/"]);
+
+        return $this->createResponse($request, "301", "Location", ["/"]);
 
     }
 }

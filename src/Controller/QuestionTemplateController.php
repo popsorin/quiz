@@ -57,20 +57,12 @@ class QuestionTemplateController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function add(Request $request, array $attributes)
+    public function add(Request $request, array $attributes): Response
     {
-        $id = isset($attributes['id']) ? $attributes['id'] : null;
+        $id = isset($attributes['id']) ?? null;
         $this->service->add($id, $request->getParameters());
 
-        return self::createResponse($request, "301", "Location", ["/dashboard/questions"]);
-    }
-
-
-    public function delete(Request $request, array $attributes)
-    {
-        $this->service->deleteById($attributes["id"]);
-
-        return self::createResponse($request, "301", "Location", ["/dashboard/questions?page="]);
+        return $this->createResponse($request, "301", "Location", ["/dashboard/questions"]);
     }
 
     /**
@@ -78,10 +70,23 @@ class QuestionTemplateController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function getAll(Request $request, array $attributes)
+    public function delete(Request $request, array $attributes): Response
     {
-        $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
+        $this->service->deleteById($attributes["id"]);
+
+        return $this->createResponse($request, "301", "Location", ["/dashboard/questions"]);
+    }
+
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
+    public function getAll(Request $request, array $attributes): Response
+    {
+        $page = $request->getParameter("page") ?? 1;
         $props = $this->service->getAll($page, self::QUESTIONS_PER_PAGE, 0 );
+
         return $this->renderer->renderView(
             $props['listingPage'],
             [
@@ -98,10 +103,10 @@ class QuestionTemplateController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function questionDetails(Request $request, array $attributes)
+    public function questionDetails(Request $request, array $attributes): Response
     {
         $question = $this->service->questionDetails($request, $attributes);
-        $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
+        $page = $request->getParameter("page") ?? 1;
         $quizzes = $this->boundedService->getAll($page, 0);
 
         return $this->renderer->renderView(

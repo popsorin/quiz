@@ -2,20 +2,27 @@
 
 namespace Quiz\Entity;
 
-use ReallyOrm\Entity\EntityInterface;
+use ReallyOrm\Entity\AbstractEntity;
 
-class TextAnswerInstance implements EntityInterface
+class AnswerTextInstance extends AbstractEntity
 {
     /**
      * @var int
+     * @MappedOn question_instance_id
      */
     private $questionInstanceId;
 
     /**
      * @var string
+     * @MappedOn text
      */
     private $text;
 
+    /**
+     * AnswerTextInstance constructor.
+     * @param int $questionInstanceId
+     * @param string $text
+     */
     public function __construct(int $questionInstanceId, string $text)
     {
         $this->questionInstanceId = $questionInstanceId;
@@ -25,16 +32,16 @@ class TextAnswerInstance implements EntityInterface
     /**
      * @return int|null
      */
-    public function getQuestionInstanceId() : ?int
+    public function getQuestionInstanceId(): int
     {
         return $this->questionInstanceId;
     }
 
     /**
      * @param int $questionInstanceId
-     * @return self
+     * @return AnswerTextInstance
      */
-    public function setQuestionInstanceInterface(int $questionInstanceId): self
+    public function setQuestionInstanceId(int $questionInstanceId): self
     {
         $this->questionInstanceId = $questionInstanceId;
 
@@ -42,7 +49,7 @@ class TextAnswerInstance implements EntityInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getText(): string
     {
@@ -51,7 +58,7 @@ class TextAnswerInstance implements EntityInterface
 
     /**
      * @param string $text
-     * @return self
+     * @return AnswerTextInstance
      */
     public function setText(string $text): self
     {

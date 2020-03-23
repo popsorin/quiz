@@ -9,10 +9,8 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
-use Quiz\Entity\QuestionInstance;
-use Quiz\Persistency\Repositories\QuizTemplateRepository;
+use Quiz\Service\AnswerInstanceService;
 use Quiz\Service\QuestionInstanceService;
-use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizTemplateService;
 
 class CandidateController extends AbstractController
@@ -24,7 +22,7 @@ class CandidateController extends AbstractController
     private $session;
 
     /**
-     * @var QuestionTemplateService
+     * @var QuizTemplateService
      */
     private $service;
 
@@ -34,26 +32,38 @@ class CandidateController extends AbstractController
     private $questionInstanceService;
 
     /**
+     * @var AnswerInstanceService
+     */
+    private $answerInstanceServoce;
+
+    /**
      * CandidateController constructor.
      * @param RendererInterface $renderer
      * @param SessionInterface $session
      * @param QuizTemplateService $service
      * @param QuestionInstanceService $questionInstanceService
+     * @param AnswerInstanceService $answerInstanceService
      */
     public function __construct(
         RendererInterface $renderer,
         SessionInterface $session,
         QuizTemplateService $service,
-        QuestionInstanceService $questionInstanceService
-    )
-    {
+        QuestionInstanceService $questionInstanceService,
+        AnswerInstanceService $answerInstanceService
+    ) {
         parent::__construct($renderer);
         $this->session = $session;
         $this->service = $service;
         $this->questionInstanceService = $questionInstanceService;
+        $this->answerInstanceServoce = $answerInstanceService;
     }
 
-    public function showHomepage(Request $request, array $attributes)
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
+    public function showHomepage(Request $request, array $attributes): Response
     {
         $this->session->start();
         if (($this->session->get("name")) === null) {
@@ -61,8 +71,9 @@ class CandidateController extends AbstractController
             return self::createResponse($request, "301", "Location", ["/"]);
         }
 
-        $page = $request->getParameter("page") == null ? 1 : $request->getParameter("page");
+        $page = ($request->getParameter("page")) ?? 1;
         $props = $this->service->getAll($page, self::QUESTIONS_PER_PAGE);
+
         return $this->renderer->renderView(
             "candidate-quiz-listing.phtml",
             [
@@ -79,12 +90,15 @@ class CandidateController extends AbstractController
      * @param Request $request
      * @param array $attributes
      * @return Response
+     * Display the results page to the contestant
      */
-    public function success(Request $request, array $attributes)
+    public function success(Request $request, array $attributes): Response
     {
         $this->session->start();
-        $questions = $this->session->get("answeredQuestions");
-        $answers = $this->session->get("answers");
+        $quizInstanceId = $attributes["quizInstanceId"];
+        $questions = $this->questionInstanceService->getAll($quizInstanceId,0,0);
+        $answers = $this->answerInstanceServoce->getAll($questions);
+      
         return $this->renderer->renderView(
             "quiz-success-page.phtml",
             [

@@ -4,11 +4,7 @@
 namespace Quiz\Service;
 
 
-use Quiz\Entity\QuestionInstance;
-use Quiz\Entity\QuestionTemplate;
 use Quiz\Entity\QuizInstance;
-use Quiz\Persistency\Repositories\QuestionTemplateRepository;
-use ReallyOrm\Entity\AbstractEntity;
 use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
 
@@ -29,16 +25,38 @@ class QuizInstanceService
     }
 
     /**
-     * @param int|null $quizId
-     * @param EntityInterface $entityData
+     * @param EntityInterface $quizInstance
      * @return bool
      */
-    public function add(?int $quizId, EntityInterface $entityData): ?bool
+    public function add(EntityInterface $quizInstance): bool
     {
-        $quizInstance = new QuizInstance($quizId, $entityData->getId(), 0, $entityData->getName(), $entityData->getDescription(), 0);
-        /** @var QuestionTemplateRepository $repository */
-        $repository =  $this->repositoryManager->getRepository(QuizInstance::class);
+        return $this->repositoryManager->getRepository(QuizInstance::class)->insertOnDuplicateKeyUpdate($quizInstance);
+    }
 
-        return $repository->insertOnDuplicateKeyUpdate($quizInstance);
+    /**
+     * @param EntityInterface $quizTemplate
+     * @param int $quizId
+     * @param int $userId
+     * @return QuizInstance
+     */
+    public function makeQuizInstance(EntityInterface $quizTemplate, int $quizId, int $userId) :QuizInstance
+    {
+        $name = $quizTemplate->getName();
+        $description = $quizTemplate->getDescription();
+        $nrQuestions = $quizTemplate->getNrQuestions();
+
+        return new QuizInstance($quizId, $userId, 0, $name, $description, $nrQuestions);
+    }
+
+    /**
+     * @param int $quizInstanceId
+     * @return int
+     */
+    public function getNumberOfQuestions(int $quizInstanceId): int
+    {
+        /** @var  QuizInstance $quizInstance */
+        $quizInstance = $this->repositoryManager->getRepository(QuizInstance::class)->findOneBy(["id" => $quizInstanceId]);
+
+        return $quizInstance->getNrQuestions();
     }
 }

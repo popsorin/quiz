@@ -4,9 +4,11 @@
 namespace Quiz\Service;
 
 
+use Exception;
 use Quiz\Entity\QuestionInstance;
 use Quiz\Entity\QuestionTemplate;
 use Quiz\Persistency\Repositories\QuestionTemplateRepository;
+use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
 
 class QuestionInstanceService
@@ -25,31 +27,51 @@ class QuestionInstanceService
         $this->repositoryManager = $repositoryManager;
     }
 
-    public function add(array $entityData): bool
+    /**
+     * @param EntityInterface $questionInstance
+     * @return bool
+     */
+    public function add(EntityInterface $questionInstance): bool
     {
-        $text = isset($entityData['text']) ?  $entityData['text'] : '';
-        $answer = isset($entityData['answer']) ? $entityData['answer'] : '';
-        $questionId = isset($entityData['questionTemplateId']) ?  $entityData['questionTemplateId'] : '';
-        $type = isset($entityData['type']) ?  $entityData['type'] : '';
-        $quizId= isset($entityData['quizInstanceId']) ?  $entityData['quizInstanceId'] : '';
-
-        $questionTemplate = new QuestionInstance($text, $quizId, $type, $questionId, $answer);
-
         /** @var QuestionTemplateRepository $repository */
         $repository =  $this->repositoryManager->getRepository(QuestionInstance::class);
 
-        $success = $repository->insertOnDuplicateKeyUpdate($questionTemplate);
-
-        // if the question could not be saved, we will not be able to save the associated quizzes
-        if (!$success) {
-            throw new \Exception("Cannot add question!");
-        }
-
-        return $success;
+        return $repository->insertOnDuplicateKeyUpdate($questionInstance);
     }
 
-    public function getAll(int $id)
+    /**
+     * @param int $quizInstanceId
+     * @param int $offset
+     * @param int $size
+     * @return array
+     */
+    public function getAll(int $quizInstanceId, int $offset, int $size): array
     {
-       return $this->repositoryManager->getRepository(QuestionInstance::class)->findBy(["quiz_instance_id" => $id], [], 0, 0);
+       return $this->repositoryManager->getRepository(QuestionInstance::class)->findBy(["quiz_instance_id" => $quizInstanceId], [], $offset, $size);
+    }
+
+    /**
+     * @param int $quizInstanceId
+     * @param int $offset
+     * @return QuestionInstance
+     */
+    public function getOne(int $quizInstanceId, int $offset): QuestionInstance
+    {
+        return $this->repositoryManager->getRepository(QuestionInstance::class)->findBy(["quiz_instance_id" => $quizInstanceId], [], $offset, 1)[0];
+    }
+
+    /**
+     * @param EntityInterface $questionTemplate
+     * @param int $quizInstanceId
+     * @param int $questionTemplateId
+     * @return QuestionInstance
+     */
+    public function getQuestionInstance(EntityInterface $questionTemplate, int $quizInstanceId, int $questionTemplateId): QuestionInstance
+    {
+        $answer = $questionTemplate->getAnswer();
+        $text = $questionTemplate->getText();
+        $type = $questionTemplate->getType();
+
+        return new QuestionInstance($text, $quizInstanceId, $type, $questionTemplateId, $answer);
     }
 }

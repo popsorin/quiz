@@ -5,6 +5,7 @@ namespace Quiz\Service;
 
 
 use Framework\Http\Request;
+use Quiz\Adapter\QuestionTemplateAdapter;
 use Quiz\Entity\QuestionTemplate;
 use Quiz\Persistency\Repositories\QuestionTemplateRepository;
 use ReallyOrm\Entity\EntityInterface;
@@ -29,21 +30,11 @@ class QuestionTemplateService
         $this->repositoryManager = $repositoryManager;
     }
 
-    /**
-     * @param int $idQuestion
-     * @param int $idQuiz
-     */
-    public function insertIntoLinkTable(int $idQuestion, int $idQuiz)
-    {
-        $this->repositoryManager->getRepository(QuestionTemplate::class)->insertIntoLinkTable($idQuestion, $idQuestion, "quiz_question_template");
-    }
-
-
     public function add(?int $entityId, array $entityData): bool
     {
-        $answer = isset($entityData['answer']) ? $entityData['answer'] : '';
-        $question = isset($entityData['question']) ?  $entityData['question'] : '';
-        $type = isset($entityData['type']) ?  $entityData['type'] : '';
+        $answer = isset($entityData['answer']) ?? '';
+        $question = isset($entityData['question']) ?? '';
+        $type = isset($entityData['type']) ?? '';
 
         $questionTemplate = new QuestionTemplate($answer, $question, $type);
         $questionTemplate->setId($entityId);
@@ -73,6 +64,7 @@ class QuestionTemplateService
     /**
      * @param string $parameter
      * @param int $limit
+     * @param int $quizTemplateId
      * @return array
      */
     public function getAll(string $parameter, int $limit, int $quizTemplateId): array
@@ -87,7 +79,7 @@ class QuestionTemplateService
             ->findBy([], [], $offset, $limit);
         $questionIds = [];
         if($quizTemplateId> 0) {
-            $questionIds = $repository->getQuestions($quizTemplateId);
+            $questionIds = $repository->getQuestionIds($quizTemplateId);
         }
 
 
@@ -141,10 +133,17 @@ class QuestionTemplateService
 
     /**
      * @param int|null $id
-     * @return mixed
+     * @return array
      */
-    public function getAllLinked(?int $id)
+    public function getQuestions(?int $id): array
     {
-        return $this->repositoryManager->getRepository(QuestionTemplate::class)->getQuestions($id);
+        /** @var QuestionTemplateRepository $repository*/
+        $repository =$this->repositoryManager->getRepository(QuestionTemplate::class);
+        $questionTemplateId = $repository->getQuestionIds($id);
+        $questionTemplate = [];
+        foreach ($questionTemplateId as $questionId) {
+            $questionTemplate =array_merge($questionTemplate,  $repository->findBy(["id" => $questionId], [], 0, 0));
+        }
+        return $questionTemplate;
     }
 }

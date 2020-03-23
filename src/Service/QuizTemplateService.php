@@ -4,12 +4,14 @@
 namespace Quiz\Service;
 
 
+use Exception;
 use Framework\Http\Request;
 use Quiz\Entity\QuestionTemplate;
 use Quiz\Entity\QuizTemplate;
 use Quiz\Entity\User;
 use Quiz\Persistency\Repositories\QuizTemplateRepository;
 use Quiz\Persistency\Repositories\UserRepository;
+use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
@@ -37,7 +39,7 @@ class QuizTemplateService
      * @param array $entityData
      * @return bool //maybe make getRepository configurable************************************************
      * //maybe make getRepository configurable*******************************************
-     * @throws \Exception
+     * @throws Exception
      */
     public function add(?int $updateId, ?int $userId, array $entityData): bool
     {
@@ -54,7 +56,7 @@ class QuizTemplateService
 
         // if the question could not be saved, we will not be able to save the associated quizzes
         if (!$success) {
-            throw new \Exception("Cannot add quiz!");
+            throw new Exception("Cannot add quiz!");
         }
 
         // save associated quizzes one by one
@@ -116,7 +118,11 @@ class QuizTemplateService
         return $this->repositoryManager->getRepository(QuizTemplate::class)->deleteById($id);
     }
 
-    public function getOneQuiz(array $filters)
+    /**
+     * @param array $filters
+     * @return EntityInterface|null
+     */
+    public function getOneQuiz(array $filters): ?EntityInterface
     {
         return $this->repositoryManager->getRepository(QuizTemplate::class)->findOneBy($filters);
     }
