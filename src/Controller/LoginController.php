@@ -37,7 +37,8 @@ class LoginController extends AbstractController
         RendererInterface $renderer,
         LoginService $service,
         SessionInterface $session
-    ) {
+    )
+    {
         parent::__construct($renderer);
         $this->service = $service;
         $this->session = $session;

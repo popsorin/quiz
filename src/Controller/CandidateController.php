@@ -50,7 +50,8 @@ class CandidateController extends AbstractController
         QuizTemplateService $service,
         QuestionInstanceService $questionInstanceService,
         AnswerInstanceService $answerInstanceService
-    ) {
+    )
+    {
         parent::__construct($renderer);
         $this->session = $session;
         $this->service = $service;

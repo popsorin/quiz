@@ -62,7 +62,8 @@ class AnswerInstanceController extends AbstractController
         SessionInterface $session,
         AnswerChoiceInstanceFactory $answerChoiceInstanceFactory,
         AnswerTextInstanceFactory $answerTextInstanceFactory
-    ) {
+    )
+    {
         parent::__construct($renderer);
         $this->session = $session;
         $this->answerInstanceService = $answerInstanceService;

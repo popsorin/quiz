@@ -94,7 +94,7 @@ class UserService
      * @param array $quizInstances
      * @return array
      */
-    public function getAllByQuizInstance(array $quizInstances): array
+    public function getAllByQuizInstances(array $quizInstances): array
     {
         $userRepository = $this->repositoryManager->getRepository(User::class);
         $users = [];

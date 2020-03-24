@@ -18,6 +18,7 @@ class ResultsController extends AbstractController
 {
     const RESULTS_PER_PAGE = 4;
     const LISTING_PAGE = "admin-results-listing.phtml";
+
     /**
      * @var SessionInterface
      */
@@ -45,7 +46,8 @@ class ResultsController extends AbstractController
         QuizInstanceService $quizInstanceService,
         RendererInterface $renderer,
         UserService $userService
-    ) {
+    )
+    {
         parent::__construct($renderer);
         $this->session = $session;
         $this->quizInstanceService = $quizInstanceService;
@@ -60,7 +62,7 @@ class ResultsController extends AbstractController
     public function getCandidateResults(Request $request, array $attributes): Response
     {
         $quizInstances = $this->quizInstanceService->getALL();
-        $users = $this->userService->getAllByQuizInstance($quizInstances);
+        $users = $this->userService->getAllByQuizInstances($quizInstances);
 
         return $this->renderer->renderView(
             self::LISTING_PAGE,

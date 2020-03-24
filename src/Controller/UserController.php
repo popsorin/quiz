@@ -52,7 +52,8 @@ class UserController extends AbstractController
         UserService $service,
         SessionInterface $session,
         UserFactory $factory
-    ) {
+    )
+    {
         parent::__construct($renderer);
         $this->session = $session;
         $this->service = $service;

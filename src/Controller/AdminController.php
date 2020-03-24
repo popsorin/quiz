@@ -25,7 +25,8 @@ class AdminController extends AbstractController
     public function __construct(
         RendererInterface $renderer,
         SessionInterface $session
-    ) {
+    )
+    {
         parent::__construct($renderer);
         $this->session = $session;
     }
