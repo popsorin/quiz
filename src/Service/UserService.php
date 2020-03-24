@@ -55,16 +55,15 @@ class UserService
     }
 
     /**
-     * @param Request $request
-     * @param array $attributes
+     * @param array $parameters
      * @param int $limit
      * @return array
      */
-    public function getAll(Request $request, array $attributes, int $limit): array
+    public function getAll( array $parameters, int $limit): array
     {
         $entitiesNumber = $this->repositoryManager->getRepository(User::class)->getCount();
 
-        $page = $request->getParameter("page") ?? 1;
+        $page = $parameters["page"] ?? 1;
         $offset = $limit * ($page - 1);
 
         $results = $this->repositoryManager->getRepository(User::class)->findBy([], [], $offset, $limit);
@@ -91,6 +90,20 @@ class UserService
         return "";
     }
 
+    /**
+     * @param array $quizInstances
+     * @return array
+     */
+    public function getAllByQuizInstances(array $quizInstances): array
+    {
+        $userRepository = $this->repositoryManager->getRepository(User::class);
+        $users = [];
+        foreach ($quizInstances as $quizInstance) {
+            $users[] = $userRepository->findOneBy(["id" => $quizInstance->getUserId()]);
+        }
+
+        return $users;
+    }
 
     /**
      * @param int $id

@@ -94,31 +94,15 @@
                 </thead>
                 <tbody>
                 <tr>
+                    <?php for ($i = 0;$i < count($quizzes); $i++): ?>
                     <th scope="row">1</th>
-                    <td>asd asad asdadadsad</td>
-                    <td>11</td>
-                    <td>111</td>
+                    <td><?php echo $users[$i]->getName()?></td>
+                    <td><?php echo $quizzes[$i]->getName()?></td>
+                    <td><?php echo $quizzes[$i]->getScore()?></td>
                     <td class="text-center">
                         <a class="btn btn-primary py-1" href="#">View</a>
                     </td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>asd asad asdadadsad</td>
-                    <td>22</td>
-                    <td>222</td>
-                    <td class="text-center">
-                        <a class="btn btn-primary py-1" href="#">View</a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>asd asad asdadadsad</td>
-                    <td>33</td>
-                    <td>333</td>
-                    <td class="text-center">
-                        <a class="btn btn-primary py-1" href="#">View</a>
-                    </td>
+                    <?php endfor;?>
                 </tr>
                 </tbody>
             </table>
@@ -131,8 +115,6 @@
                     <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
                 </li>
                 <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
                 <li class="page-item">
                     <a class="page-link" href="#">Next</a>
                 </li>

@@ -45,7 +45,7 @@ class QuestionInstanceService
      * @param int $size
      * @return array
      */
-    public function getAll(int $quizInstanceId, int $offset, int $size): array
+    public function getAllByQuizInstanceId(int $quizInstanceId, int $offset, int $size): array
     {
        return $this->repositoryManager->getRepository(QuestionInstance::class)->findBy(["quiz_instance_id" => $quizInstanceId], [], $offset, $size);
     }

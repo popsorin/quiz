@@ -9,7 +9,6 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
-use Quiz\Service\AdminService;
 
 class AdminController extends AbstractController
 {
@@ -19,23 +18,16 @@ class AdminController extends AbstractController
     protected $session;
 
     /**
-     * @var AdminService
-     */
-    protected $service;
-
-    /**
      * AdminController constructor.
      * @param RendererInterface $renderer
-     * @param AdminService $service
      * @param SessionInterface $session
      */
     public function __construct(
         RendererInterface $renderer,
-        AdminService $service,
         SessionInterface $session
-    ) {
+    )
+    {
         parent::__construct($renderer);
-        $this->service = $service;
         $this->session = $session;
     }
 

@@ -4,8 +4,8 @@
 namespace Quiz\Service;
 
 
+use Exception;
 use Framework\Http\Request;
-use Quiz\Adapter\QuestionTemplateAdapter;
 use Quiz\Entity\QuestionTemplate;
 use Quiz\Persistency\Repositories\QuestionTemplateRepository;
 use ReallyOrm\Entity\EntityInterface;
@@ -46,7 +46,7 @@ class QuestionTemplateService
 
         // if the question could not be saved, we will not be able to save the associated quizzes
         if (!$success) {
-            throw new \Exception("Cannot add question!");
+            throw new Exception("Cannot add question!");
         }
 
         // save associated quizzes one by one

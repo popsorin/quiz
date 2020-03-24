@@ -51,7 +51,8 @@ class QuestionInstanceController extends AbstractController
         QuestionInstanceService $service,
         QuestionTemplateService $questionTemplateService,
         QuizInstanceService $quizInstanceService
-    ) {
+    )
+    {
         parent::__construct($renderer);
         $this->session = $session;
         $this->service = $service;

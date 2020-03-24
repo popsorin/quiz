@@ -50,7 +50,8 @@ class CandidateController extends AbstractController
         QuizTemplateService $service,
         QuestionInstanceService $questionInstanceService,
         AnswerInstanceService $answerInstanceService
-    ) {
+    )
+    {
         parent::__construct($renderer);
         $this->session = $session;
         $this->service = $service;
@@ -96,7 +97,7 @@ class CandidateController extends AbstractController
     {
         $this->session->start();
         $quizInstanceId = $attributes["quizInstanceId"];
-        $questions = $this->questionInstanceService->getAll($quizInstanceId,0,0);
+        $questions = $this->questionInstanceService->getAllByQuizInstanceId($quizInstanceId,0,0);
         $answers = $this->answerInstanceServoce->getAll($questions);
       
         return $this->renderer->renderView(

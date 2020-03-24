@@ -59,4 +59,12 @@ class QuizInstanceService
 
         return $quizInstance->getNrQuestions();
     }
+
+    /**
+     * @return array|EntityInterface[]
+     */
+    public function getAll(): array
+    {
+        return $this->repositoryManager->getRepository(QuizInstance::class)->findBy([], [], 0, 0);
+    }
 }

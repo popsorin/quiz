@@ -6,7 +6,6 @@ namespace Quiz\Service;
 
 use Quiz\Entity\AnswerChoiceInstance;
 use Quiz\Entity\AnswerTextInstance;
-use Quiz\Persistency\Repositories\AnswerChoiceInstanceRepository;
 use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Repository\RepositoryInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
