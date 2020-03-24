@@ -7,23 +7,18 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
-use Prophecy\Comparator\Factory;
-use Quiz\Entity\User;
 use Quiz\Exception\UserAlreadyExistsException;
 use Quiz\Factory\UserFactory;
-use Quiz\Persistency\Repositories\UserRepository;
+use Quiz\Service\PaginatorService;
 use Quiz\Service\UserService;
-use ReallyOrm\Entity\EntityInterface;
-use ReallyOrm\Repository\RepositoryInterface;
-use ReallyOrm\Test\Repository\RepositoryManager;
-use ReflectionClass;
-use ReflectionException;
 
 class UserController extends AbstractController
 {
     const USERS_PER_PAGE = 4;
 
-    const LISTING_PAGE = "admin-user-details.phtml";
+    const PAGE_DETAILS = "admin-user-details.phtml";
+
+    const PAGE_LISTING = "admin-users-listing.phtml";
 
     /**
      * @var SessionInterface
@@ -72,7 +67,7 @@ class UserController extends AbstractController
             $this->service->add($entity);
         } catch (UserAlreadyExistsException $exception) {
             return $this->renderer->renderView(
-                self::LISTING_PAGE,
+                self::PAGE_DETAILS,
                 [
                     "errorMessage" => $exception->getMessage()
                 ]
@@ -102,15 +97,19 @@ class UserController extends AbstractController
      */
     public function getAll(Request $request, array $attributes): Response
     {
-        $props = $this->service->getAll($request->getParameters(), self::USERS_PER_PAGE);
+        $numberOfUsers = $this->service->getCount();
+        $properties = $request->getParameters();
+        $currentPage = (isset($properties["page"])) ? $properties["page"] : 1;
+        $paginator = new PaginatorService($numberOfUsers, $currentPage);
+
+        $users = $this->service->getAll($paginator->getResultsPerPage(), $currentPage);
+
 
         return $this->renderer->renderView(
-            $props['listingPage'],
+            self::PAGE_LISTING ,
             [
-                "users" => $props['users'],
-                "page" => $props['page'],
-                "entitiesNumber" => $props['entitiesNumber'],
-                "limit" => $props['limit']
+                "users" => $users,
+                "paginator" => $paginator
             ]
         );
     }

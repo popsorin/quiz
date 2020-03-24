@@ -14,9 +14,6 @@ use ReallyOrm\Repository\RepositoryManagerInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
 class UserService
 {
-
-    const LISTING_PAGE = "admin-users-listing.phtml";
-
     /**
      * @var RepositoryManagerInterface
      */
@@ -49,32 +46,33 @@ class UserService
         return $repository->insertOnDuplicateKeyUpdate($user);
     }
 
+    /**
+     * @param EntityInterface $user
+     * @return bool
+     */
     public function update(EntityInterface $user): bool
     {
         return $this->repositoryManager->getRepository(User::class)->insertOnDuplicateKeyUpdate($user);
     }
 
     /**
-     * @param array $parameters
+     * @return int
+     */
+    public function getCount(): int
+    {
+        return  $this->repositoryManager->getRepository(User::class)->getCount();
+    }
+
+    /**
      * @param int $limit
+     * @param int $page
      * @return array
      */
-    public function getAll( array $parameters, int $limit): array
+    public function getAll(int $limit, int $page): array
     {
-        $entitiesNumber = $this->repositoryManager->getRepository(User::class)->getCount();
+       $offset = $limit * ($page - 1);
 
-        $page = $parameters["page"] ?? 1;
-        $offset = $limit * ($page - 1);
-
-        $results = $this->repositoryManager->getRepository(User::class)->findBy([], [], $offset, $limit);
-
-        return [
-            "listingPage" => self::LISTING_PAGE,
-            "users" => $results,
-            "page" => $page,
-            "entitiesNumber" => $entitiesNumber,
-            "limit" => $limit
-            ];
+       return $this->repositoryManager->getRepository(User::class)->findBy([], [], $offset, $limit);
     }
 
     /**

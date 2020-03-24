@@ -161,8 +161,6 @@ $container->register(UserService::class, UserService::class)
     ->addArgument($container->findDefinition(RepositoryManagerInterface::class));
 $container->register(QuestionTemplateService::class, QuestionTemplateService::class)
     ->addArgument($container->findDefinition(RepositoryManagerInterface::class));
-$container->register(AdminService::class, AdminService::class)
-    ->addArgument($container->findDefinition(RepositoryManagerInterface::class));
 $container->register(QuizTemplateService::class, QuizTemplateService::class)
     ->addArgument($container->findDefinition(RepositoryManagerInterface::class));
 $container->register(QuizInstanceService::class, QuizInstanceService::class)
