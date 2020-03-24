@@ -101,7 +101,7 @@ class UserController extends AbstractController
      */
     public function getAll(Request $request, array $attributes): Response
     {
-        $props = $this->service->getAll($request, $attributes, self::USERS_PER_PAGE);
+        $props = $this->service->getAll($request->getParameters(), self::USERS_PER_PAGE);
 
         return $this->renderer->renderView(
             $props['listingPage'],

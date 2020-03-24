@@ -25,6 +25,11 @@ class QuizTemplateRepository extends AbstractRepository
         $this->tableName = $tableName;
     }
 
+    /**
+     * @param int $id
+     * @param int $linkId
+     * @return bool
+     */
     public function insertIntoLinkTable(int $id, int $linkId): bool
     {
         $query = $this->pdo->prepare(

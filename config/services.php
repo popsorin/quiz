@@ -13,6 +13,7 @@ use Quiz\Controller\QuestionInstanceController;
 use Quiz\Controller\QuestionTemplateController;
 use Quiz\Controller\QuizInstanceController;
 use Quiz\Controller\QuizTemplateController;
+use Quiz\Controller\ResultsController;
 use Quiz\Controller\UserController;
 use Framework\DependencyInjection\SymfonyContainer;
 use Framework\Dispatcher\Dispatcher;
@@ -182,7 +183,6 @@ $container->register(UserController::class, UserController::class)
 
 $container->register(AdminController::class, AdminController::class)
     ->addArgument(new Reference(RendererInterface::class))
-    ->addArgument($container->findDefinition(AdminService::class))
     ->addArgument(new Reference(SessionInterface::class))
     ->addTag("controller");
 
@@ -240,6 +240,12 @@ $container->register(AnswerInstanceController::class, AnswerInstanceController::
     ->addArgument(new Reference(AnswerTextInstanceFactory::class))
     ->addTag("controller");
 
+$container->register(ResultsController::class, ResultsController::class)
+    ->addArgument(new Reference(SessionInterface::class))
+    ->addArgument($container->findDefinition(QuizInstanceService::class))
+    ->addArgument(new Reference(RendererInterface::class))
+    ->addArgument($container->findDefinition(UserService::class))
+    ->addTag("controller");
 
 $container->setParameter('dispatcherConfig', $config[Dispatcher::CONFIG_KEY_DISPATCHER]);
 $container->register(DispatcherInterface::class, Dispatcher::class)

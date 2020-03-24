@@ -96,7 +96,7 @@ class CandidateController extends AbstractController
     {
         $this->session->start();
         $quizInstanceId = $attributes["quizInstanceId"];
-        $questions = $this->questionInstanceService->getAll($quizInstanceId,0,0);
+        $questions = $this->questionInstanceService->getAllByQuizInstanceId($quizInstanceId,0,0);
         $answers = $this->answerInstanceServoce->getAll($questions);
       
         return $this->renderer->renderView(
