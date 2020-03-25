@@ -55,7 +55,7 @@ class QuizTemplateController extends AbstractController
     public function add(Request $request, array $attributes): Response
     {
         $this->session->start();
-        $updateId = isset($attributes['id']) ?? null;
+        $updateId = ($attributes['id']) ?? null;
         $this->service->add($updateId, $this->session->get("id"), $request->getParameters());
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
@@ -105,7 +105,7 @@ class QuizTemplateController extends AbstractController
         $quiz = $this->service->quizDetails($attributes);
         $page = $request->getParameter("page") ?? 1;
 
-        $id = (isset($attributes['id']) ?? 0);
+        $id = (($attributes['id']) ?? 0);
         $questions = $this->boundedService->getAll($page, 0, $id);
 
         return $this->renderer->renderView(
