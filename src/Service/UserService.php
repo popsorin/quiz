@@ -79,13 +79,9 @@ class UserService
      * @param array $attributes
      * @return mixed
      */
-    public function userDetails(array $attributes)
+    public function userDetails(array $attributes): User
     {
-        if (!empty($attributes)) {
-            return $this->repositoryManager->getRepository(User::class)->find($attributes['id']);
-        }
-
-        return "";
+        return $this->repositoryManager->getRepository(User::class)->find($attributes['id']);
     }
 
     /**

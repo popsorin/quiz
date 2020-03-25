@@ -118,7 +118,7 @@ class UserController extends AbstractController
      * @param Request $request
      * @param array $attributes
      * @return Response
-     * Returns the page for the add functionality with a set name and a set email
+     * Returns the page for the add functionality
      */
     public function userDetails(Request $request, array $attributes): Response
     {
@@ -128,7 +128,6 @@ class UserController extends AbstractController
         return $this->renderer->renderView(
             "admin-user-details.phtml",
             [
-            "action" => "update",
             "name" => $user->getName(),
             "email" => $user->getEmail()
             ]
