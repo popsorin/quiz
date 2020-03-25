@@ -4,14 +4,11 @@
 namespace Quiz\Service;
 
 
-use Framework\Http\Request;
 use Quiz\Entity\User;
 use Quiz\Exception\UserAlreadyExistsException;
-use Quiz\Factory\UserFactory;
 use Quiz\Persistency\Repositories\UserRepository;
 use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
-use ReallyOrm\Test\Repository\RepositoryManager;
 class UserService
 {
     /**
@@ -39,7 +36,7 @@ class UserService
         /** @var UserRepository $repository */
         $repository =  $this->repositoryManager->getRepository(User::class);
 
-        if($repository->findBy(["name" => $user->getName(), "email" => $user->getEmail()],[],0, 0)) {
+        if($repository->findByWithOrOperator(["name" => $user->getName(), "email" => $user->getEmail()],[],0, 0)) {
             throw new UserAlreadyExistsException($user);
         }
 
@@ -70,9 +67,9 @@ class UserService
      */
     public function getAll(int $limit, int $page): array
     {
-       $offset = $limit * ($page - 1);
+        $offset = $limit * ($page - 1);
 
-       return $this->repositoryManager->getRepository(User::class)->findBy([], [], $offset, $limit);
+        return $this->repositoryManager->getRepository(User::class)->findBy([], [], $offset, $limit);
     }
 
     /**
