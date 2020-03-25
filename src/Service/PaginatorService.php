@@ -66,7 +66,7 @@ class PaginatorService
      */
     private function setTotalPages(int $resultsPerPage)
     {
-        $this->totalPages = (int)($this->totalPages / $this->resultsPerPage);
+        $this->totalPages = (int)($this->totalResults / $this->resultsPerPage);
     }
 
     /**
