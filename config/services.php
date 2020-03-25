@@ -131,7 +131,7 @@ $container->register(AnswerTextInstanceRepository::class, AnswerTextInstanceRepo
     ->addArgument("%PDO%")
     ->addArgument(AnswerTextInstance::class)
     ->addArgument($container->findDefinition(HydratorInterface::class))
-    ->addArgument("answer_text_instance")
+    ->addArgument("answer_choice_instance")
     ->addTag("repository");
 
 $container->register(AnswerChoiceInstanceRepository::class, AnswerChoiceInstanceRepository::class)
