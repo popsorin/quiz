@@ -122,7 +122,7 @@ class UserController extends AbstractController
      */
     public function userDetails(Request $request, array $attributes): Response
     {
-        $user = $this->service->userDetails($attributes);
+        $user = $this->service->userDetails($attributes["id"]);
         $this->session->start();
 
         return $this->renderer->renderView(

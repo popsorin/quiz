@@ -76,12 +76,12 @@ class UserService
     }
 
     /**
-     * @param array $attributes
-     * @return mixed
+     * @param int $id
+     * @return User
      */
-    public function userDetails(array $attributes): User
+    public function userDetails(int $id): EntityInterface
     {
-        return $this->repositoryManager->getRepository(User::class)->find($attributes['id']);
+        return $this->repositoryManager->getRepository(User::class)->find($id);
     }
 
     /**
