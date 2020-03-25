@@ -84,15 +84,15 @@
                 <tbody>
                 <?php foreach ($quizzes as $quiz): ?>
                     <tr>
-                        <th scope="row"><?php echo $quiz->getId()?></th>
+                        <th scope="row"><?php echo $quiz->getId() ?></th>
                         <td><?php echo $quiz->getName()?></td>
-                        <td><?php echo $quiz->getDescription()?></td>
+                        <td><?php echo $quiz->getDescription() ?></td>
                         <td class="text-center">
                             <a class="btn btn-primary py-1" href="/dashboard/quizzes/update/<?php echo $quiz->getId() ?>">Edit</a>
                             <a class="btn btn-danger py-1" href="/dashboard/quizzes/delete/<?php echo $quiz->getId() ?>">Delete</a>
                         </td>
                     </tr>
-                <?php endforeach;?>
+                <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
@@ -103,11 +103,11 @@
                 <li class="page-item">
                     <a class="page-link" href="?page=<?php echo ($page < 2) ? $page : $page-1?>">Previous</a>
                 </li>
-                <?php for( $i = 0; $i < ($entitiesNumber/$limit); $i++): ?>
-                    <li class="page-item"><a class="page-link" href="?page=<?php echo $i+1?>"><?php echo $i+1?></a></li>
+                <?php for($i = 0; $i < ($entitiesNumber/$limit); $i++): ?>
+                    <li class="page-item"><a class="page-link" href="?page=<?php echo $i+1 ?>"><?php echo $i+1 ?></a></li>
                 <?php endfor;?>
                 <li class="page-item">
-                    <a class="page-link" href="?page=<?php echo ($page < ($entitiesNumber/$limit))? $page+1 : $page?>">Next</a>
+                    <a class="page-link" href="?page=<?php echo ($page < ($entitiesNumber/$limit))? $page+1 : $page ?>">Next</a>
                 </li>
             </ul>
         </nav>
