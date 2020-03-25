@@ -8,6 +8,7 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
+use Quiz\Factory\QuizTemplateFactory;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizTemplateService;
 
@@ -24,12 +25,17 @@ class QuizTemplateController extends AbstractController
     /**
      * @var SessionInterface
      */
-    protected $session;
+    private $session;
 
     /**
      * @var QuizTemplateService
      */
-    protected $service;
+    private $service;
+
+    /**
+     * @var QuizTemplateFactory
+     */
+    private $quizTemplateFactory;
 
     /**
      * QuizTemplateController constructor.
@@ -37,13 +43,21 @@ class QuizTemplateController extends AbstractController
      * @param QuizTemplateService $service
      * @param SessionInterface $session
      * @param QuestionTemplateService $boundedService
+     * @param QuizTemplateFactory $quizTemplateFactory
      */
-    public function __construct(RendererInterface $renderer,QuizTemplateService $service, SessionInterface $session, QuestionTemplateService $boundedService)
+    public function __construct(
+        RendererInterface $renderer,
+        QuizTemplateService $service,
+        SessionInterface $session,
+        QuestionTemplateService $boundedService,
+        QuizTemplateFactory $quizTemplateFactory
+    )
     {
         parent::__construct($renderer);
         $this->boundedService = $boundedService;
         $this->session = $session;
         $this->service = $service;
+        $this->quizTemplateFactory = $quizTemplateFactory;
     }
 
     /**
@@ -55,8 +69,15 @@ class QuizTemplateController extends AbstractController
     public function add(Request $request, array $attributes): Response
     {
         $this->session->start();
-        $updateId = isset($attributes['id']) ?? null;
-        $this->service->add($updateId, $this->session->get("id"), $request->getParameters());
+        $quizTemplate = $this->quizTemplateFactory->createFromRequest(
+            $request,
+            $this->session,
+            $attributes,
+            "name",
+            "description",
+            "questions"
+        );
+        $this->service->add($quizTemplate);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
     }

@@ -4,14 +4,11 @@
 namespace Quiz\Service;
 
 
-use Framework\Http\Request;
 use Quiz\Entity\User;
 use Quiz\Exception\UserAlreadyExistsException;
-use Quiz\Factory\UserFactory;
 use Quiz\Persistency\Repositories\UserRepository;
 use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
-use ReallyOrm\Test\Repository\RepositoryManager;
 class UserService
 {
     /**

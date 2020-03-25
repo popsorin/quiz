@@ -124,7 +124,7 @@ return [
                 [
                     Router::CONFIG_KEY_PATH => '/dashboard/quizzes/update/(?<id>\d+)',
                     Router::CONFIG_KEY_CONTROLLER_NAME => 'QuizTemplate',
-                    Router::CONFIG_KEY_ACTION => 'quizDetails',
+                    Router::CONFIG_KEY_ACTION => 'getQuizDetails',
                     Router::CONFIG_KEY_METHOD => 'GET'
                 ],
         'quiz_templates_controller_add' =>
