@@ -32,7 +32,7 @@ class PaginatorService
      * @param int $currentPage
      * @param int $resultsPerPage
      */
-    public function __construct(int $totalResults, int $currentPage = 1, int $resultsPerPage = 4)
+    public function     __construct(int $totalResults, int $currentPage = 1, int $resultsPerPage = 4)
     {
         $this->totalResults = $totalResults;
         $this->setCurrentPage($currentPage);
@@ -66,7 +66,7 @@ class PaginatorService
      */
     private function setTotalPages(int $resultsPerPage)
     {
-        $this->totalPages = (int)($this->totalPages / $this->resultsPerPage);
+        $this->totalPages = ceil(($this->totalResults / $this->resultsPerPage));
     }
 
     /**

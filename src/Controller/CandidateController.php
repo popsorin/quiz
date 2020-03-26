@@ -10,6 +10,7 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Service\AnswerInstanceService;
+use Quiz\Service\PaginatorService;
 use Quiz\Service\QuestionInstanceService;
 use Quiz\Service\QuizTemplateService;
 
@@ -24,7 +25,7 @@ class CandidateController extends AbstractController
     /**
      * @var QuizTemplateService
      */
-    private $service;
+    private $quizTemplateService;
 
     /**
      * @var QuestionInstanceService
@@ -40,21 +41,21 @@ class CandidateController extends AbstractController
      * CandidateController constructor.
      * @param RendererInterface $renderer
      * @param SessionInterface $session
-     * @param QuizTemplateService $service
+     * @param QuizTemplateService $quizTemplateService
      * @param QuestionInstanceService $questionInstanceService
      * @param AnswerInstanceService $answerInstanceService
      */
     public function __construct(
         RendererInterface $renderer,
         SessionInterface $session,
-        QuizTemplateService $service,
+        QuizTemplateService $quizTemplateService,
         QuestionInstanceService $questionInstanceService,
         AnswerInstanceService $answerInstanceService
     )
     {
         parent::__construct($renderer);
         $this->session = $session;
-        $this->service = $service;
+        $this->quizTemplateService = $quizTemplateService;
         $this->questionInstanceService = $questionInstanceService;
         $this->answerInstanceServoce = $answerInstanceService;
     }
@@ -71,18 +72,16 @@ class CandidateController extends AbstractController
 
             return self::createResponse($request, "301", "Location", ["/"]);
         }
-
-        $page = ($request->getParameter("page")) ?? 1;
-        $props = $this->service->getAll($page, self::QUESTIONS_PER_PAGE);
+        $numberOfQuizzes = $this->quizTemplateService->getCount();
+        $currentPage = ($request->getParameter("page")) ?? 1;
+        $paginator = new PaginatorService($numberOfQuizzes, $currentPage);
+        $quizzes = $this->quizTemplateService->getAll($paginator->getResultsPerPage(), $currentPage);
 
         return $this->renderer->renderView(
             "candidate-quiz-listing.phtml",
             [
-                "name" => ($this->session->get("name")),
-                "quizzes" => $props['quizzes'],
-                "page" => $props['page'],
-                "entitiesNumber" => $props['entitiesNumber'],
-                "limit" => $props['limit']
+                "quizzes" => $quizzes,
+                "paginator" => $paginator
             ]);
 
     }

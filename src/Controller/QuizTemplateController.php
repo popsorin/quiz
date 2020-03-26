@@ -8,19 +8,22 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
+use Quiz\Exception\QuizTemplateAlreadyExistsException;
 use Quiz\Factory\QuizTemplateFactory;
+use Quiz\Service\PaginatorService;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizTemplateService;
 
 class QuizTemplateController extends AbstractController
 {
-    const LISTING_PAGE = 'admin-questions-listing.phtml';
+    const PAGE_LISTING = 'admin-quizzes-listing.phtml';
+    const PAGE_DETAILS = 'admin-quiz-details.phtml';
     const QUESTIONS_PER_PAGE = 4;
 
     /**
      * @var QuestionTemplateService
      */
-    private $boundedService;
+    private $questionTemplateService;
 
     /**
      * @var SessionInterface
@@ -42,19 +45,19 @@ class QuizTemplateController extends AbstractController
      * @param RendererInterface $renderer
      * @param QuizTemplateService $service
      * @param SessionInterface $session
-     * @param QuestionTemplateService $boundedService
+     * @param QuestionTemplateService $questionTemplateService
      * @param QuizTemplateFactory $quizTemplateFactory
      */
     public function __construct(
         RendererInterface $renderer,
         QuizTemplateService $service,
         SessionInterface $session,
-        QuestionTemplateService $boundedService,
+        QuestionTemplateService $questionTemplateService,
         QuizTemplateFactory $quizTemplateFactory
     )
     {
         parent::__construct($renderer);
-        $this->boundedService = $boundedService;
+        $this->questionTemplateService = $questionTemplateService;
         $this->session = $session;
         $this->service = $service;
         $this->quizTemplateFactory = $quizTemplateFactory;
@@ -69,6 +72,7 @@ class QuizTemplateController extends AbstractController
     public function add(Request $request, array $attributes): Response
     {
         $this->session->start();
+        $questionsIds = $request->getParameter("questions");
         $quizTemplate = $this->quizTemplateFactory->createFromRequest(
             $request,
             $this->session,
@@ -77,7 +81,41 @@ class QuizTemplateController extends AbstractController
             "description",
             "questions"
         );
-        $this->service->add($quizTemplate);
+        try {
+            $this->service->add($quizTemplate, $questionsIds);
+        }
+        catch (QuizTemplateAlreadyExistsException $exception){
+            $questions = $this->questionTemplateService->getAll(0, 0);
+            return $this->renderer->renderView(
+                self::PAGE_DETAILS,
+                [
+                    "errorMessage" => $exception->getMessage(),
+                    "questions" => $questions
+                ]
+            );
+        }
+
+        return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
+    }
+
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
+    public function update(Request $request, array $attributes): Response
+    {
+        $this->session->start();
+        $questionsIds = $request->getParameter("questions");
+        $quizTemplate = $this->quizTemplateFactory->createFromRequest(
+            $request,
+            $this->session,
+            $attributes,
+            "name",
+            "description",
+            "questions"
+        );
+       $this->service->update($quizTemplate, $questionsIds);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
     }
@@ -101,40 +139,49 @@ class QuizTemplateController extends AbstractController
      */
     public function getAll(Request $request, array $attributes): Response
     {
-        $page = $request->getParameter("page") ?? 1;
-        $props = $this->service->getAll($page, self::QUESTIONS_PER_PAGE);
+        $numberOfQuizzes = $this->service->getCount();
+        $properties = $request->getParameters();
+        $currentPage = (isset($properties["page"])) ? $properties["page"] : 1;
+        $paginator =  new PaginatorService($numberOfQuizzes, $currentPage);
+        $quizzes = $this->service->getAll($paginator->getResultsPerPage(), $currentPage);
 
         return $this->renderer->renderView(
-            $props['listingPage'],
+            self::PAGE_LISTING,
             [
-                "quizzes" => $props['quizzes'],
-                "page" => $props['page'],
-                "entitiesNumber" => $props['entitiesNumber'],
-                "limit" => $props['limit']
+                "paginator" => $paginator,
+                "quizzes" => $quizzes
             ]
         );
     }
 
+    public function getQuizDetailsForAdd(Request $request, array $attributes)
+    {
+        $questions = $this->questionTemplateService->getAll(0, 0);
+
+        return $this->renderer->renderView(
+            "admin-quiz-details.phtml", [
+            "questions" => $questions
+        ]);
+    }
     /**
      * @param Request $request
      * @param array $attributes
      * @return Response
      * Returns the page for the edit functionality for the quizzes
      */
-    public function getQuizDetails(Request $request, array $attributes): Response
+    public function getQuizDetailsForUpdate(Request $request, array $attributes): Response
     {
-        $quiz = $this->service->quizDetails($attributes);
-        $page = $request->getParameter("page") ?? 1;
-
-        $id = (isset($attributes['id']) ?? 0);
-        $questions = $this->boundedService->getAll($page, 0, $id);
+        $id = (isset($attributes['id']) ? $attributes['id'] : 0);
+        $quiz = $this->service->quizDetails($id);
+        $thisQuizQuestions = $this->questionTemplateService->getAllQuestionIdsFromOneQuiz($id);
+        $questions = $this->questionTemplateService->getAll(0, 0);
 
         return $this->renderer->renderView(
             "admin-quiz-details.phtml",
             [
                 "quiz" => $quiz,
-                "questions" => $questions['questions'],
-                'questionIds' => $questions['questionIds']
+                "thisQuizQuestions" => $thisQuizQuestions,
+                "questions" => $questions
             ]);
     }
 }

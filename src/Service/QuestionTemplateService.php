@@ -62,35 +62,24 @@ class QuestionTemplateService
     }
 
     /**
-     * @param string $parameter
      * @param int $limit
+     * @param int $page
+     * @return array
+     */
+    public function getAll(int $limit, int $page): array
+    {
+        $offset = $limit * ($page - 1);
+
+        return $this->repositoryManager->getRepository(QuestionTemplate::class)->findBy([], [], $offset, $limit);
+    }
+
+    /**
      * @param int $quizTemplateId
      * @return array
      */
-    public function getAll(string $parameter, int $limit, int $quizTemplateId): array
+    public function getAllQuestionIdsFromOneQuiz(int $quizTemplateId): array
     {
-        $entitiesNumber = $this->repositoryManager->getRepository(QuestionTemplate::class)->getCount();
-
-        $page = $parameter;
-        $offset = $limit * ($page - 1);
-
-        $repository  = $this->repositoryManager->getRepository(QuestionTemplate::class);
-        $results = $repository
-            ->findBy([], [], $offset, $limit);
-        $questionIds = [];
-        if($quizTemplateId> 0) {
-            $questionIds = $repository->getQuestionIds($quizTemplateId);
-        }
-
-
-        return [
-            "listingPage" => self::LISTING_PAGE,
-            "questions" => $results,
-            "page" => $page,
-            "entitiesNumber" => $entitiesNumber,
-            "limit" => $limit,
-            'questionIds' => $questionIds,
-        ];
+        return  $this->repositoryManager->getRepository(QuestionTemplate::class)->getQuestionIds($quizTemplateId);
     }
 
     /**

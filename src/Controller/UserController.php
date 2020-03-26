@@ -98,12 +98,11 @@ class UserController extends AbstractController
     public function getAll(Request $request, array $attributes): Response
     {
         $numberOfUsers = $this->service->getCount();
-        $properties = $request->getParameters();
-        $currentPage = (isset($properties["page"])) ? $properties["page"] : 1;
+        $parameters = $request->getParameters();
+        $currentPage = ($parameters["page"]) ?? 1;
         $paginator = new PaginatorService($numberOfUsers, $currentPage);
 
         $users = $this->service->getAll($paginator->getResultsPerPage(), $currentPage);
-
 
         return $this->renderer->renderView(
             self::PAGE_LISTING ,
@@ -128,15 +127,15 @@ class UserController extends AbstractController
         return $this->renderer->renderView(
             "admin-user-details.phtml",
             [
-            "name" => $user->getName(),
-            "email" => $user->getEmail()
+                "name" => $user->getName(),
+                "email" => $user->getEmail()
             ]
         );
     }
 
     /**
      * @return Response
-     * Returns the page for the add functionality with the name and email unset
+     * Returns the page for the add functionality
      */
     public function userView(): Response
     {
