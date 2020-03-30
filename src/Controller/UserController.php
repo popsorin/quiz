@@ -16,9 +16,9 @@ class UserController extends AbstractController
 {
     const USERS_PER_PAGE = 4;
 
-    const PAGE_DETAILS = "admin-user-details.phtml";
+    const ADMIN_USER_DETAILS_PAGE  = "admin-user-details.phtml";
 
-    const PAGE_LISTING = "admin-users-listing.phtml";
+    const ADMIN_USER_LISTING_PAGE = "admin-users-listing.phtml";
 
     /**
      * @var SessionInterface
@@ -67,7 +67,7 @@ class UserController extends AbstractController
             $this->service->add($entity);
         } catch (UserAlreadyExistsException $exception) {
             return $this->renderer->renderView(
-                self::PAGE_DETAILS,
+                self::ADMIN_USER_DETAILS_PAGE,
                 [
                     "errorMessage" => $exception->getMessage()
                 ]
@@ -105,7 +105,7 @@ class UserController extends AbstractController
         $users = $this->service->getAll($paginator->getResultsPerPage(), $currentPage);
 
         return $this->renderer->renderView(
-            self::PAGE_LISTING ,
+            self::ADMIN_USER_LISTING_PAGE ,
             [
                 "users" => $users,
                 "paginator" => $paginator

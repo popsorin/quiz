@@ -140,7 +140,7 @@ $container->register(AnswerChoiceInstanceRepository::class, AnswerChoiceInstance
     ->addArgument("%PDO%")
     ->addArgument(AnswerChoiceInstance::class)
     ->addArgument($container->findDefinition(HydratorInterface::class))
-    ->addArgument("answer_text_instance")
+    ->addArgument("answer_choice_instance")
     ->addTag("repository");
 
 foreach ($container->findTaggedServiceIds("repository") as $id => $attributes) {
