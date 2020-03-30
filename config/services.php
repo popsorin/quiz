@@ -30,6 +30,7 @@ use Quiz\Entity\QuizTemplate;
 use Quiz\Entity\User;
 use Quiz\Factory\AnswerChoiceInstanceFactory;
 use Quiz\Factory\AnswerTextInstanceFactory;
+use Quiz\Factory\QuizTemplateFactory;
 use Quiz\Factory\UserFactory;
 use Quiz\Persistency\Repositories\AnswerChoiceInstanceRepository;
 use Quiz\Persistency\Repositories\AnswerChoiceTemplateRepository;
@@ -58,6 +59,7 @@ use Symfony\Component\DependencyInjection\Reference;
 $databaseConfig = require 'db_config.php';
 
 $dsn = "mysql:host={$databaseConfig['host']};dbname={$databaseConfig['db']};charset={$databaseConfig['charset']}";
+
 $container = new ContainerBuilder();
 $config = require "../config/config.php";
 
@@ -153,7 +155,7 @@ $container->findDefinition(HydratorInterface::class)
 $container->register(UserFactory::class, UserFactory::class);
 $container->register(AnswerChoiceInstanceFactory::class, AnswerChoiceInstanceFactory::class);
 $container->register(AnswerTextInstanceFactory::class, AnswerTextInstanceFactory::class);
-
+$container->register(QuizTemplateFactory::class, QuizTemplateFactory::class);
 $container->register(SessionInterface::class, Session::class);
 
 $container->register(LoginService::class, LoginService::class)
@@ -170,8 +172,6 @@ $container->register(QuestionInstanceService::class, QuestionInstanceService::cl
     ->addArgument($container->findDefinition(RepositoryManagerInterface::class));
 $container->register(AnswerInstanceService::class, AnswerInstanceService::class)
     ->addArgument($container->findDefinition(RepositoryManagerInterface::class));
-
-$container->register(UserFactory::class, UserFactory::class);
 
 $container->register(UserController::class, UserController::class)
     ->addArgument($container->findDefinition(RendererInterface::class))
@@ -203,6 +203,7 @@ $container->register(QuizTemplateController::class, QuizTemplateController::clas
     ->addArgument($container->findDefinition(QuizTemplateService::class))
     ->addArgument($container->findDefinition(SessionInterface::class))
     ->addArgument($container->findDefinition(QuestionTemplateService::class))
+    ->addArgument($container->findDefinition(QuizTemplateFactory::class))
     ->addTag("controller");
 
 $container->register(CandidateController::class, CandidateController::class)

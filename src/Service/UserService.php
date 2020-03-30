@@ -76,7 +76,7 @@ class UserService
      * @param int $id
      * @return EntityInterface
      */
-    public function userDetails(int $id): EntityInterface
+    public function getUserDetails(int $id): User
     {
         return $this->repositoryManager->getRepository(User::class)->find($id);
     }

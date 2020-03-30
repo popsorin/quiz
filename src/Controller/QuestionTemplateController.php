@@ -8,6 +8,7 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
+use Quiz\Service\PaginatorService;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizTemplateService;
 
@@ -18,7 +19,6 @@ use Quiz\Service\QuizTemplateService;
 class QuestionTemplateController extends AbstractController
 {
     const LISTING_PAGE = 'admin-questions-listing.phtml';
-    const QUESTIONS_PER_PAGE = 4;
 
     /**
      * @var QuizTemplateService
@@ -59,7 +59,7 @@ class QuestionTemplateController extends AbstractController
      */
     public function add(Request $request, array $attributes): Response
     {
-        $id = isset($attributes['id']) ?? null;
+        $id = $attributes['id'] ?? null;
         $this->service->add($id, $request->getParameters());
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/questions"]);
@@ -84,16 +84,17 @@ class QuestionTemplateController extends AbstractController
      */
     public function getAll(Request $request, array $attributes): Response
     {
-        $page = $request->getParameter("page") ?? 1;
-        $props = $this->service->getAll($page, self::QUESTIONS_PER_PAGE, 0 );
+        $parameters = $request->getParameters();
+        $page = $parameters["page"] ?? 1;
+        $numberOfQuestions = $this->service->getCount();
+        $paginator = new PaginatorService($numberOfQuestions, $page);
+        $questionTemplates = $this->service->getAll($paginator->getResultsPerPage(), $page);
 
         return $this->renderer->renderView(
-            $props['listingPage'],
+            self::LISTING_PAGE,
             [
-                "questions" => $props['questions'],
-                "page" => $props['page'],
-                "entitiesNumber" => $props['entitiesNumber'],
-                "limit" => $props['limit']
+                "questions" => $questionTemplates,
+                "paginator" => $paginator,
             ]
         );
     }
@@ -106,7 +107,8 @@ class QuestionTemplateController extends AbstractController
     public function questionDetails(Request $request, array $attributes): Response
     {
         $question = $this->service->questionDetails($request, $attributes);
-        $page = $request->getParameter("page") ?? 1;
+        $parameters = $request->getParameters();
+        $page = $parameters["page"] ?? 1;
         $quizzes = $this->boundedService->getAll($page, 0);
 
         return $this->renderer->renderView(

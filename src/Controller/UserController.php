@@ -16,7 +16,7 @@ class UserController extends AbstractController
 {
     const USERS_PER_PAGE = 4;
 
-    const ADMIN_USER_DETAILS_PAGE = "admin-user-details.phtml";
+    const ADMIN_USER_DETAILS_PAGE  = "admin-user-details.phtml";
 
     const ADMIN_USER_LISTING_PAGE = "admin-users-listing.phtml";
 
@@ -98,12 +98,12 @@ class UserController extends AbstractController
     public function getAll(Request $request, array $attributes): Response
     {
         $numberOfUsers = $this->service->getCount();
-        $properties = $request->getParameters();
-        $currentPage = ($properties["page"]) ?? 1;
+
+        $parameters = $request->getParameters();
+        $currentPage = $parameters["page"] ?? 1;
         $paginator = new PaginatorService($numberOfUsers, $currentPage);
 
         $users = $this->service->getAll($paginator->getResultsPerPage(), $currentPage);
-
 
         return $this->renderer->renderView(
             self::ADMIN_USER_LISTING_PAGE ,
@@ -120,7 +120,7 @@ class UserController extends AbstractController
      * @return Response
      * Returns the page for the add functionality
      */
-    public function userDetails(Request $request, array $attributes): Response
+    public function getUserDetails(Request $request, array $attributes): Response
     {
         $user = $this->service->userDetails($attributes["id"]);
         $this->session->start();
@@ -128,15 +128,15 @@ class UserController extends AbstractController
         return $this->renderer->renderView(
             "admin-user-details.phtml",
             [
-            "name" => $user->getName(),
-            "email" => $user->getEmail()
+                "name" => $user->getName(),
+                "email" => $user->getEmail()
             ]
         );
     }
 
     /**
      * @return Response
-     * Returns the page for the add functionality with the name and email unset
+     * Returns the page for the add functionality
      */
     public function userView(): Response
     {

@@ -4,13 +4,8 @@
 namespace Quiz\Service;
 
 
-use Exception;
-use Framework\Http\Request;
-use Quiz\Entity\QuestionTemplate;
 use Quiz\Entity\QuizTemplate;
-use Quiz\Entity\User;
-use Quiz\Persistency\Repositories\QuizTemplateRepository;
-use Quiz\Persistency\Repositories\UserRepository;
+use Quiz\Exception\QuizTemplateAlreadyExistsException;
 use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
@@ -34,78 +29,68 @@ class QuizTemplateService
     }
 
     /**
-     * @param int|null $updateId
-     * @param int|null $userId
-     * @param array $entityData
-     * @return bool //maybe make getRepository configurable************************************************
-     * //maybe make getRepository configurable*******************************************
-     * @throws Exception
+     * @param EntityInterface $quizTemplate
+     * @param array $questionsIds
+     * @return bool
+     * @throws QuizTemplateAlreadyExistsException
      */
-    public function add(?int $updateId, ?int $userId, array $entityData): bool
+    public function add(EntityInterface $quizTemplate, array $questionsIds): bool
     {
-        $name = isset($entityData['name']) ? $entityData['name'] : '';
-        $description = isset($entityData['description']) ?  $entityData['description'] : '';
-
-        $quizTemplate = new QuizTemplate($userId, $name, $description, count($entityData["questions"]));
-        $quizTemplate->setId($updateId);
-
-        /** @var QuizTemplateRepository $repository */
         $repository =  $this->repositoryManager->getRepository(QuizTemplate::class);
 
-        $success = $repository->insertOnDuplicateKeyUpdate($quizTemplate);
-
-        // if the question could not be saved, we will not be able to save the associated quizzes
-        if (!$success) {
-            throw new Exception("Cannot add quiz!");
+        if($repository->findByWithOrOperator(["name" => $quizTemplate->getName()],[],0, 0)) {
+            throw new QuizTemplateAlreadyExistsException($quizTemplate);
         }
 
-        // save associated quizzes one by one
-        // note: this should happen in a transaction (in a very very far away future iteration)
-        // alternative: use array of quiz IDs in a single insert statement
-        if (isset($entityData['questions'])) {
-            $repository->deleteQuestions($quizTemplate->getId());
-            foreach ($entityData['questions'] as $question) {
-                $success = $repository->insertIntoLinkTable($question, $quizTemplate->getId());
+        $success = $repository->insertOnDuplicateKeyUpdate($quizTemplate);
+        foreach ($questionsIds as $questionsId) {
+            if ($success === false) {
+                return $success;
             }
+            $success = $repository->insertIntoLinkTable($questionsId, $quizTemplate->getId());
         }
 
         return $success;
     }
 
     /**
-     * @param string $parameter
-     * @param int $limit
-     * @return array
+     * @param EntityInterface $quizTemplate
+     * @param array $questionsIds
+     * @return bool
      */
-    public function getAll(string $parameter, int $limit): array
+    public function update(EntityInterface $quizTemplate, array $questionsIds): bool
     {
-        $entitiesNumber = $this->repositoryManager->getRepository(QuizTemplate::class)->getCount();
+        $repository = $this->repositoryManager->getRepository(QuizTemplate::class);
+        $success = $repository->insertOnDuplicateKeyUpdate($quizTemplate);
+        foreach ($questionsIds as $questionsId) {
+            if ($success === false) {
+                return $success;
+            }
+            $success = $repository->insertIntoLinkTable($questionsId, $quizTemplate->getId());
+        }
 
-        $page = $parameter;
-        $offset = $limit * ($page - 1);
-
-        $results = $this->repositoryManager->getRepository(QuizTemplate::class)->findBy([], [], $offset, $limit);
-
-        return [
-            "listingPage" => self::LISTING_PAGE,
-            "quizzes" => $results,
-            "page" => $page,
-            "entitiesNumber" => $entitiesNumber,
-            "limit" => $limit
-        ];
+        return $success;
     }
 
     /**
-     * @param array $attributes
-     * @return mixed
+     * @param int $limit
+     * @param int $page
+     * @return array
      */
-    public function quizDetails(array $attributes)
+    public function getAll(int $limit, int $page): array
     {
-        if (!empty($attributes)) {
-            return $this->repositoryManager->getRepository(QuizTemplate::class)->find($attributes['id']);
-        }
+        $offset = $limit * ($page - 1);
 
-        return "";
+         return $this->repositoryManager->getRepository(QuizTemplate::class)->findBy([], [], $offset, $limit);
+    }
+
+    /**
+     * @param int $quizId
+     * @return QuizTemplate
+     */
+    public function quizDetails(int $quizId): QuizTemplate
+    {
+        return $this->repositoryManager->getRepository(QuizTemplate::class)->find($quizId);
     }
 
 
@@ -125,5 +110,13 @@ class QuizTemplateService
     public function getOneQuiz(array $filters): ?EntityInterface
     {
         return $this->repositoryManager->getRepository(QuizTemplate::class)->findOneBy($filters);
+    }
+
+    /**
+     * @return int
+     */
+    public function getCount(): int
+    {
+        return  $this->repositoryManager->getRepository(QuizTemplate::class)->getCount();
     }
 }

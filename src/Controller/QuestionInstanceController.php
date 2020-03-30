@@ -68,7 +68,7 @@ class QuestionInstanceController extends AbstractController
     public function displayQuestion(Request $request, array  $attributes): Response
     {
         $this->session->start();
-        $currentQuestionInstanceNumber = $attributes["currentQuestionInstanceNumber"];
+        $currentQuestionInstanceNumber = (int)$attributes["currentQuestionInstanceNumber"];
         $quizInstanceId = $attributes["quizInstanceId"];
         $nrQuestions = $this->quizInstanceService->getNumberOfQuestions($quizInstanceId);
 
