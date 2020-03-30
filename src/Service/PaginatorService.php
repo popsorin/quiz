@@ -32,7 +32,7 @@ class PaginatorService
      * @param int $currentPage
      * @param int $resultsPerPage
      */
-    public function     __construct(int $totalResults, int $currentPage = 1, int $resultsPerPage = 4)
+    public function __construct(int $totalResults, int $currentPage = 1, int $resultsPerPage = 4)
     {
         $this->totalResults = $totalResults;
         $this->setCurrentPage($currentPage);

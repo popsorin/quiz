@@ -135,4 +135,12 @@ class QuestionTemplateService
         }
         return $questionTemplate;
     }
+
+    /**
+     * @return int
+     */
+    public function getCount(): int
+    {
+        return  $this->repositoryManager->getRepository(QuestionTemplate::class)->getCount();
+    }
 }

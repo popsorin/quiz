@@ -117,14 +117,14 @@ return [
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/quizzes/add',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'QuizTemplate',
-                Router::CONFIG_KEY_ACTION => 'getQuizDetails',
+                Router::CONFIG_KEY_ACTION => 'getQuizDetailsForAdd',
                 Router::CONFIG_KEY_METHOD => 'GET'
                 ],
             'quiz_templates_controller_getQuizDetails_update' =>
                 [
                     Router::CONFIG_KEY_PATH => '/dashboard/quizzes/update/(?<id>\d+)',
                     Router::CONFIG_KEY_CONTROLLER_NAME => 'QuizTemplate',
-                    Router::CONFIG_KEY_ACTION => 'getQuizDetails',
+                    Router::CONFIG_KEY_ACTION => 'getQuizDetailsForUpdate',
                     Router::CONFIG_KEY_METHOD => 'GET'
                 ],
         'quiz_templates_controller_add' =>
@@ -138,7 +138,7 @@ return [
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/quizzes/update/(?<id>\d+)',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'QuizTemplate',
-                Router::CONFIG_KEY_ACTION => 'add',
+                Router::CONFIG_KEY_ACTION => 'update',
                 Router::CONFIG_KEY_METHOD => 'POST'
             ],
         'quiz_templates_controller_delete' =>

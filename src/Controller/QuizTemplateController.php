@@ -141,7 +141,7 @@ class QuizTemplateController extends AbstractController
     {
         $numberOfQuizzes = $this->service->getCount();
         $properties = $request->getParameters();
-        $currentPage = (isset($properties["page"])) ? $properties["page"] : 1;
+        $currentPage = $properties["page"] ?? 1;
         $paginator =  new PaginatorService($numberOfQuizzes, $currentPage);
         $quizzes = $this->service->getAll($paginator->getResultsPerPage(), $currentPage);
 
@@ -154,7 +154,12 @@ class QuizTemplateController extends AbstractController
         );
     }
 
-    public function getQuizDetailsForAdd(Request $request, array $attributes)
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
+    public function getQuizDetailsForAdd(Request $request, array $attributes): Response
     {
         $questions = $this->questionTemplateService->getAll(0, 0);
 
@@ -171,7 +176,7 @@ class QuizTemplateController extends AbstractController
      */
     public function getQuizDetailsForUpdate(Request $request, array $attributes): Response
     {
-        $id = (isset($attributes['id']) ? $attributes['id'] : 0);
+        $id = $attributes['id'] ??  0;
         $quiz = $this->service->quizDetails($id);
         $thisQuizQuestions = $this->questionTemplateService->getAllQuestionIdsFromOneQuiz($id);
         $questions = $this->questionTemplateService->getAll(0, 0);

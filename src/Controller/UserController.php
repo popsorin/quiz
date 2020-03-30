@@ -99,7 +99,7 @@ class UserController extends AbstractController
     {
         $numberOfUsers = $this->service->getCount();
         $parameters = $request->getParameters();
-        $currentPage = ($parameters["page"]) ?? 1;
+        $currentPage = $parameters["page"] ?? 1;
         $paginator = new PaginatorService($numberOfUsers, $currentPage);
 
         $users = $this->service->getAll($paginator->getResultsPerPage(), $currentPage);

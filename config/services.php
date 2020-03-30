@@ -59,6 +59,7 @@ use Symfony\Component\DependencyInjection\Reference;
 $databaseConfig = require 'db_config.php';
 
 $dsn = "mysql:host={$databaseConfig['host']};dbname={$databaseConfig['db']};charset={$databaseConfig['charset']}";
+
 $container = new ContainerBuilder();
 $config = require "../config/config.php";
 

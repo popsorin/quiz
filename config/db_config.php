@@ -1,7 +1,7 @@
 <?php
 
 return [
-        'host' => '127.0.0.1',
+        'host' => 'mysql',
         'db' => 'user',
         'user' => 'sorinpop',
         'pass' => '123456789',
