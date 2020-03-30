@@ -104,7 +104,7 @@ class QuestionTemplateController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function questionDetails(Request $request, array $attributes): Response
+    public function getQuestionDetails(Request $request, array $attributes): Response
     {
         $question = $this->service->getQuestionDetails($request, $attributes);
         $parameters = $request->getParameters();

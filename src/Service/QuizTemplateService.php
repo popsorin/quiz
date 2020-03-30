@@ -88,7 +88,7 @@ class QuizTemplateService
      * @param int $quizId
      * @return QuizTemplate
      */
-    public function quizDetails(int $quizId): QuizTemplate
+    public function getQuizDetails(int $quizId): QuizTemplate
     {
         return $this->repositoryManager->getRepository(QuizTemplate::class)->find($quizId);
     }
