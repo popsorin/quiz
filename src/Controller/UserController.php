@@ -119,7 +119,7 @@ class UserController extends AbstractController
      * @return Response
      * Returns the page for the add functionality
      */
-    public function userDetails(Request $request, array $attributes): Response
+    public function getUserDetails(Request $request, array $attributes): Response
     {
         $user = $this->service->userDetails($attributes["id"]);
         $this->session->start();
