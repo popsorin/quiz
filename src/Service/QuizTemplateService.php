@@ -105,9 +105,9 @@ class QuizTemplateService
 
     /**
      * @param array $filters
-     * @return EntityInterface|null
+     * @return QuizTemplate
      */
-    public function getOneQuiz(array $filters): ?EntityInterface
+    public function getOneQuiz(array $filters): QuizTemplate
     {
         return $this->repositoryManager->getRepository(QuizTemplate::class)->findOneBy($filters);
     }

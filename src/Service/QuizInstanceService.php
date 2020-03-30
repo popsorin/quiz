@@ -39,7 +39,7 @@ class QuizInstanceService
      * @param int $userId
      * @return QuizInstance
      */
-    public function makeQuizInstance(EntityInterface $quizTemplate, int $quizId, int $userId) :QuizInstance
+    public function makeQuizInstance(EntityInterface $quizTemplate, int $quizId, int $userId): QuizInstance
     {
         $name = $quizTemplate->getName();
         $description = $quizTemplate->getDescription();
@@ -61,7 +61,7 @@ class QuizInstanceService
     }
 
     /**
-     * @return array|EntityInterface[]
+     * @return array|QuizInstance[]
      */
     public function getAll(): array
     {

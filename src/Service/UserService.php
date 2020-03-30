@@ -74,7 +74,7 @@ class UserService
 
     /**
      * @param int $id
-     * @return EntityInterface
+     * @return User
      */
     public function getUserDetails(int $id): User
     {

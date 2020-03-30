@@ -109,22 +109,19 @@ class QuestionTemplateService
     /**
      * @param Request $request
      * @param array $attributes
-     * @return mixed
+     * @return QuestionTemplate
      */
-    public function questionDetails(Request $request, array $attributes)
+    public function getQuestionDetails(Request $request, array $attributes): QuestionTemplate
     {
-        if (!empty($attributes)) {
-            return $this->repositoryManager->getRepository(QuestionTemplate::class)->find($attributes['id']);
-        }
+        return $this->repositoryManager->getRepository(QuestionTemplate::class)->find($attributes['id']);
 
-        return "";
     }
 
     /**
-     * @param int|null $id
+     * @param int $id
      * @return array
      */
-    public function getQuestions(?int $id): array
+    public function getQuestions(int $id): array
     {
         /** @var QuestionTemplateRepository $repository*/
         $repository =$this->repositoryManager->getRepository(QuestionTemplate::class);

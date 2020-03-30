@@ -52,7 +52,6 @@ class UserController extends AbstractController
         parent::__construct($renderer);
         $this->session = $session;
         $this->service = $service;
-        $this->factory = $factory;
     }
 
     /**
@@ -122,7 +121,7 @@ class UserController extends AbstractController
      */
     public function getUserDetails(Request $request, array $attributes): Response
     {
-        $user = $this->service->userDetails($attributes["id"]);
+        $user = $this->service->getUserDetails($attributes["id"]);
         $this->session->start();
 
         return $this->renderer->renderView(
