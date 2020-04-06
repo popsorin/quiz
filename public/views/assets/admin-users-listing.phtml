@@ -117,10 +117,10 @@
 
                 $totalPages= $paginator->getTotalPages()
                 ?>
-                <a class="page-link" href="?page=<?php echo ($page < 2) ? $page : $page-1?>">Previous</a>
+                <a class="page-link" href="?page=<?php echo ($page < 2) ? $page : $page-1 ?>">Previous</a>
             </li>
-            <?php for ($i = 0; $i < $totalPages; $i++): ?>
-            <li class="page-item"><a class="page-link" href="?page=<?php echo $i+1?>"><?php echo $i+1?></a></li>
+            <?php for ($i = 0; $i < $totalPages; $i++) : ?>
+            <li class="page-item"><a class="page-link" href="?page=<?php echo $i+1?>"><?php echo $i+1 ?></a></li>
             <?php endfor;?>
             <li class="page-item">
                 <a class="page-link" href="?page=<?php echo ($page < $totalPages)? $page + 1 : $page ?>">Next</a>
