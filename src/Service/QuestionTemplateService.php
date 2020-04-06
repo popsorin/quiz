@@ -34,7 +34,7 @@ class QuestionTemplateService
      * @param QuestionTemplate $questionTemplate
      * @return bool
      */
-    public function add(QuestionTemplate $questionTemplate): bool
+    public function insertOnDuplicateKeyUpdate(QuestionTemplate $questionTemplate): bool
     {
         return $this->repositoryManager->getRepository(QuestionTemplate::class)->insertOnDuplicateKeyUpdate($questionTemplate);
     }

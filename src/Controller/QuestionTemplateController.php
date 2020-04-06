@@ -12,6 +12,7 @@ use Quiz\Factory\QuestionTemplateFactory;
 use Quiz\Service\PaginatorService;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizTemplateService;
+use ReflectionException;
 
 /**
  * Class QuestionTemplateController
@@ -73,7 +74,22 @@ class QuestionTemplateController extends AbstractController
     public function add(Request $request, array $attributes): Response
     {
         $questionTemplate = $this->factory->createFromRequest($request);
-        $this->service->add($questionTemplate);
+        $this->service->insertOnDuplicateKeyUpdate($questionTemplate);
+
+        return $this->createResponse($request, "301", "Location", ["/dashboard/questions"]);
+    }
+
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     * @throws ReflectionException
+     */
+    public function update(Request $request, array $attributes): Response
+    {
+        $questionTemplate = $this->factory->createFromRequest($request);
+        $questionTemplate->setId($attributes["id"]);
+        $this->service->insertOnDuplicateKeyUpdate($questionTemplate);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/questions"]);
     }
@@ -120,15 +136,11 @@ class QuestionTemplateController extends AbstractController
     public function getQuestionDetailsUpdate(Request $request, array $attributes): Response
     {
         $question = $this->service->getQuestionDetails($attributes["id"]);
-        $parameters = $request->getParameters();
-        $page = $parameters["page"] ?? 1;
-        $quizzes = $this->boundedService->getAll($page, 1);
 
         return $this->renderer->renderView(
             "admin-question-details.phtml",
             [
-                "question" => $question,
-                "quizzes" => $quizzes['quizzes'],
+                "question" => $question->getText()
             ]);
     }
 
