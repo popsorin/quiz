@@ -49,9 +49,9 @@
             <h1>New user / Edit user</h1>
         </div>
 
-        <?php $displayName = (isset($name) && $name !== "") ? $name : "" ?>
-        <?php $displayEmail = (isset($email) && $email !== "") ? $email : "" ?>
-        <?php $errorMessage = (isset($errorMessage) && $errorMessage !== "") ? $errorMessage : "" ?>
+        <?php $displayName = ($name) ?? ""?>
+        <?php $displayEmail = ($email) ?? "" ?>
+        <?php $errorMessage = ($errorMessage) ?? "" ?>
         <?php $userRole =  (isset($userRole) && $userRole === "admin") ? "admin" : "candidate"  ?>
         <?php $otherRole =  (isset($userRole) && $userRole !== "admin") ? "admin" : "candidate"  ?>
         <!--User details form-->
