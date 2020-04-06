@@ -62,35 +62,24 @@ class QuestionTemplateService
     }
 
     /**
-     * @param string $parameter
      * @param int $limit
+     * @param int $page
+     * @return array
+     */
+    public function getAll(int $limit, int $page): array
+    {
+        $offset = $limit * ($page - 1);
+
+        return $this->repositoryManager->getRepository(QuestionTemplate::class)->findBy([], [], $offset, $limit);
+    }
+
+    /**
      * @param int $quizTemplateId
      * @return array
      */
-    public function getAll(string $parameter, int $limit, int $quizTemplateId): array
+    public function getAllQuestionIdsFromOneQuiz(int $quizTemplateId): array
     {
-        $entitiesNumber = $this->repositoryManager->getRepository(QuestionTemplate::class)->getCount();
-
-        $page = $parameter;
-        $offset = $limit * ($page - 1);
-
-        $repository  = $this->repositoryManager->getRepository(QuestionTemplate::class);
-        $results = $repository
-            ->findBy([], [], $offset, $limit);
-        $questionIds = [];
-        if($quizTemplateId> 0) {
-            $questionIds = $repository->getQuestionIds($quizTemplateId);
-        }
-
-
-        return [
-            "listingPage" => self::LISTING_PAGE,
-            "questions" => $results,
-            "page" => $page,
-            "entitiesNumber" => $entitiesNumber,
-            "limit" => $limit,
-            'questionIds' => $questionIds,
-        ];
+        return  $this->repositoryManager->getRepository(QuestionTemplate::class)->getQuestionIds($quizTemplateId);
     }
 
     /**
@@ -118,24 +107,20 @@ class QuestionTemplateService
     }
 
     /**
-     * @param Request $request
-     * @param array $attributes
-     * @return mixed
+     * @param int $id
+     * @return QuestionTemplate
      */
-    public function questionDetails(Request $request, array $attributes)
+    public function getQuestionDetails(int $id): QuestionTemplate
     {
-        if (!empty($attributes)) {
-            return $this->repositoryManager->getRepository(QuestionTemplate::class)->find($attributes['id']);
-        }
+        return $this->repositoryManager->getRepository(QuestionTemplate::class)->find($id);
 
-        return "";
     }
 
     /**
-     * @param int|null $id
+     * @param int $id
      * @return array
      */
-    public function getQuestions(?int $id): array
+    public function getQuestions(int $id): array
     {
         /** @var QuestionTemplateRepository $repository*/
         $repository =$this->repositoryManager->getRepository(QuestionTemplate::class);
@@ -145,5 +130,13 @@ class QuestionTemplateService
             $questionTemplate =array_merge($questionTemplate,  $repository->findBy(["id" => $questionId], [], 0, 0));
         }
         return $questionTemplate;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCount(): int
+    {
+        return  $this->repositoryManager->getRepository(QuestionTemplate::class)->getCount();
     }
 }

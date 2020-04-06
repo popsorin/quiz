@@ -51,7 +51,7 @@ class AnswerTextInstance extends AbstractEntity
     /**
      * @return string|null
      */
-    public function getText(): string
+    public function getText(): ?string
     {
         return $this->text;
     }

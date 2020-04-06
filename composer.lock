@@ -103,12 +103,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/popsorin/mvc-framework-skeleton.git",
-                "reference": "c7f31fd0310f04ff37952ae1ef214907148cb5f6"
+                "reference": "b026d7e1868815925127f706e905a9ddd1ad2ffd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popsorin/mvc-framework-skeleton/zipball/c7f31fd0310f04ff37952ae1ef214907148cb5f6",
-                "reference": "c7f31fd0310f04ff37952ae1ef214907148cb5f6",
+                "url": "https://api.github.com/repos/popsorin/mvc-framework-skeleton/zipball/b026d7e1868815925127f706e905a9ddd1ad2ffd",
+                "reference": "b026d7e1868815925127f706e905a9ddd1ad2ffd",
                 "shasum": ""
             },
             "require": {
@@ -130,9 +130,10 @@
                 }
             ],
             "support": {
-                "source": "https://github.com/popsorin/mvc-framework-skeleton/tree/master"
+                "source": "https://github.com/popsorin/mvc-framework-skeleton/tree/master",
+                "issues": "https://github.com/popsorin/mvc-framework-skeleton/issues"
             },
-            "time": "2020-03-12T07:31:11+00:00"
+            "time": "2020-03-25T16:22:08+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -938,12 +939,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/popsorin/ORM.git",
-                "reference": "87f621d396740af0f6953701e7d185f7469dd349"
+                "reference": "ba7d8db42f093bb823474242b879dec33ae51401"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popsorin/ORM/zipball/87f621d396740af0f6953701e7d185f7469dd349",
-                "reference": "87f621d396740af0f6953701e7d185f7469dd349",
+                "url": "https://api.github.com/repos/popsorin/ORM/zipball/ba7d8db42f093bb823474242b879dec33ae51401",
+                "reference": "ba7d8db42f093bb823474242b879dec33ae51401",
                 "shasum": ""
             },
             "require": {
@@ -970,7 +971,7 @@
                 "source": "https://github.com/popsorin/ORM/tree/master",
                 "issues": "https://github.com/popsorin/ORM/issues"
             },
-            "time": "2020-03-12T09:20:57+00:00"
+            "time": "2020-03-18T07:11:58+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",

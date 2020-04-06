@@ -112,13 +112,18 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <li class="page-item">
-                <a class="page-link" href="?page=<?php echo ($page < 2)? $page : $page-1?>">Previous</a>
+                <?php
+                $page = $paginator->getCurrentPage();
+
+                $totalPages= $paginator->getTotalPages()
+                ?>
+                <a class="page-link" href="?page=<?php echo ($page < 2) ? $page : $page-1 ?>">Previous</a>
             </li>
-            <?php for($i = 0; $i < ($entitiesNumber/$limit); $i++): ?>
-            <li class="page-item"><a class="page-link" href="?page=<?php echo $i+1?>"><?php echo $i+1?></a></li>
+            <?php for ($i = 0; $i < $totalPages; $i++) : ?>
+            <li class="page-item"><a class="page-link" href="?page=<?php echo $i+1?>"><?php echo $i+1 ?></a></li>
             <?php endfor;?>
             <li class="page-item">
-                <a class="page-link" href="?page=<?php echo ($page < ($entitiesNumber/$limit))? $page+1 : $page?>">Next</a>
+                <a class="page-link" href="?page=<?php echo ($page < $totalPages)? $page + 1 : $page ?>">Next</a>
             </li>
         </ul>
     </nav>

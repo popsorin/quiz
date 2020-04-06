@@ -53,7 +53,7 @@ class AnswerTextTemplate extends AbstractEntity
     /**
      * @return string
      */
-    public function getText(): string
+    public function getText(): ?string
     {
         return $this->text;
     }

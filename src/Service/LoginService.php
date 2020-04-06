@@ -28,10 +28,10 @@ class LoginService
 
     /**
      * @param array $credentials
-     * @return EntityInterface
+     * @return User
      * @throws WrongPasswordException
      */
-    public function login(array $credentials): EntityInterface
+    public function login(array $credentials): User
     {
         $repository = $this->repositoryManager->getRepository(User::class);
         $entity = $repository->findOneBy(["name" =>$credentials['name']]);
