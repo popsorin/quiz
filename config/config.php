@@ -19,14 +19,14 @@ return [
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/users/update/(?<id>\d+)',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'User',
-                Router::CONFIG_KEY_ACTION => 'userDetails',
+                Router::CONFIG_KEY_ACTION => 'getUserDetails',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
         'user_controller_userDetails_add' =>
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/users/add',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'User',
-                Router::CONFIG_KEY_ACTION => 'userView',
+                Router::CONFIG_KEY_ACTION => 'getUserView',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
         'user_controller_add' =>
@@ -61,14 +61,14 @@ return [
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/questions/add',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'QuestionTemplate',
-                Router::CONFIG_KEY_ACTION => 'questionDetails',
+                Router::CONFIG_KEY_ACTION => 'getQuestionDetails',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
         'question_templates_controller_questionDetails_update' =>
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/questions/update/(?<id>\d+)',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'QuestionTemplate',
-                Router::CONFIG_KEY_ACTION => 'questionDetails',
+                Router::CONFIG_KEY_ACTION => 'getQuestionDetails',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
         'question_templates_controller_update' =>

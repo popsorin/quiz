@@ -177,7 +177,7 @@ class QuizTemplateController extends AbstractController
     public function getQuizDetailsForUpdate(Request $request, array $attributes): Response
     {
         $id = $attributes['id'] ??  0;
-        $quiz = $this->service->quizDetails($id);
+        $quiz = $this->service->getQuizDetails($id);
         $thisQuizQuestions = $this->questionTemplateService->getAllQuestionIdsFromOneQuiz($id);
         $questions = $this->questionTemplateService->getAll(0, 0);
 

@@ -106,10 +106,10 @@ class QuestionTemplateController extends AbstractController
      */
     public function getQuestionDetails(Request $request, array $attributes): Response
     {
-        $question = $this->service->getQuestionDetails($request, $attributes);
+        $question = $this->service->getQuestionDetails($attributes["id"]);
         $parameters = $request->getParameters();
         $page = $parameters["page"] ?? 1;
-        $quizzes = $this->boundedService->getAll($page, 0);
+        $quizzes = $this->boundedService->getAll($page, 1);
 
         return $this->renderer->renderView(
             "admin-question-details.phtml",

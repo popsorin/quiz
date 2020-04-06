@@ -61,14 +61,14 @@ class QuizTemplateService
     public function update(EntityInterface $quizTemplate, array $questionsIds): bool
     {
         $repository = $this->repositoryManager->getRepository(QuizTemplate::class);
-        $success = $repository->insertOnDuplicateKeyUpdate($quizTemplate);
+        $success = true;
         foreach ($questionsIds as $questionsId) {
             if ($success === false) {
                 return $success;
             }
             $success = $repository->insertIntoLinkTable($questionsId, $quizTemplate->getId());
         }
-
+        $success = $repository->insertOnDuplicateKeyUpdate($quizTemplate);
         return $success;
     }
 
@@ -81,7 +81,7 @@ class QuizTemplateService
     {
         $offset = $limit * ($page - 1);
 
-         return $this->repositoryManager->getRepository(QuizTemplate::class)->findBy([], [], $offset, $limit);
+        return $this->repositoryManager->getRepository(QuizTemplate::class)->findBy([], [], $offset, $limit);
     }
 
     /**

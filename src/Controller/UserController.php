@@ -52,6 +52,7 @@ class UserController extends AbstractController
         parent::__construct($renderer);
         $this->session = $session;
         $this->service = $service;
+        $this->factory = $factory;
     }
 
     /**
@@ -137,7 +138,7 @@ class UserController extends AbstractController
      * @return Response
      * Returns the page for the add functionality
      */
-    public function userView(): Response
+    public function getUserView(): Response
     {
         return $this->renderer->renderView("admin-user-details.phtml", []);
     }

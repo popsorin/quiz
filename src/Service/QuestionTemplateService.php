@@ -107,13 +107,12 @@ class QuestionTemplateService
     }
 
     /**
-     * @param Request $request
-     * @param array $attributes
+     * @param int $id
      * @return QuestionTemplate
      */
-    public function getQuestionDetails(Request $request, array $attributes): QuestionTemplate
+    public function getQuestionDetails(int $id): QuestionTemplate
     {
-        return $this->repositoryManager->getRepository(QuestionTemplate::class)->find($attributes['id']);
+        return $this->repositoryManager->getRepository(QuestionTemplate::class)->find($id);
 
     }
 
