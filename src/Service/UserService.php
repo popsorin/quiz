@@ -111,17 +111,4 @@ class UserService
     {
         return $this->repositoryManager->getRepository(User::class)->deleteById($id);
     }
-
-    /**
-     * This function returns a user from the database.
-     * If no user was found in returns null.
-     *
-     * @param array $filters
-     * @return User|null
-     */
-    public function findOneBy(array $filters): ?User
-    {
-        $repository = $this->repositoryManager->getRepository(User::class);
-        return ($repository->findByWithOrOperator($filters, [], 0, 0)[0]) ?? null;
-    }
 }
