@@ -30,6 +30,7 @@ use Quiz\Entity\QuizTemplate;
 use Quiz\Entity\User;
 use Quiz\Factory\AnswerChoiceInstanceFactory;
 use Quiz\Factory\AnswerTextInstanceFactory;
+use Quiz\Factory\QuestionTemplateFactory;
 use Quiz\Factory\QuizTemplateFactory;
 use Quiz\Factory\UserFactory;
 use Quiz\Persistency\Repositories\AnswerChoiceInstanceRepository;
@@ -156,6 +157,8 @@ $container->register(UserFactory::class, UserFactory::class);
 $container->register(AnswerChoiceInstanceFactory::class, AnswerChoiceInstanceFactory::class);
 $container->register(AnswerTextInstanceFactory::class, AnswerTextInstanceFactory::class);
 $container->register(QuizTemplateFactory::class, QuizTemplateFactory::class);
+$container->register(QuestionTemplateFactory::class, QuestionTemplateFactory::class);
+
 $container->register(SessionInterface::class, Session::class);
 
 $container->register(LoginService::class, LoginService::class)
@@ -196,6 +199,7 @@ $container->register(QuestionTemplateController::class, QuestionTemplateControll
     ->addArgument($container->findDefinition(QuestionTemplateService::class))
     ->addArgument($container->findDefinition(SessionInterface::class))
     ->addArgument($container->findDefinition(QuizTemplateService::class))
+    ->addArgument($container->findDefinition(QuestionTemplateFactory::class))
     ->addTag("controller");
 
 $container->register(QuizTemplateController::class, QuizTemplateController::class)
