@@ -94,4 +94,15 @@ class User extends AbstractEntity
 
         return $this;
     }
+
+    /**
+     * @param string $name
+     * @return User
+     */
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
 }
