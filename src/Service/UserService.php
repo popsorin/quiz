@@ -36,7 +36,7 @@ class UserService
         /** @var UserRepository $repository */
         $repository =  $this->repositoryManager->getRepository(User::class);
 
-        if($repository->findByWithOrOperator(["name" => $user->getName(), "email" => $user->getEmail()],[],0, 0)) {
+        if($repository->findByWithOrOperator(["email" => $user->getEmail()],[],0, 0)) {
             throw new UserAlreadyExistsException($user);
         }
 
@@ -52,7 +52,7 @@ class UserService
     {
         /** @var UserRepository $repository */
         $repository =  $this->repositoryManager->getRepository(User::class);
-        if($repository->findByWithOrOperator(["name" => $user->getName(), "email" => $user->getEmail()],[],0, 0)) {
+        if($repository->findByWithOrOperator(["email" => $user->getEmail()],[],0, 0)) {
             throw new UserAlreadyExistsException($user);
         }
 
@@ -83,7 +83,7 @@ class UserService
      * @param int $id
      * @return User
      */
-    public function getUserDetails(int $id): User
+    public function findUserById(int $id): User
     {
         return $this->repositoryManager->getRepository(User::class)->find($id);
     }

@@ -52,6 +52,8 @@
         <?php $displayName = (isset($name) && $name !== "") ? $name : "" ?>
         <?php $displayEmail = (isset($email) && $email !== "") ? $email : "" ?>
         <?php $errorMessage = (isset($errorMessage) && $errorMessage !== "") ? $errorMessage : "" ?>
+        <?php $userRole =  (isset($userRole) && $userRole === "admin") ? "admin" : "candidate"  ?>
+        <?php $otherRole =  (isset($userRole) && $userRole !== "admin") ? "admin" : "candidate"  ?>
         <!--User details form-->
         <form method="POST">
             <div class="form-group">
@@ -69,8 +71,8 @@
             <div class="form-group">
                 <label for="userRole">Role</label>
                 <select name="role" class="form-control" id="userRole">
-                    <option value="admin">admin</option>
-                    <option value="user">user</option>
+                    <option value="admin"><?php echo $userRole ?></option>
+                    <option value="user"><?php echo $otherRole ?></option>
                 </select>
             </div>
             <div>

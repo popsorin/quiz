@@ -75,12 +75,12 @@ class LoginController extends AbstractController
     {
         $this->session->start();
         try {
-            $entity = $this->service->login(["name" => $request->getParameter("name"), "password" => $request->getParameter("password")]);
+            $entity = $this->service->login(["email" => $request->getParameter("email"), "password" => $request->getParameter("password")]);
         }
         catch (WrongPasswordException $exception) {
             return $this->createResponse($request, "301", "Location", ["/"]);
         }
-        $this->session->set("name", $entity->getName());
+        $this->session->set("email", $entity->getEmail());
         $this->session->set("role", $entity->getRole());
         $this->session->set("id", $entity->getId());
 

@@ -34,7 +34,7 @@ class LoginService
     public function login(array $credentials): User
     {
         $repository = $this->repositoryManager->getRepository(User::class);
-        $entity = $repository->findOneBy(["name" =>$credentials['name']]);
+        $entity = $repository->findOneBy(["email" =>$credentials['email']]);
         if(!password_verify($credentials["password"], $entity->getPassword())) {
             //redirect back to the page
             throw new WrongPasswordException("Wrong password");

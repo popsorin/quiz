@@ -85,16 +85,12 @@ class UserController extends AbstractController
     public function update(Request $request, array $attributes): Response
     {
         $this->session->start();
+        $id = $attributes["id"];
         $entity = $this->factory->createFromRequest($request, "name", "email", "password","role");
-        $entity->setId($this->session->get("updateUserId"));
+        $entity->setId($id);
+        $user = $this->service->findUserById($id);
 
-        //here I set he user's name or email to null if the user didn't change them
-        //because if the repository gets an empty string as a value for update
-        //the value will just be ignored
-        if($this->session->get("updateUserName") === $entity->getName()) {
-            $entity->setName("");
-        }
-        if($this->session->get("updateUserEmail") === $entity->getEmail()) {
+        if($user->getEmail() === $entity->getEmail()) {
             $entity->setEmail("");
         }
 
@@ -104,6 +100,7 @@ class UserController extends AbstractController
             return $this->renderer->renderView(
                 "admin-user-details.phtml",
                 [
+                    "role" => $entity->getRole(),
                     "name" => $entity->getName(),
                     "email" => $entity->getEmail(),
                     "errorMessage" => $exception->getMessage()
@@ -147,10 +144,7 @@ class UserController extends AbstractController
     public function getUserDetails(Request $request, array $attributes): Response
     {
         $this->session->start();
-        $user = $this->service->getUserDetails($attributes["id"]);
-        $this->session->set("updateUserName", $user->getName());
-        $this->session->set("updateUserEmail", $user->getEmail());
-        $this->session->set("updateUserId", $attributes["id"]);
+        $user = $this->service->findUserById($attributes["id"]);
 
         return $this->renderer->renderView(
             "admin-user-details.phtml",
