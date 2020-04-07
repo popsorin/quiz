@@ -7,6 +7,13 @@ use ReallyOrm\Repository\AbstractRepository;
 
 class QuestionTemplateRepository extends AbstractRepository implements LinkedEntityInterface
 {
+    /**
+     * QuestionTemplateRepository constructor.
+     * @param \PDO $pdo
+     * @param string $entityName
+     * @param HydratorInterface $hydrator
+     * @param string $tableName
+     */
     public function __construct(
         \PDO $pdo,
         string $entityName,

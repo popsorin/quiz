@@ -61,7 +61,8 @@ class QuizTemplateService
     public function update(EntityInterface $quizTemplate, array $questionsIds): bool
     {
         $repository = $this->repositoryManager->getRepository(QuizTemplate::class);
-        $success = true;
+        $success = $repository->deleteQuestionsFromLinkedTable($quizTemplate->getId());
+
         foreach ($questionsIds as $questionsId) {
             if ($success === false) {
                 return $success;

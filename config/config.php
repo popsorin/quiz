@@ -19,14 +19,14 @@ return [
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/users/update/(?<id>\d+)',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'User',
-                Router::CONFIG_KEY_ACTION => 'getUserDetails',
+                Router::CONFIG_KEY_ACTION => 'showEditPage',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
         'user_controller_userDetails_add' =>
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/users/add',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'User',
-                Router::CONFIG_KEY_ACTION => 'getUserView',
+                Router::CONFIG_KEY_ACTION => 'showNewUserPage',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
         'user_controller_add' =>
@@ -117,14 +117,14 @@ return [
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/quizzes/add',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'QuizTemplate',
-                Router::CONFIG_KEY_ACTION => 'getQuizDetailsForAdd',
+                Router::CONFIG_KEY_ACTION => 'showNewQuizPage',
                 Router::CONFIG_KEY_METHOD => 'GET'
                 ],
             'quiz_templates_controller_getQuizDetails_update' =>
                 [
                     Router::CONFIG_KEY_PATH => '/dashboard/quizzes/update/(?<id>\d+)',
                     Router::CONFIG_KEY_CONTROLLER_NAME => 'QuizTemplate',
-                    Router::CONFIG_KEY_ACTION => 'getQuizDetailsForUpdate',
+                    Router::CONFIG_KEY_ACTION => 'showEditQuizPage',
                     Router::CONFIG_KEY_METHOD => 'GET'
                 ],
         'quiz_templates_controller_add' =>

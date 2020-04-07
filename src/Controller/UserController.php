@@ -141,7 +141,7 @@ class UserController extends AbstractController
      * @return Response
      * Returns the page for the add functionality
      */
-    public function getUserDetails(Request $request, array $attributes): Response
+    public function showEditUserPage(Request $request, array $attributes): Response
     {
         $this->session->start();
         $user = $this->service->findUserById($attributes["id"]);
@@ -159,7 +159,7 @@ class UserController extends AbstractController
      * @return Response
      * Returns the page for the add functionality
      */
-    public function getUserView(): Response
+    public function showNewUserPage(): Response
     {
         return $this->renderer->renderView("admin-user-details.phtml", []);
     }

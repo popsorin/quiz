@@ -158,7 +158,7 @@ class QuizTemplateController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function getQuizDetailsForAdd(Request $request, array $attributes): Response
+    public function showNewQuizPage(Request $request, array $attributes): Response
     {
         $questions = $this->questionTemplateService->getAll(0, 0);
 
@@ -174,7 +174,7 @@ class QuizTemplateController extends AbstractController
      * @return Response
      * Returns the page for the edit functionality for the quizzes
      */
-    public function getQuizDetailsForUpdate(Request $request, array $attributes): Response
+    public function showEditQuizPage(Request $request, array $attributes): Response
     {
         $id = $attributes['id'] ??  0;
         $quiz = $this->service->getQuizDetails($id);
