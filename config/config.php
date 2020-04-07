@@ -61,14 +61,14 @@ return [
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/questions/add',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'QuestionTemplate',
-                Router::CONFIG_KEY_ACTION => 'getQuestionDetails',
+                Router::CONFIG_KEY_ACTION => 'showNewQuestionPage',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
         'question_templates_controller_questionDetails_update' =>
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/questions/update/(?<id>\d+)',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'QuestionTemplate',
-                Router::CONFIG_KEY_ACTION => 'getQuestionDetails',
+                Router::CONFIG_KEY_ACTION => 'showEditQuestionPage',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
         'question_templates_controller_update' =>

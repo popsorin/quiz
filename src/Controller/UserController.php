@@ -84,8 +84,32 @@ class UserController extends AbstractController
      */
     public function update(Request $request, array $attributes): Response
     {
+        $this->session->start();
         $entity = $this->factory->createFromRequest($request, "name", "email", "password","role");
-        $this->service->update($entity);
+        $entity->setId($this->session->get("updateUserId"));
+
+        //here I set he user's name or email to null if the user didn't change them
+        //because if the repository gets an empty string as a value for update
+        //the value will just be ignored
+        if($this->session->get("updateUserName") === $entity->getName()) {
+            $entity->setName("");
+        }
+        if($this->session->get("updateUserEmail") === $entity->getEmail()) {
+            $entity->setEmail("");
+        }
+
+        try {
+            $this->service->update($entity);
+        } catch (UserAlreadyExistsException $exception) {
+            return $this->renderer->renderView(
+                "admin-user-details.phtml",
+                [
+                    "name" => $entity->getName(),
+                    "email" => $entity->getEmail(),
+                    "errorMessage" => $exception->getMessage()
+                ]
+            );
+        }
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
@@ -122,8 +146,11 @@ class UserController extends AbstractController
      */
     public function getUserDetails(Request $request, array $attributes): Response
     {
-        $user = $this->service->getUserDetails($attributes["id"]);
         $this->session->start();
+        $user = $this->service->getUserDetails($attributes["id"]);
+        $this->session->set("updateUserName", $user->getName());
+        $this->session->set("updateUserEmail", $user->getEmail());
+        $this->session->set("updateUserId", $attributes["id"]);
 
         return $this->renderer->renderView(
             "admin-user-details.phtml",

@@ -46,10 +46,17 @@ class UserService
     /**
      * @param EntityInterface $user
      * @return bool
+     * @throws UserAlreadyExistsException
      */
     public function update(EntityInterface $user): bool
     {
-        return $this->repositoryManager->getRepository(User::class)->insertOnDuplicateKeyUpdate($user);
+        /** @var UserRepository $repository */
+        $repository =  $this->repositoryManager->getRepository(User::class);
+        if($repository->findByWithOrOperator(["name" => $user->getName(), "email" => $user->getEmail()],[],0, 0)) {
+            throw new UserAlreadyExistsException($user);
+        }
+
+        return $repository->insertOnDuplicateKeyUpdate($user);
     }
 
     /**
