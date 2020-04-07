@@ -19,7 +19,8 @@ class AnswerTextInstanceFactory
         Request $request,
         string $questionInstanceIdKey,
         string $textKey
-    ): AnswerTextInstance {
+    ): AnswerTextInstance
+    {
         $parameters = $request->getParameters();
         $questionInstanceId = 0;
         $text = "";

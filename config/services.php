@@ -48,12 +48,12 @@ use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizInstanceService;
 use Quiz\Service\QuizTemplateService;
 use Quiz\Service\UserService;
+use Quiz\Service\Validator\UserValidator;
 use ReallyOrm\Hydrator\HydratorInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
 use ReallyOrm\Test\Hydrator\Hydrator;
 use ReallyOrm\Test\Repository\RepositoryManager;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
 
 $databaseConfig = require 'db_config.php';
@@ -156,6 +156,10 @@ $container->register(UserFactory::class, UserFactory::class);
 $container->register(AnswerChoiceInstanceFactory::class, AnswerChoiceInstanceFactory::class);
 $container->register(AnswerTextInstanceFactory::class, AnswerTextInstanceFactory::class);
 $container->register(QuizTemplateFactory::class, QuizTemplateFactory::class);
+
+$container->register(UserValidator::class, UserValidator::class)
+    ->addArgument($container->findDefinition(UserRepository::class));
+
 $container->register(SessionInterface::class, Session::class);
 
 $container->register(LoginService::class, LoginService::class)
@@ -178,6 +182,7 @@ $container->register(UserController::class, UserController::class)
     ->addArgument($container->findDefinition(UserService::class))
     ->addArgument($container->findDefinition(SessionInterface::class))
     ->addArgument($container->findDefinition(UserFactory::class))
+    ->addArgument($container->findDefinition(UserValidator::class))
     ->addTag("controller");
 
 $container->register(AdminController::class, AdminController::class)

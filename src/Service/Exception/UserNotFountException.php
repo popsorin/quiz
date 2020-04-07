@@ -1,14 +1,14 @@
 <?php
 
 
-namespace Quiz\Exception;
+namespace Quiz\Service\Exception;
 
 
 use Exception;
 use ReallyOrm\Entity\EntityInterface;
 use Throwable;
 
-class QuizTemplateAlreadyExistsException extends Exception
+class UserNotFountException extends Exception
 {
     /**
      * @var EntityInterface
@@ -16,20 +16,20 @@ class QuizTemplateAlreadyExistsException extends Exception
     private $entity;
 
     /**
-     * QuizTemplateAlreadyExistsException constructor.
+     * UserNotFountException constructor.
      * @param EntityInterface $entity
      * @param string $message
      * @param int $code
      * @param Throwable|null $previous
      */
-    public function __construct(EntityInterface $entity, $message = "Quiz name already exists", $code = 0, Throwable $previous = null)
+    public function __construct(EntityInterface $entity, $message = "", $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->entity = $entity;
     }
 
     /**
-     * @return EntityInterface
+     * @return EntityInterface|null
      */
     public function getEntity(): EntityInterface
     {

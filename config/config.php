@@ -19,14 +19,14 @@ return [
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/users/update/(?<id>\d+)',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'User',
-                Router::CONFIG_KEY_ACTION => 'getUserDetails',
+                Router::CONFIG_KEY_ACTION => 'showUserEditPage',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
         'user_controller_userDetails_add' =>
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/users/add',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'User',
-                Router::CONFIG_KEY_ACTION => 'getUserView',
+                Router::CONFIG_KEY_ACTION => 'showUserAddPage',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
         'user_controller_add' =>

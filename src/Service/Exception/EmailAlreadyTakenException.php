@@ -1,12 +1,12 @@
 <?php
 
-namespace Quiz\Exception;
+namespace Quiz\Service\Exception;
 
 use Exception;
 use ReallyOrm\Entity\EntityInterface;
 use Throwable;
 
-class UserAlreadyExistsException extends Exception
+class EmailAlreadyTakenException extends Exception
 {
     /**
      * @var EntityInterface
@@ -14,21 +14,21 @@ class UserAlreadyExistsException extends Exception
     private $entity;
 
     /**
-     * UserAlreadyExistsException constructor.
+     * EmailAlreadyTakenException constructor.
      * @param EntityInterface $entity
      * @param string $message
      * @param int $code
      * @param Throwable|null $previous
      */
-    public function __construct(EntityInterface $entity, $message = "Email or username already exists", $code = 0, Throwable $previous = null)
+    public function __construct(EntityInterface $entity, $message = "Email is already taken", $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->entity = $entity;
     }
 
     /**
-     * @return EntityInterface|null
-     */
+    * @return EntityInterface
+    */
     public function getEntity(): EntityInterface
     {
         return $this->entity;
