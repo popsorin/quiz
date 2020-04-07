@@ -74,7 +74,7 @@ class QuestionTemplateController extends AbstractController
     public function add(Request $request, array $attributes): Response
     {
         $questionTemplate = $this->factory->createFromRequest($request);
-        $this->service->insertOnDuplicateKeyUpdate($questionTemplate);
+        $this->service->add($questionTemplate);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/questions"]);
     }
@@ -89,7 +89,7 @@ class QuestionTemplateController extends AbstractController
     {
         $questionTemplate = $this->factory->createFromRequest($request);
         $questionTemplate->setId($attributes["id"]);
-        $this->service->insertOnDuplicateKeyUpdate($questionTemplate);
+        $this->service->update($questionTemplate);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/questions"]);
     }
