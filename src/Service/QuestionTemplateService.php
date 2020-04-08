@@ -30,35 +30,22 @@ class QuestionTemplateService
         $this->repositoryManager = $repositoryManager;
     }
 
-    public function add(?int $entityId, array $entityData): bool
+    /**
+     * @param QuestionTemplate $questionTemplate
+     * @return bool
+     */
+    public function add(QuestionTemplate $questionTemplate): bool
     {
-        $answer = isset($entityData['answer']) ?? '';
-        $question = isset($entityData['question']) ?? '';
-        $type = isset($entityData['type']) ?? '';
+        return $this->repositoryManager->getRepository(QuestionTemplate::class)->insertOnDuplicateKeyUpdate($questionTemplate);
+    }
 
-        $questionTemplate = new QuestionTemplate($answer, $question, $type);
-        $questionTemplate->setId($entityId);
-
-        /** @var QuestionTemplateRepository $repository */
-        $repository =  $this->repositoryManager->getRepository(QuestionTemplate::class);
-
-        $success = $repository->insertOnDuplicateKeyUpdate($questionTemplate);
-
-        // if the question could not be saved, we will not be able to save the associated quizzes
-        if (!$success) {
-            throw new Exception("Cannot add question!");
-        }
-
-        // save associated quizzes one by one
-        // note: this should happen in a transaction (in a very very far away future iteration)
-        // alternative: use array of quiz IDs in a single insert statement
-        if (isset($entityData['quizzes'])) {
-            foreach ($entityData['quizzes'] as $quiz) {
-                $success = $repository->insertIntoLinkTable($questionTemplate->getId(), $quiz);
-            }
-        }
-
-        return $success;
+    /**
+     * @param QuestionTemplate $questionTemplate
+     * @return bool
+     */
+    public function update(QuestionTemplate $questionTemplate): bool
+    {
+        return $this->repositoryManager->getRepository(QuestionTemplate::class)->insertOnDuplicateKeyUpdate($questionTemplate);
     }
 
     /**
