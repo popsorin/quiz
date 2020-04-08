@@ -8,12 +8,10 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Factory\UserFactory;
-use Quiz\Service\Exception\EmailAlreadyTakenException;
-use Quiz\Service\Exception\UserAlreadyExistsException;
-use Quiz\Service\Exception\UserNotFountException;
+use Quiz\Service\Exception\InvalidUserException;
 use Quiz\Service\PaginatorService;
 use Quiz\Service\UserService;
-use Quiz\Service\Validator\EntityValidator;
+use Quiz\Service\Validator\EntityValidatorInterface;
 
 class UserController extends AbstractController
 {
@@ -41,7 +39,7 @@ class UserController extends AbstractController
     private $factory;
 
     /**
-     * @var EntityValidator
+     * @var EntityValidatorInterface
      */
     private $validator;
 
@@ -51,14 +49,14 @@ class UserController extends AbstractController
      * @param UserService $service
      * @param SessionInterface $session
      * @param UserFactory $factory
-     * @param EntityValidator $validator
+     * @param EntityValidatorInterface $validator
      */
     public function __construct(
         RendererInterface $renderer,
         UserService $service,
         SessionInterface $session,
         UserFactory $factory,
-        EntityValidator $validator
+        EntityValidatorInterface $validator
     )
     {
         parent::__construct($renderer);
@@ -75,22 +73,37 @@ class UserController extends AbstractController
      */
     public function add(Request $request, array $attributes): Response
     {
-        $entity = $this->factory->createFromRequest($request, "name", "email", "password", "role");
+        $user = $this->factory->createFromRequest($request, "name", "email", "password", "role");
+
         try {
-            $this->service->add($entity);
-        } catch (UserAlreadyExistsException $exception) {
+            $this->validator->validate($user);
+        } catch (InvalidUserException $exception) {
+            $message = "";
+
+            while ($exception->getPrevious() !== null) {
+                $message .= $exception->getMessage() . '<br>';
+                $exception = $exception->getPrevious();
+            }
+
             return $this->renderer->renderView(
-                self::ADMIN_USER_DETAILS_PAGE,
+                "admin-user-details.phtml",
                 [
-                    "errorMessage" => $exception->getMessage()
+                    "role" => $user->getRole(),
+                    "name" => $user->getName(),
+                    "email" => $user->getEmail(),
+                    "errorMessage" => $message
                 ]
             );
         }
+
+        $this->service->add($user);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
 
     /**
+     *
+     *
      * @param Request $request
      * @param array $attributes
      * @return Response
@@ -103,21 +116,28 @@ class UserController extends AbstractController
 
         try {
             $this->validator->validate($updatedUser);
-        }
-        catch (UserNotFountException $exception) {
-            return $this->renderer->renderView(self::EXCEPTIONS_PAGE, []);
-        }
-        catch (EmailAlreadyTakenException $exception) {
+        } catch (InvalidUserException $exception) {
+            $message = "";
+
+            while ($exception->getPrevious() !== null) {
+                if($exception->getCode() === 1) {
+                    $exception = $exception->getPrevious();
+                }
+                $message .= $exception->getMessage() . '<br>';
+                $exception = $exception->getPrevious();
+            }
+
             return $this->renderer->renderView(
                 "admin-user-details.phtml",
                 [
-                    "role" => $exception->getEntity()->getRole(),
-                    "name" => $exception->getEntity()->getName(),
-                    "email" => $exception->getEntity()->getEmail(),
-                    "errorMessage" => $exception->getMessage()
+                    "role" => $updatedUser->getRole(),
+                    "name" => $updatedUser->getName(),
+                    "email" => $updatedUser->getEmail(),
+                    "errorMessage" => $message
                 ]
             );
         }
+
         $this->service->update($updatedUser);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/users"]);

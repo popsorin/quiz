@@ -6,11 +6,11 @@ namespace Quiz\Service\Validator;
 
 use ReallyOrm\Entity\EntityInterface;
 
-interface EntityValidator
+interface EntityValidatorInterface
 {
     /**
      * @param EntityInterface $entity
-     * @return bool
+     * @return void
      */
-    public function validate(EntityInterface $entity): bool;
+    public function validate(EntityInterface $entity): void;
 }

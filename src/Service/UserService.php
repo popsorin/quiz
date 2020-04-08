@@ -28,18 +28,11 @@ class UserService
     /**
      * @param EntityInterface $user
      * @return bool
-     * //maybe make getRepository configurable******************************************
-     * @throws UserAlreadyExistsException
      */
     public function add(EntityInterface $user): bool
     {
         /** @var UserRepository $repository */
         $repository = $this->repositoryManager->getRepository(User::class);
-
-        if ($repository->findByWithOrOperator(["email" => $user->getEmail()], [], 0, 0)) {
-            throw new UserAlreadyExistsException($user);
-        }
-
         return $repository->insertOnDuplicateKeyUpdate($user);
     }
 
