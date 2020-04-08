@@ -189,10 +189,11 @@ class UserController extends AbstractController
     }
 
     /**
+     * @param Request $request
+     * @param array $attributes
      * @return Response
-     * Returns the page for the add functionality
      */
-    public function showNewUserPage(): Response
+    public function showNewUserPage(Request $request, array $attributes): Response
     {
         return $this->renderer->renderView("admin-user-details.phtml", []);
     }
