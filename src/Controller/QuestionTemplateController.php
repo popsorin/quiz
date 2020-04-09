@@ -134,7 +134,8 @@ class QuestionTemplateController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function showQuestionEditPage(Request $request, array $attributes): Response
+
+    public function showEditQuestionPage(Request $request, array $attributes): Response
     {
         $question = $this->questionTemplateService->getQuestionDetails($attributes["id"]);
 
@@ -150,7 +151,8 @@ class QuestionTemplateController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function showQuestionAddPage(Request $request, array $attributes): Response
+
+    public function showNewQuestionPage(Request $request, array $attributes): Response
     {
         $question = new QuestionTemplate("", "", "");
         return $this->renderer->renderView(
