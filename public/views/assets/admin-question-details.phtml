@@ -48,11 +48,10 @@
         <div class="text-center">
             <h1>New question / Edit question</h1>
         </div>
-        <?php $question = ($question) ?? "" ?>
         <!--Question details form-->
         <form method="POST">
             <div class="form-group">
-                <input type="text" name="text" value="<?php echo $question ?>" class="form-control" id="userName" placeholder="<?php echo $question ?>">
+                <input type="text" name="text" value="<?php echo $question->getText() ?>" class="form-control" id="userName" placeholder="<?php echo $question->getText() ?>">
 
             </div>
 

@@ -48,19 +48,15 @@
         <div class="text-center">
             <h1>New user / Edit user</h1>
         </div>
-
-        <?php $displayName = (isset($name) && $name !== "") ? $name : "" ?>
-        <?php $displayEmail = (isset($email) && $email !== "") ? $email : "" ?>
-        <?php $errorMessage = (isset($errorMessage) && $errorMessage !== "") ? $errorMessage : "" ?>
         <!--User details form-->
         <form method="POST">
             <div class="form-group">
                 <label for="userName">Name</label>
-                <input type="text" name="name" value="<?php echo $displayName;?>" class="form-control" id="userName">
+                <input type="text" name="name" value="<?php echo $user->getName(); ?>" class="form-control" id="userName" placeholder="User name">
             </div>
             <div class="form-group">
                 <label for="userEmail">Email</label>
-                <input type="text" name="email" value="<?php echo $displayEmail ?>" class="form-control" id="userEmail">
+                <input type="text" name="email" value="<?php echo $user->getEmail() ?>" class="form-control" id="userEmail" placeholder="User email">
             </div>
             <div class="form-group">
                 <label for="userPassword">Password</label>
@@ -69,8 +65,10 @@
             <div class="form-group">
                 <label for="userRole">Role</label>
                 <select name="role" class="form-control" id="userRole">
-                    <option value="admin">admin</option>
-                    <option value="user">user</option>
+                    <?php foreach ($roles as $role): ?>
+                    <?php $isSelected = ($role === $user->getRole()) ?  "selected" : ""; ?>
+                    <option value="<?php echo $role ?>" <?php echo $isSelected ?> > <?php echo $role ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
             <div>

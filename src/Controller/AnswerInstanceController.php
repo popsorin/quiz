@@ -79,7 +79,6 @@ class AnswerInstanceController extends AbstractController
      */
     public function add(Request $request, array $attributes): Response
     {
-        $this->session->start();
         $offset = (int)$attributes["currentQuestionInstanceNumber"];
         $quizInstanceId = (int)$attributes["quizInstanceId"];
 

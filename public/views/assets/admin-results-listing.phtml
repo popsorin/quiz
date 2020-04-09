@@ -96,13 +96,13 @@
                 <tr>
                     <?php for ($i = 0;$i < count($quizzes); $i++): ?>
                     <th scope="row">1</th>
-                    <td><?php echo $users[$i]->getName()?></td>
-                    <td><?php echo $quizzes[$i]->getName()?></td>
-                    <td><?php echo $quizzes[$i]->getScore()?></td>
+                    <td><?php echo $users[$i]->getName() ?></td>
+                    <td><?php echo $quizzes[$i]->getName() ?></td>
+                    <td><?php echo $quizzes[$i]->getScore() ?></td>
                     <td class="text-center">
                         <a class="btn btn-primary py-1" href="#">View</a>
                     </td>
-                    <?php endfor;?>
+                    <?php endfor; ?>
                 </tr>
                 </tbody>
             </table>

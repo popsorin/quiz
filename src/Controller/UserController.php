@@ -2,23 +2,26 @@
 
 namespace Quiz\Controller;
 
+use Exception;
 use Framework\Contracts\RendererInterface;
 use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
-use Quiz\Exception\UserAlreadyExistsException;
+use Quiz\Entity\User;
 use Quiz\Factory\UserFactory;
+use Quiz\Service\Exception\InvalidUserException;
 use Quiz\Service\PaginatorService;
 use Quiz\Service\UserService;
+use Quiz\Service\Validator\EntityValidatorInterface;
 
 class UserController extends AbstractController
 {
     const USERS_PER_PAGE = 4;
-
     const ADMIN_USER_DETAILS_PAGE  = "admin-user-details.phtml";
-
     const ADMIN_USER_LISTING_PAGE = "admin-users-listing.phtml";
+    const EXCEPTIONS_PAGE_TEMPLATE = "exceptions-page.html";
+    const USER_ROLE_TYPES = ["admin", "candidate"];
 
     /**
      * @var SessionInterface
@@ -28,12 +31,17 @@ class UserController extends AbstractController
     /**
      * @var UserService
      */
-    private $service;
+    private $userService;
 
     /**
      * @var UserFactory
      */
-    private $factory;
+    private $userFactory;
+
+    /**
+     * @var EntityValidatorInterface
+     */
+    private $userValidator;
 
     /**
      * UserController constructor.
@@ -41,18 +49,20 @@ class UserController extends AbstractController
      * @param UserService $service
      * @param SessionInterface $session
      * @param UserFactory $factory
+     * @param EntityValidatorInterface $validator
      */
     public function __construct(
         RendererInterface $renderer,
         UserService $service,
         SessionInterface $session,
-        UserFactory $factory
-    )
-    {
+        UserFactory $factory,
+        EntityValidatorInterface $validator
+    ) {
         parent::__construct($renderer);
         $this->session = $session;
-        $this->service = $service;
-        $this->factory = $factory;
+        $this->userService = $service;
+        $this->userFactory = $factory;
+        $this->userValidator = $validator;
     }
 
     /**
@@ -62,54 +72,57 @@ class UserController extends AbstractController
      */
     public function add(Request $request, array $attributes): Response
     {
-        $entity = $this->factory->createFromRequest($request, "name", "email", "password", "role");
+        $user = $this->userFactory->createFromRequest($request, "name", "email", "password", "role");
+
         try {
-            $this->service->add($entity);
-        } catch (UserAlreadyExistsException $exception) {
+            $this->userValidator->validate($user);
+        } catch (InvalidUserException $exception) {
+            $errorMessage = $this->buildExceptionMessage($exception);
+
             return $this->renderer->renderView(
-                self::ADMIN_USER_DETAILS_PAGE,
+                "admin-user-details.phtml",
                 [
-                    "errorMessage" => $exception->getMessage()
+                    "user" => $user,
+                    "errorMessage" => $errorMessage,
+                    "roles" => self::USER_ROLE_TYPES
                 ]
             );
         }
+
+        $this->userService->add($user);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
 
     /**
+     *
+     *
      * @param Request $request
      * @param array $attributes
      * @return Response
      */
     public function update(Request $request, array $attributes): Response
     {
-        $this->session->start();
-        $entity = $this->factory->createFromRequest($request, "name", "email", "password","role");
-        $entity->setId($this->session->get("updateUserId"));
-
-        //here I set he user's name or email to null if the user didn't change them
-        //because if the repository gets an empty string as a value for update
-        //the value will just be ignored
-        if($this->session->get("updateUserName") === $entity->getName()) {
-            $entity->setName("");
-        }
-        if($this->session->get("updateUserEmail") === $entity->getEmail()) {
-            $entity->setEmail("");
-        }
+        $id = $attributes["id"];
+        $updatedUser = $this->userFactory->createFromRequest($request, "name", "email", "password","role");
+        $updatedUser->setId($id);
 
         try {
-            $this->service->update($entity);
-        } catch (UserAlreadyExistsException $exception) {
+            $this->userValidator->validate($updatedUser);
+        } catch (InvalidUserException $exception) {
+            $errorMessage = $this->buildExceptionMessage($exception);
+
             return $this->renderer->renderView(
                 "admin-user-details.phtml",
                 [
-                    "name" => $entity->getName(),
-                    "email" => $entity->getEmail(),
-                    "errorMessage" => $exception->getMessage()
+                    "user" => $updatedUser,
+                    "errorMessage" => $errorMessage,
+                    "roles" => self::USER_ROLE_TYPES
                 ]
             );
         }
+
+        $this->userService->update($updatedUser);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
@@ -121,13 +134,13 @@ class UserController extends AbstractController
      */
     public function getAll(Request $request, array $attributes): Response
     {
-        $numberOfUsers = $this->service->getCount();
+        $numberOfUsers = $this->userService->getCount();
 
         $parameters = $request->getParameters();
         $currentPage = $parameters["page"] ?? 1;
         $paginator = new PaginatorService($numberOfUsers, $currentPage);
 
-        $users = $this->service->getAll($paginator->getResultsPerPage(), $currentPage);
+        $users = $this->userService->getAll($paginator->getResultsPerPage(), $currentPage);
 
         return $this->renderer->renderView(
             self::ADMIN_USER_LISTING_PAGE ,
@@ -142,32 +155,36 @@ class UserController extends AbstractController
      * @param Request $request
      * @param array $attributes
      * @return Response
-     * Returns the page for the add functionality
+     * Returns the page for the update functionality
      */
-    public function getUserDetails(Request $request, array $attributes): Response
+    public function showEditUserPage(Request $request, array $attributes): Response
     {
-        $this->session->start();
-        $user = $this->service->getUserDetails($attributes["id"]);
-        $this->session->set("updateUserName", $user->getName());
-        $this->session->set("updateUserEmail", $user->getEmail());
-        $this->session->set("updateUserId", $attributes["id"]);
+        $user = $this->userService->findUserById($attributes["id"]);
 
         return $this->renderer->renderView(
             "admin-user-details.phtml",
             [
-                "name" => $user->getName(),
-                "email" => $user->getEmail()
+                "user" => $user,
+                "roles" => self::USER_ROLE_TYPES
             ]
         );
     }
 
     /**
+     * @param Request $request
+     * @param array $attributes
      * @return Response
-     * Returns the page for the add functionality
      */
-    public function getUserView(): Response
+    public function showNewUserPage(Request $request, array $attributes): Response
     {
-        return $this->renderer->renderView("admin-user-details.phtml", []);
+        $user = new User("","","","");
+        return $this->renderer->renderView(
+            "admin-user-details.phtml",
+            [
+                "user" => $user,
+                "roles" => self::USER_ROLE_TYPES
+            ]
+        );
     }
 
     /**
@@ -177,8 +194,29 @@ class UserController extends AbstractController
      */
     public function delete(Request $request, array $attributes): Response
     {
-        $this->service->delete($attributes["id"]);
+        $this->userService->delete($attributes["id"]);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/users"]);
+    }
+
+    /**
+     *
+     * Concatenates the error messages then returns them
+     *
+     * In case there is no error found it returns empty string
+     *
+     * @param Exception $exception
+     * @return string
+     */
+    private function buildExceptionMessage(Exception $exception): string
+    {
+        $errorMessage = "";
+
+        while ($exception !== null) {
+            $errorMessage .= $exception->getMessage() . '<br>';
+            $exception = $exception->getPrevious();
+        }
+
+        return $errorMessage;
     }
 }

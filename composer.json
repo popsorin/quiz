@@ -26,7 +26,8 @@
         "mvc-framework-skeleton/mvc-framework-skeleton": "dev-master",
         "really-orm-skeleton": "dev-master",
         "codehighlightlib/codehightlib": "dev-master",
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+      "ext-mbstring": "*"
     },
     "autoload": {
         "psr-4": {"Quiz\\": "src"}

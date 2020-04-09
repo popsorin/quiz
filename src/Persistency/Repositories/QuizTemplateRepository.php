@@ -44,7 +44,7 @@ class QuizTemplateRepository extends AbstractRepository
      * @param int $quizId
      * @return bool
      */
-    public function deleteQuestions(int $quizId): bool
+    public function deleteQuestionsFromLinkedTable(int $quizId): bool
     {
         $query = $this->pdo->prepare("DELETE FROM " . $this->getLinkTableName() . " WHERE quiz_template_id = ?");
         $query->bindValue(1, $quizId);

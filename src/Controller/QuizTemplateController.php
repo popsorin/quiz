@@ -8,7 +8,6 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
-use Quiz\Exception\QuizTemplateAlreadyExistsException;
 use Quiz\Factory\QuizTemplateFactory;
 use Quiz\Service\PaginatorService;
 use Quiz\Service\QuestionTemplateService;
@@ -33,7 +32,7 @@ class QuizTemplateController extends AbstractController
     /**
      * @var QuizTemplateService
      */
-    private $service;
+    private $quizTemplateService;
 
     /**
      * @var QuizTemplateFactory
@@ -59,7 +58,7 @@ class QuizTemplateController extends AbstractController
         parent::__construct($renderer);
         $this->questionTemplateService = $questionTemplateService;
         $this->session = $session;
-        $this->service = $service;
+        $this->quizTemplateService = $service;
         $this->quizTemplateFactory = $quizTemplateFactory;
     }
 
@@ -80,19 +79,7 @@ class QuizTemplateController extends AbstractController
             "description",
             "questions"
         );
-        try {
-            $this->service->add($quizTemplate, $questionsIds);
-        }
-        catch (QuizTemplateAlreadyExistsException $exception){
-            $questions = $this->questionTemplateService->getAll(0, 0);
-            return $this->renderer->renderView(
-                self::PAGE_DETAILS,
-                [
-                    "errorMessage" => $exception->getMessage(),
-                    "questions" => $questions
-                ]
-            );
-        }
+        $this->quizTemplateService->add($quizTemplate, $questionsIds);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
     }
@@ -114,9 +101,9 @@ class QuizTemplateController extends AbstractController
             "description",
             "questions"
         );
-       $this->service->update($quizTemplate, $questionsIds);
+       $this->quizTemplateService->update($quizTemplate, $questionsIds);
 
-        return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
+       return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
     }
 
     /**
@@ -126,7 +113,7 @@ class QuizTemplateController extends AbstractController
      */
     public function delete(Request $request, array $attributes): Response
     {
-        $this->service->deleteById($attributes["id"]);
+        $this->quizTemplateService->deleteById($attributes["id"]);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
     }
@@ -138,11 +125,11 @@ class QuizTemplateController extends AbstractController
      */
     public function getAll(Request $request, array $attributes): Response
     {
-        $numberOfQuizzes = $this->service->getCount();
+        $numberOfQuizzes = $this->quizTemplateService->getCount();
         $properties = $request->getParameters();
         $currentPage = $properties["page"] ?? 1;
         $paginator =  new PaginatorService($numberOfQuizzes, $currentPage);
-        $quizzes = $this->service->getAll($paginator->getResultsPerPage(), $currentPage);
+        $quizzes = $this->quizTemplateService->getAll($paginator->getResultsPerPage(), $currentPage);
 
         return $this->renderer->renderView(
             self::PAGE_LISTING,
@@ -158,7 +145,7 @@ class QuizTemplateController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function getQuizDetailsForAdd(Request $request, array $attributes): Response
+    public function showNewQuizPage(Request $request, array $attributes): Response
     {
         $questions = $this->questionTemplateService->getAll(0, 0);
 
@@ -174,10 +161,10 @@ class QuizTemplateController extends AbstractController
      * @return Response
      * Returns the page for the edit functionality for the quizzes
      */
-    public function getQuizDetailsForUpdate(Request $request, array $attributes): Response
+    public function showEditQuizPage(Request $request, array $attributes): Response
     {
         $id = $attributes['id'] ??  0;
-        $quiz = $this->service->getQuizDetails($id);
+        $quiz = $this->quizTemplateService->getQuizDetails($id);
         $thisQuizQuestions = $this->questionTemplateService->getAllQuestionIdsFromOneQuiz($id);
         $questions = $this->questionTemplateService->getAll(0, 0);
 

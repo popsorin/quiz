@@ -17,6 +17,7 @@ use Quiz\Service\QuizTemplateService;
 class CandidateController extends AbstractController
 {
     const QUESTIONS_PER_PAGE = 4;
+
     /**
      * @var SessionInterface
      */
@@ -68,7 +69,8 @@ class CandidateController extends AbstractController
     public function showHomepage(Request $request, array $attributes): Response
     {
         $this->session->start();
-        if (($this->session->get("name")) === null) {
+        $user = $this->session->get("user");
+        if ($user->getEmail() === null) {
 
             return self::createResponse($request, "301", "Location", ["/"]);
         }
@@ -94,7 +96,6 @@ class CandidateController extends AbstractController
      */
     public function success(Request $request, array $attributes): Response
     {
-        $this->session->start();
         $quizInstanceId = $attributes["quizInstanceId"];
         $questions = $this->questionInstanceService->getAllByQuizInstanceId($quizInstanceId,0,0);
         $answers = $this->answerInstanceServoce->getAll($questions);

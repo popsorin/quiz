@@ -10,6 +10,8 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
+use Quiz\Entity\User;
+use Quiz\Factory\UserFactory;
 use Quiz\Service\Exception\WrongPasswordException;
 use Quiz\Service\LoginService;
 use ReallyOrm\Repository\RepositoryInterface;
@@ -20,28 +22,35 @@ class LoginController extends AbstractController
     /**
      * @var SessionInterface
      */
-    protected $session;
+    private $session;
 
     /**
      * @var LoginService
      */
-    protected $service;
+    private $loginService;
+
+    /**
+     * @var UserFactory
+     */
+    private $userFactory;
 
     /**
      * LoginController constructor.
      * @param RendererInterface $renderer
      * @param LoginService $service
      * @param SessionInterface $session
+     * @param UserFactory $userFactory
      */
     public function __construct(
         RendererInterface $renderer,
         LoginService $service,
-        SessionInterface $session
-    )
-    {
+        SessionInterface $session,
+        UserFactory $userFactory
+    ) {
         parent::__construct($renderer);
-        $this->service = $service;
+        $this->loginService = $service;
         $this->session = $session;
+        $this->userFactory = $userFactory;
     }
 
     /**
@@ -52,7 +61,8 @@ class LoginController extends AbstractController
     public function displayLogin(Request $request, array $attributes): Response
     {
         $this->session->start();
-        if ($this->session->get("name") === null) {
+        $user = $this->session->get("user");
+        if ($user->getEmail() === null) {
             return $this->renderer->renderView("login.html", $attributes);
         }
 
@@ -74,16 +84,17 @@ class LoginController extends AbstractController
     public function login(Request $request, array $attributes): Response
     {
         $this->session->start();
+        $user = $this->userFactory->createFromRequest($request, "name", "email", "password", "role");
         try {
-            $entity = $this->service->login(["name" => $request->getParameter("name"), "password" => $request->getParameter("password")]);
+
+            $entity = $this->loginService->login(["email" => $user->getEmail(), "password" => $user->getPassword()]);
         }
         catch (WrongPasswordException $exception) {
             return $this->createResponse($request, "301", "Location", ["/"]);
         }
-        $this->session->set("name", $entity->getName());
-        $this->session->set("role", $entity->getRole());
-        $this->session->set("id", $entity->getId());
 
+        $this->session->set("user", $user);
+        
         if($entity->getRole() === "admin") {
 
             return $this->createResponse($request, "301", "Location", ["/dashboard"]);
@@ -100,7 +111,8 @@ class LoginController extends AbstractController
     public function logout(Request $request, array $attributes): Response
     {
         $this->session->start();
-        if($this->session->get("name")) {
+        $user = $this->session->get("user");
+        if(isset($user)){
             $this->session->destroy();
         }
 

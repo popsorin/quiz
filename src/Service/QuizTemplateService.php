@@ -32,15 +32,10 @@ class QuizTemplateService
      * @param EntityInterface $quizTemplate
      * @param array $questionsIds
      * @return bool
-     * @throws QuizTemplateAlreadyExistsException
      */
     public function add(EntityInterface $quizTemplate, array $questionsIds): bool
     {
         $repository =  $this->repositoryManager->getRepository(QuizTemplate::class);
-
-        if($repository->findByWithOrOperator(["name" => $quizTemplate->getName()],[],0, 0)) {
-            throw new QuizTemplateAlreadyExistsException($quizTemplate);
-        }
 
         $success = $repository->insertOnDuplicateKeyUpdate($quizTemplate);
         foreach ($questionsIds as $questionsId) {
@@ -61,7 +56,8 @@ class QuizTemplateService
     public function update(EntityInterface $quizTemplate, array $questionsIds): bool
     {
         $repository = $this->repositoryManager->getRepository(QuizTemplate::class);
-        $success = true;
+        $success = $repository->deleteQuestionsFromLinkedTable($quizTemplate->getId());
+
         foreach ($questionsIds as $questionsId) {
             if ($success === false) {
                 return $success;

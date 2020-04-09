@@ -5,8 +5,8 @@ namespace Quiz\Service;
 
 
 use Quiz\Entity\User;
-use Quiz\Exception\UserAlreadyExistsException;
 use Quiz\Persistency\Repositories\UserRepository;
+use Quiz\Service\Exception\UserAlreadyExistsException;
 use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
 class UserService
@@ -28,33 +28,22 @@ class UserService
     /**
      * @param EntityInterface $user
      * @return bool
-     * //maybe make getRepository configurable******************************************
-     * @throws UserAlreadyExistsException
      */
     public function add(EntityInterface $user): bool
     {
         /** @var UserRepository $repository */
-        $repository =  $this->repositoryManager->getRepository(User::class);
-
-        if($repository->findByWithOrOperator(["name" => $user->getName(), "email" => $user->getEmail()],[],0, 0)) {
-            throw new UserAlreadyExistsException($user);
-        }
-
+        $repository = $this->repositoryManager->getRepository(User::class);
         return $repository->insertOnDuplicateKeyUpdate($user);
     }
 
     /**
      * @param EntityInterface $user
      * @return bool
-     * @throws UserAlreadyExistsException
      */
     public function update(EntityInterface $user): bool
     {
         /** @var UserRepository $repository */
-        $repository =  $this->repositoryManager->getRepository(User::class);
-        if($repository->findByWithOrOperator(["name" => $user->getName(), "email" => $user->getEmail()],[],0, 0)) {
-            throw new UserAlreadyExistsException($user);
-        }
+        $repository = $this->repositoryManager->getRepository(User::class);
 
         return $repository->insertOnDuplicateKeyUpdate($user);
     }
@@ -64,7 +53,7 @@ class UserService
      */
     public function getCount(): int
     {
-        return  $this->repositoryManager->getRepository(User::class)->getCount();
+        return $this->repositoryManager->getRepository(User::class)->getCount();
     }
 
     /**
@@ -81,11 +70,20 @@ class UserService
 
     /**
      * @param int $id
-     * @return User
+     * @return User|null
      */
-    public function getUserDetails(int $id): User
+    public function findUserById(int $id): ?User
     {
         return $this->repositoryManager->getRepository(User::class)->find($id);
+    }
+
+    /**
+     * @param string $email
+     * @return User|null
+     */
+    public function findUserByEmail(string $email): ?User
+    {
+        return $this->repositoryManager->getRepository(User::class)->findOneBy(["email" => $email]);
     }
 
     /**
