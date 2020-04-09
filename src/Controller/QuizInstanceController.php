@@ -17,6 +17,7 @@ use Quiz\Service\QuizTemplateService;
 class QuizInstanceController extends AbstractController
 {
     const LISTING_PAGE = "candidate-quiz-page.phtml";
+
     /**
      * @var QuizTemplateService
      */

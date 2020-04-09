@@ -11,7 +11,7 @@ use ReallyOrm\Repository\RepositoryInterface;
 class UserValidator implements EntityValidatorInterface
 {
     const MIN_NAME_LENGTH = 3;
-    const PASSWORD_LENGTH = 8;
+    const MIN_PASSWORD_LENGTH = 8;
 
     /**
      * @var RepositoryInterface

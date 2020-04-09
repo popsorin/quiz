@@ -17,6 +17,7 @@ use Quiz\Service\QuizTemplateService;
 class CandidateController extends AbstractController
 {
     const QUESTIONS_PER_PAGE = 4;
+
     /**
      * @var SessionInterface
      */

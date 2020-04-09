@@ -15,7 +15,7 @@ class AdminController extends AbstractController
     /**
      * @var SessionInterface
      */
-    protected $session;
+    private $session;
 
     /**
      * AdminController constructor.

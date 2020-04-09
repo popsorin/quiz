@@ -16,6 +16,7 @@ use Quiz\Service\QuizInstanceService;
 class QuestionInstanceController extends AbstractController
 {
     const LISTING_PAGE = "candidate-quiz-page.phtml";
+
     /**
      * @var SessionInterface
      */

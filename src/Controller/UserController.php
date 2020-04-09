@@ -18,13 +18,9 @@ use Quiz\Service\Validator\EntityValidatorInterface;
 class UserController extends AbstractController
 {
     const USERS_PER_PAGE = 4;
-
     const ADMIN_USER_DETAILS_PAGE  = "admin-user-details.phtml";
-
     const ADMIN_USER_LISTING_PAGE = "admin-users-listing.phtml";
-
     const EXCEPTIONS_PAGE_TEMPLATE = "exceptions-page.html";
-
     const USER_ROLE_TYPES = ["admin", "candidate"];
 
     /**
