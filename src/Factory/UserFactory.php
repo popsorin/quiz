@@ -23,8 +23,7 @@ class UserFactory
         string $emailKey,
         string $passwordKey,
         string $roleKey
-    ):User
-    {
+    ): User {
         $parameters = $request->getParameters();
         $name = $parameters[$nameKey];
         $email = $parameters[$emailKey];

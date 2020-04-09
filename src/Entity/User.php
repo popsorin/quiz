@@ -79,7 +79,7 @@ class User extends AbstractEntity
     /**
      * @return string|null
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }

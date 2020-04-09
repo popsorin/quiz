@@ -8,6 +8,7 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
+use Quiz\Entity\QuestionTemplate;
 use Quiz\Factory\QuestionTemplateFactory;
 use Quiz\Service\PaginatorService;
 use Quiz\Service\QuestionTemplateService;
@@ -25,7 +26,7 @@ class QuestionTemplateController extends AbstractController
     /**
      * @var QuizTemplateService
      */
-    private $boundedService;
+    private $quizTemplateService;
 
     /**
      * @var SessionInterface
@@ -35,7 +36,7 @@ class QuestionTemplateController extends AbstractController
     /**
      * @var QuestionTemplateService
      */
-    private $service;
+    private $questionTemplateService;
 
     /**
      * @var QuestionTemplateFactory
@@ -58,9 +59,9 @@ class QuestionTemplateController extends AbstractController
         QuestionTemplateFactory $factory
     ) {
         parent::__construct($renderer);
-        $this->boundedService = $boundedService;
+        $this->quizTemplateService = $boundedService;
         $this->session = $session;
-        $this->service = $service;
+        $this->questionTemplateService = $service;
         $this->factory = $factory;
     }
 
@@ -74,7 +75,7 @@ class QuestionTemplateController extends AbstractController
     public function add(Request $request, array $attributes): Response
     {
         $questionTemplate = $this->factory->createFromRequest($request);
-        $this->service->add($questionTemplate);
+        $this->questionTemplateService->add($questionTemplate);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/questions"]);
     }
@@ -89,7 +90,7 @@ class QuestionTemplateController extends AbstractController
     {
         $questionTemplate = $this->factory->createFromRequest($request);
         $questionTemplate->setId($attributes["id"]);
-        $this->service->update($questionTemplate);
+        $this->questionTemplateService->update($questionTemplate);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/questions"]);
     }
@@ -101,7 +102,7 @@ class QuestionTemplateController extends AbstractController
      */
     public function delete(Request $request, array $attributes): Response
     {
-        $this->service->deleteById($attributes["id"]);
+        $this->questionTemplateService->deleteById($attributes["id"]);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/questions"]);
     }
@@ -115,9 +116,9 @@ class QuestionTemplateController extends AbstractController
     {
         $parameters = $request->getParameters();
         $page = $parameters["page"] ?? 1;
-        $numberOfQuestions = $this->service->getCount();
+        $numberOfQuestions = $this->questionTemplateService->getCount();
         $paginator = new PaginatorService($numberOfQuestions, $page);
-        $questionTemplates = $this->service->getAll($paginator->getResultsPerPage(), $page);
+        $questionTemplates = $this->questionTemplateService->getAll($paginator->getResultsPerPage(), $page);
 
         return $this->renderer->renderView(
             self::LISTING_PAGE,
@@ -133,14 +134,14 @@ class QuestionTemplateController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function getQuestionDetailsUpdate(Request $request, array $attributes): Response
+    public function showQuestionEditPage(Request $request, array $attributes): Response
     {
-        $question = $this->service->getQuestionDetails($attributes["id"]);
+        $question = $this->questionTemplateService->getQuestionDetails($attributes["id"]);
 
         return $this->renderer->renderView(
             "admin-question-details.phtml",
             [
-                "question" => $question->getText()
+                "question" => $question
             ]);
     }
 
@@ -149,8 +150,13 @@ class QuestionTemplateController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function getQuestionDetailsAdd(Request $request, array $attributes): Response
+    public function showQuestionAddPage(Request $request, array $attributes): Response
     {
-        return $this->renderer->renderView("admin-question-details.phtml", []);
+        $question = new QuestionTemplate("", "", "");
+        return $this->renderer->renderView(
+            "admin-question-details.phtml",
+            [
+                "question" => $question
+            ]);
     }
 }

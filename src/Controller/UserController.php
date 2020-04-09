@@ -2,11 +2,13 @@
 
 namespace Quiz\Controller;
 
+use Exception;
 use Framework\Contracts\RendererInterface;
 use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
+use Quiz\Entity\User;
 use Quiz\Factory\UserFactory;
 use Quiz\Service\Exception\InvalidUserException;
 use Quiz\Service\PaginatorService;
@@ -21,7 +23,9 @@ class UserController extends AbstractController
 
     const ADMIN_USER_LISTING_PAGE = "admin-users-listing.phtml";
 
-    const EXCEPTIONS_PAGE = "exceptions-page.html";
+    const EXCEPTIONS_PAGE_TEMPLATE = "exceptions-page.html";
+
+    const USER_ROLE_TYPES = ["admin", "candidate"];
 
     /**
      * @var SessionInterface
@@ -31,17 +35,17 @@ class UserController extends AbstractController
     /**
      * @var UserService
      */
-    private $service;
+    private $userService;
 
     /**
      * @var UserFactory
      */
-    private $factory;
+    private $userFactory;
 
     /**
      * @var EntityValidatorInterface
      */
-    private $validator;
+    private $userValidator;
 
     /**
      * UserController constructor.
@@ -57,13 +61,12 @@ class UserController extends AbstractController
         SessionInterface $session,
         UserFactory $factory,
         EntityValidatorInterface $validator
-    )
-    {
+    ) {
         parent::__construct($renderer);
         $this->session = $session;
-        $this->service = $service;
-        $this->factory = $factory;
-        $this->validator = $validator;
+        $this->userService = $service;
+        $this->userFactory = $factory;
+        $this->userValidator = $validator;
     }
 
     /**
@@ -73,30 +76,23 @@ class UserController extends AbstractController
      */
     public function add(Request $request, array $attributes): Response
     {
-        $user = $this->factory->createFromRequest($request, "name", "email", "password", "role");
+        $user = $this->userFactory->createFromRequest($request, "name", "email", "password", "role");
 
         try {
-            $this->validator->validate($user);
+            $this->userValidator->validate($user);
         } catch (InvalidUserException $exception) {
-            $message = "";
-
-            while ($exception->getPrevious() !== null) {
-                $message .= $exception->getMessage() . '<br>';
-                $exception = $exception->getPrevious();
-            }
+            $message = $this->buildExceptionMessage($exception);
 
             return $this->renderer->renderView(
                 "admin-user-details.phtml",
                 [
-                    "role" => $user->getRole(),
-                    "name" => $user->getName(),
-                    "email" => $user->getEmail(),
+                    "user" => $user,
                     "errorMessage" => $message
                 ]
             );
         }
 
-        $this->service->add($user);
+        $this->userService->add($user);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
@@ -111,34 +107,24 @@ class UserController extends AbstractController
     public function update(Request $request, array $attributes): Response
     {
         $id = $attributes["id"];
-        $updatedUser = $this->factory->createFromRequest($request, "name", "email", "password","role");
+        $updatedUser = $this->userFactory->createFromRequest($request, "name", "email", "password","role");
         $updatedUser->setId($id);
 
         try {
-            $this->validator->validate($updatedUser);
+            $this->userValidator->validate($updatedUser);
         } catch (InvalidUserException $exception) {
-            $message = "";
-
-            while ($exception->getPrevious() !== null) {
-                if($exception->getCode() === 1) {
-                    $exception = $exception->getPrevious();
-                }
-                $message .= $exception->getMessage() . '<br>';
-                $exception = $exception->getPrevious();
-            }
+            $message = $this->buildExceptionMessage($exception);
 
             return $this->renderer->renderView(
                 "admin-user-details.phtml",
                 [
-                    "role" => $updatedUser->getRole(),
-                    "name" => $updatedUser->getName(),
-                    "email" => $updatedUser->getEmail(),
+                    "user" => $updatedUser,
                     "errorMessage" => $message
                 ]
             );
         }
 
-        $this->service->update($updatedUser);
+        $this->userService->update($updatedUser);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
@@ -150,13 +136,13 @@ class UserController extends AbstractController
      */
     public function getAll(Request $request, array $attributes): Response
     {
-        $numberOfUsers = $this->service->getCount();
+        $numberOfUsers = $this->userService->getCount();
 
         $parameters = $request->getParameters();
         $currentPage = $parameters["page"] ?? 1;
         $paginator = new PaginatorService($numberOfUsers, $currentPage);
 
-        $users = $this->service->getAll($paginator->getResultsPerPage(), $currentPage);
+        $users = $this->userService->getAll($paginator->getResultsPerPage(), $currentPage);
 
         return $this->renderer->renderView(
             self::ADMIN_USER_LISTING_PAGE ,
@@ -175,15 +161,13 @@ class UserController extends AbstractController
      */
     public function showEditUserPage(Request $request, array $attributes): Response
     {
-        $this->session->start();
-        $user = $this->service->findUserById($attributes["id"]);
+        $user = $this->userService->findUserById($attributes["id"]);
 
         return $this->renderer->renderView(
             "admin-user-details.phtml",
             [
-                "name" => $user->getName(),
-                "email" => $user->getEmail(),
-                "userRole" => $user->getRole()
+                "user" => $user,
+                "roles" => self::USER_ROLE_TYPES
             ]
         );
     }
@@ -195,7 +179,14 @@ class UserController extends AbstractController
      */
     public function showNewUserPage(Request $request, array $attributes): Response
     {
-        return $this->renderer->renderView("admin-user-details.phtml", []);
+        $user = new User("","","","");
+        return $this->renderer->renderView(
+            "admin-user-details.phtml",
+            [
+                "user" => $user,
+                "roles" => self::USER_ROLE_TYPES
+            ]
+        );
     }
 
     /**
@@ -205,8 +196,29 @@ class UserController extends AbstractController
      */
     public function delete(Request $request, array $attributes): Response
     {
-        $this->service->delete($attributes["id"]);
+        $this->userService->delete($attributes["id"]);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/users"]);
+    }
+
+    /**
+     *
+     * Concatenates the error messages then returns them
+     *
+     * In case there is no error found it returns empty string
+     *
+     * @param Exception $exception
+     * @return string
+     */
+    private function buildExceptionMessage(Exception $exception): string
+    {
+        $message = "";
+
+        while ($exception->getPrevious() !== null) {
+            $message .= $exception->getMessage() . '<br>';
+            $exception = $exception->getPrevious();
+        }
+
+        return $message;
     }
 }

@@ -196,6 +196,7 @@ $container->register(LoginController::class, LoginController::class)
     ->addArgument($container->findDefinition(RendererInterface::class))
     ->addArgument($container->findDefinition(LoginService::class))
     ->addArgument($container->findDefinition(SessionInterface::class))
+    ->addArgument($container->findDefinition(UserFactory::class))
     ->addTag("controller");
 
 $container->register(QuestionTemplateController::class, QuestionTemplateController::class)

@@ -27,8 +27,7 @@ class QuizTemplateFactory
         string $nameKey,
         string $descriptionKey,
         string $questionNumberKey
-    ): QuizTemplate
-    {
+    ): QuizTemplate {
         $session->start();
         $parameters = $request->getParameters();
         $name = (isset($parameters[$nameKey])) ? $parameters[$nameKey] : "";

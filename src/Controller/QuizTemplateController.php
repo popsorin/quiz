@@ -116,7 +116,7 @@ class QuizTemplateController extends AbstractController
         );
        $this->service->update($quizTemplate, $questionsIds);
 
-        return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
+       return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
     }
 
     /**
