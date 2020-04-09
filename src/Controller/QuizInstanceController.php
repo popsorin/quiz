@@ -35,7 +35,7 @@ class QuizInstanceController extends AbstractController
     /**
      * @var QuizInstanceService
      */
-    private $service;
+    private $quizInstanceService;
 
     /**
      * @var QuestionInstanceService
@@ -64,7 +64,7 @@ class QuizInstanceController extends AbstractController
         $this->quizTemplateService = $quizTemplateService;
         $this->session = $session;
         $this->questionTemplateService = $questionTemplateService;
-        $this->service = $service;
+        $this->quizInstanceService = $service;
         $this->questionInstanceService = $questionInstanceService;
     }
 
@@ -81,8 +81,8 @@ class QuizInstanceController extends AbstractController
 
         $quizTemplateId = $attributes["quizTemplateId"];
         $quizTemplate = $this->quizTemplateService->getOneQuiz(["id" => $quizTemplateId]);
-        $quizInstance = $this->service->makeQuizInstance($quizTemplate, $quizTemplateId, $this->session->get("id"));
-        $this->service->add($quizInstance);
+        $quizInstance = $this->quizInstanceService->makeQuizInstance($quizTemplate, $quizTemplateId, $this->session->get("id"));
+        $this->quizInstanceService->add($quizInstance);
 
         $quizInstanceId = $quizInstance->getId();
         $questionTemplates = $this->questionTemplateService->getQuestions($quizTemplateId);

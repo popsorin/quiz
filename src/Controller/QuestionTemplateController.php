@@ -41,7 +41,7 @@ class QuestionTemplateController extends AbstractController
     /**
      * @var QuestionTemplateFactory
      */
-    private $factory;
+    private $questionTemplateFactory;
 
     /**
      * QuestionTemplateController constructor.
@@ -62,7 +62,7 @@ class QuestionTemplateController extends AbstractController
         $this->quizTemplateService = $boundedService;
         $this->session = $session;
         $this->questionTemplateService = $service;
-        $this->factory = $factory;
+        $this->questionTemplateFactory = $factory;
     }
 
 
@@ -74,7 +74,7 @@ class QuestionTemplateController extends AbstractController
      */
     public function add(Request $request, array $attributes): Response
     {
-        $questionTemplate = $this->factory->createFromRequest($request);
+        $questionTemplate = $this->questionTemplateFactory->createFromRequest($request);
         $this->questionTemplateService->add($questionTemplate);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/questions"]);
@@ -88,7 +88,7 @@ class QuestionTemplateController extends AbstractController
      */
     public function update(Request $request, array $attributes): Response
     {
-        $questionTemplate = $this->factory->createFromRequest($request);
+        $questionTemplate = $this->questionTemplateFactory->createFromRequest($request);
         $questionTemplate->setId($attributes["id"]);
         $this->questionTemplateService->update($questionTemplate);
 

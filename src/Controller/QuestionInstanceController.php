@@ -24,7 +24,7 @@ class QuestionInstanceController extends AbstractController
     /**
      * @var QuestionInstanceService
      */
-    private $service;
+    private $questionInstanceService;
 
     /**
      * @var QuestionTemplateService
@@ -55,7 +55,7 @@ class QuestionInstanceController extends AbstractController
     {
         parent::__construct($renderer);
         $this->session = $session;
-        $this->service = $service;
+        $this->questionInstanceService = $service;
         $this->questionTemplateService = $questionTemplateService;
         $this->quizInstanceService = $quizInstanceService;
     }
@@ -76,7 +76,7 @@ class QuestionInstanceController extends AbstractController
             return $this->createResponse($request, 301,"Location", ["/homepage/success/$quizInstanceId"]);
         }
 
-        $questionInstance = $this->service->getOne($quizInstanceId, $currentQuestionInstanceNumber-1);
+        $questionInstance = $this->questionInstanceService->getOne($quizInstanceId, $currentQuestionInstanceNumber-1);
 
         return $this->renderer->renderView(
             self::LISTING_PAGE,
