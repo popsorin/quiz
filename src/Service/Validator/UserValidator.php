@@ -74,12 +74,12 @@ class UserValidator implements EntityValidatorInterface
         $exception = null;
 
         $userFoundByEmail = $this->repository->findOneBy(["email" => $user->getEmail()]);
-        if($userFoundByEmail !== null) {
+        if($userFoundByEmail->getEmail() !== null) {
             $exception = InvalidUserException::forAlreadyTakenEmail($user, 0, $exception);
         }
 
-        if(mb_strlen($user->getPassword(), 'UTF-8') < self::PASSWORD_LENGTH) {
-            $exception = InvalidUserException::forPasswordTooShort(self::PASSWORD_LENGTH, 0, $exception);
+        if(mb_strlen($user->getPassword(), 'UTF-8') < self::MIN_PASSWORD_LENGTH) {
+            $exception = InvalidUserException::forPasswordTooShort(self::MIN_PASSWORD_LENGTH, 0, $exception);
         }
 
         return $exception;
@@ -109,8 +109,8 @@ class UserValidator implements EntityValidatorInterface
             $exception = InvalidUserException::forAlreadyTakenEmail($user, 0, $exception);
         }
 
-        if(mb_strlen($userFoundById->getPassword(), 'UTF-8') < self::PASSWORD_LENGTH) {
-            $exception = InvalidUserException::forPasswordTooShort(self::PASSWORD_LENGTH, 0, $exception);
+        if(mb_strlen($userFoundById->getPassword(), 'UTF-8') < self::MIN_PASSWORD_LENGTH) {
+            $exception = InvalidUserException::forPasswordTooShort(self::MIN_PASSWORD_LENGTH, 0, $exception);
         }
 
         return $exception;
