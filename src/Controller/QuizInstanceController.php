@@ -77,8 +77,6 @@ class QuizInstanceController extends AbstractController
      */
     public function startQuiz(Request $request, array $attributes): Response
     {
-        $this->session->start();
-
         $quizTemplateId = $attributes["quizTemplateId"];
         $quizTemplate = $this->quizTemplateService->getOneQuiz(["id" => $quizTemplateId]);
         $quizInstance = $this->quizInstanceService->makeQuizInstance($quizTemplate, $quizTemplateId, $this->session->get("id"));

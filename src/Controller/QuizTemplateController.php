@@ -8,7 +8,6 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
-use Quiz\Exception\QuizTemplateAlreadyExistsException;
 use Quiz\Factory\QuizTemplateFactory;
 use Quiz\Service\PaginatorService;
 use Quiz\Service\QuestionTemplateService;
@@ -80,19 +79,7 @@ class QuizTemplateController extends AbstractController
             "description",
             "questions"
         );
-        try {
-            $this->quizTemplateService->add($quizTemplate, $questionsIds);
-        }
-        catch (QuizTemplateAlreadyExistsException $exception){
-            $questions = $this->questionTemplateService->getAll(0, 0);
-            return $this->renderer->renderView(
-                self::PAGE_DETAILS,
-                [
-                    "errorMessage" => $exception->getMessage(),
-                    "questions" => $questions
-                ]
-            );
-        }
+        $this->quizTemplateService->add($quizTemplate, $questionsIds);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
     }

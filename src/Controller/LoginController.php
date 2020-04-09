@@ -94,6 +94,7 @@ class LoginController extends AbstractController
         }
 
         $this->session->set("user", $user);
+        
         if($entity->getRole() === "admin") {
 
             return $this->createResponse($request, "301", "Location", ["/dashboard"]);

@@ -81,13 +81,14 @@ class UserController extends AbstractController
         try {
             $this->userValidator->validate($user);
         } catch (InvalidUserException $exception) {
-            $message = $this->buildExceptionMessage($exception);
+            $errorMessage = $this->buildExceptionMessage($exception);
 
             return $this->renderer->renderView(
                 "admin-user-details.phtml",
                 [
                     "user" => $user,
-                    "errorMessage" => $message
+                    "errorMessage" => $errorMessage,
+                    "roles" => self::USER_ROLE_TYPES
                 ]
             );
         }
@@ -113,13 +114,14 @@ class UserController extends AbstractController
         try {
             $this->userValidator->validate($updatedUser);
         } catch (InvalidUserException $exception) {
-            $message = $this->buildExceptionMessage($exception);
+            $errorMessage = $this->buildExceptionMessage($exception);
 
             return $this->renderer->renderView(
                 "admin-user-details.phtml",
                 [
                     "user" => $updatedUser,
-                    "errorMessage" => $message
+                    "errorMessage" => $errorMessage,
+                    "roles" => self::USER_ROLE_TYPES
                 ]
             );
         }
@@ -212,13 +214,13 @@ class UserController extends AbstractController
      */
     private function buildExceptionMessage(Exception $exception): string
     {
-        $message = "";
+        $errorMessage = "";
 
-        while ($exception->getPrevious() !== null) {
-            $message .= $exception->getMessage() . '<br>';
+        while ($exception !== null) {
+            $errorMessage .= $exception->getMessage() . '<br>';
             $exception = $exception->getPrevious();
         }
 
-        return $message;
+        return $errorMessage;
     }
 }

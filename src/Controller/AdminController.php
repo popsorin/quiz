@@ -39,7 +39,8 @@ class AdminController extends AbstractController
     public function showDashboard(Request $request, array $attributes): Response
     {
         $this->session->start();
-        if(($this->session->get("email")) === null) {
+        $user = $this->session->get("user");
+        if(($user->getEmail()) === null) {
             return $this->createResponse($request, "301", "Location", ["/"]);
         }
 
