@@ -209,6 +209,7 @@ $container->register(QuestionTemplateController::class, QuestionTemplateControll
     ->addArgument($container->findDefinition(SessionInterface::class))
     ->addArgument($container->findDefinition(QuizTemplateService::class))
     ->addArgument($container->findDefinition(QuestionTemplateFactory::class))
+    ->addArgument($container->findDefinition(URLHelper::class))
     ->addTag("controller");
 
 $container->register(QuizTemplateController::class, QuizTemplateController::class)

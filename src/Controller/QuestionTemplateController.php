@@ -11,8 +11,10 @@ use Framework\Http\Response;
 use Quiz\Entity\QuestionTemplate;
 use Quiz\Factory\QuestionTemplateFactory;
 use Quiz\Service\PaginatorService;
+use Quiz\Service\ParameterBagService;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizTemplateService;
+use Quiz\Service\URLHelper;
 use ReflectionException;
 
 /**
@@ -22,6 +24,7 @@ use ReflectionException;
 class QuestionTemplateController extends AbstractController
 {
     const LISTING_PAGE = 'admin-questions-listing.phtml';
+    const QUESTION_TYPES = ["text", "code"];
 
     /**
      * @var QuizTemplateService
@@ -43,6 +46,8 @@ class QuestionTemplateController extends AbstractController
      */
     private $questionTemplateFactory;
 
+    private $urlHelper;
+
     /**
      * QuestionTemplateController constructor.
      * @param RendererInterface $renderer
@@ -50,19 +55,22 @@ class QuestionTemplateController extends AbstractController
      * @param SessionInterface $session
      * @param QuizTemplateService $boundedService
      * @param QuestionTemplateFactory $factory
+     * @param URLHelper $urlHelper
      */
     public function __construct(
         RendererInterface $renderer,
         QuestionTemplateService $service,
         SessionInterface $session,
         QuizTemplateService $boundedService,
-        QuestionTemplateFactory $factory
+        QuestionTemplateFactory $factory,
+        URLHelper $urlHelper
     ) {
         parent::__construct($renderer);
         $this->quizTemplateService = $boundedService;
         $this->session = $session;
         $this->questionTemplateService = $service;
         $this->questionTemplateFactory = $factory;
+        $this->urlHelper = $urlHelper;
     }
 
 
@@ -114,17 +122,25 @@ class QuestionTemplateController extends AbstractController
      */
     public function getAll(Request $request, array $attributes): Response
     {
-        $parameters = $request->getParameters();
-        $page = $parameters["page"] ?? 1;
-        $numberOfQuestions = $this->questionTemplateService->getCount([]);
-        $paginator = new PaginatorService($numberOfQuestions, $page);
-        $questionTemplates = $this->questionTemplateService->getAll($paginator->getResultsPerPage(), $page);
+        $parameterBag = new ParameterBagService($request->getParameters());
+        $currentPage = $request->getParameter("page") ?? 1;
+        $numberOfUsers = $this->questionTemplateService->getCount($parameterBag->getParameterBag());
+        $paginator = new PaginatorService($numberOfUsers, $currentPage);
+
+        $questionTemplates = $this->questionTemplateService->getAll(
+            $parameterBag->getParameterBag(),
+            $paginator->getResultsPerPage(),
+            $currentPage
+        );
 
         return $this->renderer->renderView(
             self::LISTING_PAGE,
             [
                 "questions" => $questionTemplates,
                 "paginator" => $paginator,
+                "types" => self::QUESTION_TYPES,
+                "parameterBag" => $parameterBag,
+                "urlHelper" => $this->urlHelper
             ]
         );
     }
