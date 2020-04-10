@@ -62,7 +62,7 @@ class LoginController extends AbstractController
     {
         $this->session->start();
         $user = $this->session->get("user");
-        if ($user->getEmail() === null) {
+        if ($user === null) {
             return $this->renderer->renderView("login.html", $attributes);
         }
 

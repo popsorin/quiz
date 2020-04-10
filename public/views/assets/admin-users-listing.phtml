@@ -57,22 +57,28 @@
         <h1>Users listing</h1>
     </div>
 
+    <?php
+    $page = $paginator->getCurrentPage();
+    $totalPages= $paginator->getTotalPages()
+    ?>
     <!--Table actions block-->
     <div class="row">
         <div class="col-12 col-md-6">
-            <form class="form-inline" action="/dashboard/users" method="POST">
+            <form class="form-inline" action="/dashboard/users">
                 <div class="form-group">
                     <label for="roleSearch"></label>
                     <select name="role" class="form-control" id="roleSearch">
-                        <?php foreach ($users as $user): ?>
-                        <option value="<?php echo $user->getRole() ?>"><?php echo $user->getRole() ?></option>
+                        <option value="">(nothing)</option>
+                        <?php foreach ($roles as $role): ?>
+                        <option value="<?php echo $role ?>"><?php echo $role ?></option>
                         <?php endforeach;?>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Search</button>
+                <button type="submit" class="btn btn-primary">Filter</button>
             </form>
 
         </div>
+
         <div class="col-12 col-md-6 d-flex align-items-end justify-content-end">
             <a class="btn btn-primary py-1 mb-3" href="/dashboard/users/add">Add new user</a>
         </div>
@@ -87,6 +93,7 @@
                 <!--Sorting arrow are displayed using the 'asc','dsc' classes-->
                 <th scope="col" class="sorting-header asc dsc">ID</th>
                 <th scope="col">Name</th>
+                <th scope="col">Email</th>
                 <th scope="col">Role</th>
                 <th scope="col">Actions</th>
             </tr>
@@ -96,6 +103,7 @@
                  <tr>
                     <th scope="row"><?php echo $user->getId()?></th>
                     <td><?php echo $user->getName()?></td>
+                    <td><?php echo $user->getEmail()?></td>
                     <td><?php echo $user->getRole()?></td>
                     <td class="text-center">
                         <a class="btn btn-primary py-1" href="/dashboard/users/update/<?php echo $user->getId() ?>">Edit</a>
@@ -111,19 +119,14 @@
     <!--Pagination block-->
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            <li class="page-item">
-                <?php
-                $page = $paginator->getCurrentPage();
-
-                $totalPages= $paginator->getTotalPages()
-                ?>
-                <a class="page-link" href="?page=<?php echo ($page < 2) ? $page : $page-1 ?>">Previous</a>
+            <li class="page-item" <?php if($page === 1) echo "hidden"; ?>>
+                <a class="page-link" href="?page=<?php echo ($page < 2) ? $page . $urlQuery : $page-1 . $urlQuery ?>">Previous</a>
             </li>
             <?php for ($i = 0; $i < $totalPages; $i++) : ?>
-            <li class="page-item"><a class="page-link" href="?page=<?php echo $i+1?>"><?php echo $i+1 ?></a></li>
+            <li class="page-item"><a class="page-link" href="?page=<?php echo $i+1 . $urlQuery ?>"><?php echo $i+1 ?></a></li>
             <?php endfor;?>
-            <li class="page-item">
-                <a class="page-link" href="?page=<?php echo ($page < $totalPages)? $page + 1 : $page ?>">Next</a>
+            <li class="page-item" <?php if($page === $totalPages) echo "hidden"; ?>>
+                <a class="page-link" href="?page=<?php echo ($page < $totalPages)? $page + 1 . $urlQuery : $page .  $urlQuery ?>">Next</a>
             </li>
         </ul>
     </nav>

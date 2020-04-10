@@ -12,6 +12,8 @@ use Quiz\Entity\User;
 use Quiz\Factory\UserFactory;
 use Quiz\Service\Exception\InvalidUserException;
 use Quiz\Service\PaginatorService;
+use Quiz\Service\ParameterBagService;
+use Quiz\Service\URLHelper;
 use Quiz\Service\UserService;
 use Quiz\Service\Validator\EntityValidatorInterface;
 
@@ -44,25 +46,33 @@ class UserController extends AbstractController
     private $userValidator;
 
     /**
+     * @var URLHelper
+     */
+    private $urlHelper;
+
+    /**
      * UserController constructor.
      * @param RendererInterface $renderer
      * @param UserService $service
      * @param SessionInterface $session
      * @param UserFactory $factory
      * @param EntityValidatorInterface $validator
+     * @param URLHelper $urlHelper
      */
     public function __construct(
         RendererInterface $renderer,
         UserService $service,
         SessionInterface $session,
         UserFactory $factory,
-        EntityValidatorInterface $validator
+        EntityValidatorInterface $validator,
+        URLHelper $urlHelper
     ) {
         parent::__construct($renderer);
         $this->session = $session;
         $this->userService = $service;
         $this->userFactory = $factory;
         $this->userValidator = $validator;
+        $this->urlHelper = $urlHelper;
     }
 
     /**
@@ -134,19 +144,21 @@ class UserController extends AbstractController
      */
     public function getAll(Request $request, array $attributes): Response
     {
-        $numberOfUsers = $this->userService->getCount();
-
-        $parameters = $request->getParameters();
-        $currentPage = $parameters["page"] ?? 1;
+        $parameterBag = new ParameterBagService($request->getParameters());
+        $currentPage = $request->getParameter("page") ?? 1;
+        $numberOfUsers = $this->userService->getCount($parameterBag->getParameterBag());
+        $urlQuery = $this->urlHelper->buildURLQuery($parameterBag);
         $paginator = new PaginatorService($numberOfUsers, $currentPage);
 
-        $users = $this->userService->getAll($paginator->getResultsPerPage(), $currentPage);
+        $users = $this->userService->getAll($parameterBag->getParameterBag(), $paginator->getResultsPerPage(), $currentPage);
 
         return $this->renderer->renderView(
             self::ADMIN_USER_LISTING_PAGE ,
             [
                 "users" => $users,
-                "paginator" => $paginator
+                "paginator" => $paginator,
+                "roles" => self::USER_ROLE_TYPES,
+                "urlQuery" => $urlQuery
             ]
         );
     }
