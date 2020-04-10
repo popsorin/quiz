@@ -125,7 +125,7 @@ class QuizTemplateController extends AbstractController
      */
     public function getAll(Request $request, array $attributes): Response
     {
-        $numberOfQuizzes = $this->quizTemplateService->getCount();
+        $numberOfQuizzes = $this->quizTemplateService->getCount([]);
         $properties = $request->getParameters();
         $currentPage = $properties["page"] ?? 1;
         $paginator =  new PaginatorService($numberOfQuizzes, $currentPage);

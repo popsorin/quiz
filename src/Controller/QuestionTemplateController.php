@@ -116,7 +116,7 @@ class QuestionTemplateController extends AbstractController
     {
         $parameters = $request->getParameters();
         $page = $parameters["page"] ?? 1;
-        $numberOfQuestions = $this->questionTemplateService->getCount();
+        $numberOfQuestions = $this->questionTemplateService->getCount([]);
         $paginator = new PaginatorService($numberOfQuestions, $page);
         $questionTemplates = $this->questionTemplateService->getAll($paginator->getResultsPerPage(), $page);
 
