@@ -147,7 +147,6 @@ class UserController extends AbstractController
         $parameterBag = new ParameterBagService($request->getParameters());
         $currentPage = $request->getParameter("page") ?? 1;
         $numberOfUsers = $this->userService->getCount($parameterBag->getParameterBag());
-        $urlQuery = $this->urlHelper->buildURLQuery($parameterBag);
         $paginator = new PaginatorService($numberOfUsers, $currentPage);
 
         $users = $this->userService->getAll($parameterBag->getParameterBag(), $paginator->getResultsPerPage(), $currentPage);
@@ -158,7 +157,8 @@ class UserController extends AbstractController
                 "users" => $users,
                 "paginator" => $paginator,
                 "roles" => self::USER_ROLE_TYPES,
-                "urlQuery" => $urlQuery
+                "parameterBag" => $parameterBag,
+                "urlHelper" => $this->urlHelper
             ]
         );
     }
