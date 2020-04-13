@@ -10,7 +10,7 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Service\AnswerInstanceService;
-use Quiz\Service\PaginatorService;
+use Quiz\Service\Paginator;
 use Quiz\Service\QuestionInstanceService;
 use Quiz\Service\QuizTemplateService;
 
@@ -74,9 +74,9 @@ class CandidateController extends AbstractController
 
             return self::createResponse($request, "301", "Location", ["/"]);
         }
-        $numberOfQuizzes = $this->quizTemplateService->getCount();
+        $numberOfQuizzes = $this->quizTemplateService->getCount([]);
         $currentPage = ($request->getParameter("page")) ?? 1;
-        $paginator = new PaginatorService($numberOfQuizzes, $currentPage);
+        $paginator = new Paginator($numberOfQuizzes, $currentPage);
         $quizzes = $this->quizTemplateService->getAll($paginator->getResultsPerPage(), $currentPage);
 
         return $this->renderer->renderView(

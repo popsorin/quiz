@@ -10,9 +10,11 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Entity\QuestionTemplate;
 use Quiz\Factory\QuestionTemplateFactory;
-use Quiz\Service\PaginatorService;
+use Quiz\Service\Paginator;
+use Quiz\Service\ParameterBag;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizTemplateService;
+use Quiz\Service\URLHelper;
 use ReflectionException;
 
 /**
@@ -22,6 +24,7 @@ use ReflectionException;
 class QuestionTemplateController extends AbstractController
 {
     const LISTING_PAGE = 'admin-questions-listing.phtml';
+    const QUESTION_TYPES = ["text", "code"];
 
     /**
      * @var QuizTemplateService
@@ -44,25 +47,33 @@ class QuestionTemplateController extends AbstractController
     private $questionTemplateFactory;
 
     /**
+     * @var URLHelper
+     */
+    private $urlHelper;
+
+    /**
      * QuestionTemplateController constructor.
      * @param RendererInterface $renderer
-     * @param QuestionTemplateService $service
+     * @param QuestionTemplateService $questionTemplateService
      * @param SessionInterface $session
-     * @param QuizTemplateService $boundedService
-     * @param QuestionTemplateFactory $factory
+     * @param QuizTemplateService $quizTemplateService
+     * @param QuestionTemplateFactory $questionTemplateFactory
+     * @param URLHelper $urlHelper
      */
     public function __construct(
         RendererInterface $renderer,
-        QuestionTemplateService $service,
+        QuestionTemplateService $questionTemplateService,
         SessionInterface $session,
-        QuizTemplateService $boundedService,
-        QuestionTemplateFactory $factory
+        QuizTemplateService $quizTemplateService,
+        QuestionTemplateFactory $questionTemplateFactory,
+        URLHelper $urlHelper
     ) {
         parent::__construct($renderer);
-        $this->quizTemplateService = $boundedService;
+        $this->quizTemplateService = $quizTemplateService;
         $this->session = $session;
-        $this->questionTemplateService = $service;
-        $this->questionTemplateFactory = $factory;
+        $this->questionTemplateService = $questionTemplateService;
+        $this->questionTemplateFactory = $questionTemplateFactory;
+        $this->urlHelper = $urlHelper;
     }
 
 
@@ -114,17 +125,25 @@ class QuestionTemplateController extends AbstractController
      */
     public function getAll(Request $request, array $attributes): Response
     {
-        $parameters = $request->getParameters();
-        $page = $parameters["page"] ?? 1;
-        $numberOfQuestions = $this->questionTemplateService->getCount([]);
-        $paginator = new PaginatorService($numberOfQuestions, $page);
-        $questionTemplates = $this->questionTemplateService->getAll($paginator->getResultsPerPage(), $page);
+        $parameterBag = new ParameterBag($request->getParameters());
+        $currentPage = $request->getParameter("page") ?? 1;
+        $numberOfUsers = $this->questionTemplateService->countQuestions($parameterBag->getParameters());
+        $paginator = new Paginator($numberOfUsers, $currentPage);
+        $urlQuery = $this->urlHelper->buildURLQuery($parameterBag);
+
+        $questionTemplates = $this->questionTemplateService->getAll(
+            $parameterBag->getParameters(),
+            $paginator->getResultsPerPage(),
+            $currentPage
+        );
 
         return $this->renderer->renderView(
             self::LISTING_PAGE,
             [
                 "questions" => $questionTemplates,
                 "paginator" => $paginator,
+                "types" => self::QUESTION_TYPES,
+                "urlQuery" => $urlQuery,
             ]
         );
     }

@@ -6,7 +6,7 @@ namespace Quiz\Service;
 
 class ParameterBag
 {
-    const OPERATIONS = ["search", "sort", "role"];
+    const OPERATIONS = ["search", "sort", "role", "type"];
 
     /**
      * @var array

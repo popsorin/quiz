@@ -50,22 +50,30 @@
         </div>
 
         <!--Table actions block-->
+        <?php
+        $page = $paginator->getCurrentPage();
+        $totalPages= $paginator->getTotalPages()
+        ?>
+        <!--Table actions block-->
         <div class="row">
             <div class="col-12 col-md-6">
-                <form action="">
-                    <label for="textSearch">Text search</label>
-                    <div class="input-group">
-                        <input type="text" id="textSearch" class="form-control" placeholder="">
-                        <div class="input-group-append">
-                            <button class="btn btn-secondary" type="submit">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
+                <form class="form-inline" action="/dashboard/questions">
+                    <div class="form-group">
+                        <label for="roleSearch"></label>
+                        <select name="type" class="form-control" id="roleSearch">
+                            <option value="">no filter</option>
+                            <?php foreach ($types as $type): ?>
+                                <option value="<?php echo $type ?>"><?php echo $type ?></option>
+                            <?php endforeach;?>
+                        </select>
                     </div>
+                    <button type="submit" class="btn btn-primary">Filter</button>
                 </form>
+
             </div>
+
             <div class="col-12 col-md-6 d-flex align-items-end justify-content-end">
-                <a class="btn btn-primary py-1" href="/dashboard/questions/add ">Add new question</a>
+                <a class="btn btn-primary py-1 mb-3" href="/dashboard/questions/add">Add new question</a>
             </div>
         </div>
 
@@ -77,6 +85,7 @@
                     <!--Sorting arrow are displayed using the 'asc','dsc' classes-->
                     <th scope="col" class="sorting-header asc dsc">ID</th>
                     <th scope="col">Text</th>
+                    <th scope="col">Type</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
@@ -85,6 +94,7 @@
                     <tr>
                         <th scope="row"><?php echo $question->getId()?></th>
                         <td><?php echo $question->getText()?></td>
+                        <td><?php echo $question->getType()?></td>
                         <td class="text-center">
                             <a class="btn btn-primary py-1" href="/dashboard/questions/update/<?php echo $question->getId() ?>">Edit</a>
                             <a class="btn btn-danger py-1" href="/dashboard/questions/delete/<?php echo $question->getId() ?>">Delete</a>
@@ -97,16 +107,14 @@
         <!--Pagination block-->
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
-                <?php $page = $paginator->getCurrentPage();
-                      $totalPages= $paginator->getTotalPages();?>
-                <li class="page-item">
-                    <a class="page-link" href="?page=<?php echo ($page < 2)? $page : $page-1?>">Previous</a>
+                <li class="page-item" <?php if($page === 1) echo "hidden"; ?>>
+                    <a class="page-link" href="?page=<?php echo ($page < 2) ? $page . $urlQuery : $page-1 . $urlQuery ?>">Previous</a>
                 </li>
                 <?php for($i = 0; $i < $totalPages; $i++): ?>
-                    <li class="page-item"><a class="page-link" href="?page=<?php echo $i+1?>"><?php echo $i+1?></a></li>
+                    <li class="page-item"><a class="page-link" href="?page=<?php echo $i+1 . $urlQuery ?>"><?php echo $i+1 ?></a></li>
                 <?php endfor;?>
-                <li class="page-item">
-                    <a class="page-link" href="?page=<?php echo ($page < $totalPages) ? $page+1 : $page?>">Next</a>
+                <li class="page-item" <?php if($page === $totalPages) echo "hidden"; ?>>
+                    <a class="page-link" href="?page=<?php echo ($page < $totalPages)? $page + 1 . $urlQuery : $page .  $urlQuery ?>">Next</a>
                 </li>
             </ul>
         </nav>

@@ -4,7 +4,7 @@
 namespace Quiz\Service;
 
 
-class PaginatorService
+class Paginator
 {
     /**
      * @var int
@@ -27,7 +27,7 @@ class PaginatorService
     private $resultsPerPage;
 
     /**
-     * PaginatorService constructor.
+     * Paginator constructor.
      * @param int $totalResults
      * @param int $currentPage
      * @param int $resultsPerPage
@@ -41,7 +41,7 @@ class PaginatorService
 
     /**
      * @param int $currentPage
-     * @return PaginatorService
+     * @return Paginator
      */
     public function setCurrentPage(int $currentPage): self
     {
@@ -51,7 +51,7 @@ class PaginatorService
 
     /**
      * @param int $resultsPerPage
-     * @return PaginatorService
+     * @return Paginator
      */
     public function setResultsPerPage(int $resultsPerPage): self
     {
