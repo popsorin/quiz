@@ -54,25 +54,25 @@ class QuestionTemplateController extends AbstractController
     /**
      * QuestionTemplateController constructor.
      * @param RendererInterface $renderer
-     * @param QuestionTemplateService $service
+     * @param QuestionTemplateService $questionTemplateService
      * @param SessionInterface $session
-     * @param QuizTemplateService $boundedService
-     * @param QuestionTemplateFactory $factory
+     * @param QuizTemplateService $quizTemplateService
+     * @param QuestionTemplateFactory $questionTemplateFactory
      * @param URLHelper $urlHelper
      */
     public function __construct(
         RendererInterface $renderer,
-        QuestionTemplateService $service,
+        QuestionTemplateService $questionTemplateService,
         SessionInterface $session,
-        QuizTemplateService $boundedService,
-        QuestionTemplateFactory $factory,
+        QuizTemplateService $quizTemplateService,
+        QuestionTemplateFactory $questionTemplateFactory,
         URLHelper $urlHelper
     ) {
         parent::__construct($renderer);
-        $this->quizTemplateService = $boundedService;
+        $this->quizTemplateService = $quizTemplateService;
         $this->session = $session;
-        $this->questionTemplateService = $service;
-        $this->questionTemplateFactory = $factory;
+        $this->questionTemplateService = $questionTemplateService;
+        $this->questionTemplateFactory = $questionTemplateFactory;
         $this->urlHelper = $urlHelper;
     }
 
