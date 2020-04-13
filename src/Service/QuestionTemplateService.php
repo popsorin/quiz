@@ -124,7 +124,7 @@ class QuestionTemplateService
      * @param array $filters
      * @return int
      */
-    public function getCount(array $filters): int
+    public function countQuestions(array $filters): int
     {
         return  $this->repositoryManager->getRepository(QuestionTemplate::class)->getCount($filters);
     }

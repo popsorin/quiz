@@ -127,7 +127,7 @@ class QuestionTemplateController extends AbstractController
     {
         $parameterBag = new ParameterBag($request->getParameters());
         $currentPage = $request->getParameter("page") ?? 1;
-        $numberOfUsers = $this->questionTemplateService->getCount($parameterBag->getParameters());
+        $numberOfUsers = $this->questionTemplateService->countQuestions($parameterBag->getParameters());
         $paginator = new PaginatorService($numberOfUsers, $currentPage);
 
         $questionTemplates = $this->questionTemplateService->getAll(
