@@ -56,11 +56,7 @@ class ParameterBag
      */
     public function getParameter(string $key): ?string
     {
-        if(array_key_exists($key, $this->parameters)) {
-            return $this->parameters[$key];
-        }
-
-        return null;
+      return (array_key_exists($key, $this->parameters)) ? $this->parameters[$key] : null;
     }
 
     /**
