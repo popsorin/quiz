@@ -25,10 +25,10 @@ class UserFactory
         string $roleKey
     ): User {
         $parameters = $request->getParameters();
-        $name = $parameters[$nameKey];
-        $email = $parameters[$emailKey];
-        $password = $parameters[$passwordKey];
-        $role = $parameters[$roleKey];
+        $name = $parameters[$nameKey] ?? "";
+        $email = $parameters[$emailKey] ?? "";
+        $password = $parameters[$passwordKey] ?? "";
+        $role = $parameters[$roleKey] ?? "";
 
         return new User($name, $email, $password, $role);
     }

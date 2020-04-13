@@ -48,6 +48,7 @@ use Quiz\Service\QuestionInstanceService;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizInstanceService;
 use Quiz\Service\QuizTemplateService;
+use Quiz\Service\URLHelper;
 use Quiz\Service\UserService;
 use Quiz\Service\Validator\UserValidator;
 use ReallyOrm\Hydrator\HydratorInterface;
@@ -162,6 +163,8 @@ $container->register(UserValidator::class, UserValidator::class)
     ->addArgument($container->findDefinition(UserRepository::class));
 $container->register(QuestionTemplateFactory::class, QuestionTemplateFactory::class);
 
+$container->register(URLHelper::class, URLHelper::class);
+
 $container->register(SessionInterface::class, Session::class);
 
 $container->register(LoginService::class, LoginService::class)
@@ -185,6 +188,7 @@ $container->register(UserController::class, UserController::class)
     ->addArgument($container->findDefinition(SessionInterface::class))
     ->addArgument($container->findDefinition(UserFactory::class))
     ->addArgument($container->findDefinition(UserValidator::class))
+    ->addArgument($container->findDefinition(URLHelper::class))
     ->addTag("controller");
 
 $container->register(AdminController::class, AdminController::class)

@@ -109,10 +109,11 @@ class QuizTemplateService
     }
 
     /**
+     * @param array $filters
      * @return int
      */
-    public function getCount(): int
+    public function getCount(array $filters): int
     {
-        return  $this->repositoryManager->getRepository(QuizTemplate::class)->getCount();
+        return  $this->repositoryManager->getRepository(QuizTemplate::class)->getCount($filters);
     }
 }

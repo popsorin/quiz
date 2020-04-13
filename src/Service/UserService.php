@@ -49,23 +49,25 @@ class UserService
     }
 
     /**
+     * @param array $filters
      * @return int
      */
-    public function getCount(): int
+    public function getCount(array $filters): int
     {
-        return $this->repositoryManager->getRepository(User::class)->getCount();
+        return $this->repositoryManager->getRepository(User::class)->getCount($filters);
     }
 
     /**
+     * @param array $filter
      * @param int $limit
      * @param int $page
      * @return array
      */
-    public function getAll(int $limit, int $page): array
+    public function getAll(array $filter, int $limit, int $page): array
     {
         $offset = $limit * ($page - 1);
 
-        return $this->repositoryManager->getRepository(User::class)->findBy([], [], $offset, $limit);
+        return $this->repositoryManager->getRepository(User::class)->findBy($filter, [], $offset, $limit);
     }
 
     /**
