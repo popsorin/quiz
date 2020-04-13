@@ -4,22 +4,22 @@
 namespace Quiz\Service;
 
 
-class ParameterBagService
+class ParameterBag
 {
     const OPERATIONS = ["search", "sort", "role"];
 
     /**
      * @var array
      */
-    private $parameterBag;
+    private $parameters;
 
     /**
-     * ParameterBagService constructor.
+     * ParameterBag constructor.
      * @param array $parameters
      */
     public function __construct(array $parameters)
     {
-        $this->parameterBag = self::createFromRequestParameters($parameters);
+        $this->parameters = self::createFromRequestParameters($parameters);
     }
 
     /**
@@ -48,7 +48,11 @@ class ParameterBagService
      */
     public function getParameter(string $key): ?string
     {
-        return $this->parameterBag[$key];
+        if(array_key_exists($key, $this->parameters)) {
+            return $this->parameters[$key];
+        }
+
+        return null;
     }
 
     /**
@@ -56,11 +60,14 @@ class ParameterBagService
      */
     public function count(): int
     {
-        return count($this->parameterBag);
+        return count($this->parameters);
     }
 
-    public function getParameterBag(): array
+    /**
+     * @return array
+     */
+    public function getParameters(): array
     {
-        return $this->parameterBag;
+        return $this->parameters;
     }
 }
