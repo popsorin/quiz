@@ -34,7 +34,7 @@ class ParameterBag
     {
         $results = [];
         foreach (self::OPERATIONS as $operation) {
-            if(isset($parameters[$operation]) && $parameters[$operation] !== "") {
+            if($parameters[$operation] && $parameters[$operation] !== "") {
                 $results[$operation] = $parameters[$operation];
             }
         }
