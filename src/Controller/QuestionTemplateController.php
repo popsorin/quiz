@@ -10,7 +10,7 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Entity\QuestionTemplate;
 use Quiz\Factory\QuestionTemplateFactory;
-use Quiz\Service\PaginatorService;
+use Quiz\Service\Paginator;
 use Quiz\Service\ParameterBag;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizTemplateService;
@@ -128,7 +128,8 @@ class QuestionTemplateController extends AbstractController
         $parameterBag = new ParameterBag($request->getParameters());
         $currentPage = $request->getParameter("page") ?? 1;
         $numberOfUsers = $this->questionTemplateService->countQuestions($parameterBag->getParameters());
-        $paginator = new PaginatorService($numberOfUsers, $currentPage);
+        $paginator = new Paginator($numberOfUsers, $currentPage);
+        $urlQuery = $this->urlHelper->buildURLQuery($parameterBag);
 
         $questionTemplates = $this->questionTemplateService->getAll(
             $parameterBag->getParameters(),
@@ -142,8 +143,7 @@ class QuestionTemplateController extends AbstractController
                 "questions" => $questionTemplates,
                 "paginator" => $paginator,
                 "types" => self::QUESTION_TYPES,
-                "parameterBag" => $parameterBag,
-                "urlHelper" => $this->urlHelper
+                "urlQuery" => $urlQuery,
             ]
         );
     }

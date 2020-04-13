@@ -9,7 +9,7 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Factory\QuizTemplateFactory;
-use Quiz\Service\PaginatorService;
+use Quiz\Service\Paginator;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizTemplateService;
 
@@ -128,7 +128,7 @@ class QuizTemplateController extends AbstractController
         $numberOfQuizzes = $this->quizTemplateService->getCount([]);
         $properties = $request->getParameters();
         $currentPage = $properties["page"] ?? 1;
-        $paginator =  new PaginatorService($numberOfQuizzes, $currentPage);
+        $paginator =  new Paginator($numberOfQuizzes, $currentPage);
         $quizzes = $this->quizTemplateService->getAll($paginator->getResultsPerPage(), $currentPage);
 
         return $this->renderer->renderView(

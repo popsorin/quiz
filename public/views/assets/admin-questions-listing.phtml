@@ -49,10 +49,6 @@
             <h1>Questions listing</h1>
         </div>
 
-        <?php
-        $page = $paginator->getCurrentPage();
-        $totalPages= $paginator->getTotalPages();
-        ?>
         <!--Table actions block-->
         <?php
         $page = $paginator->getCurrentPage();
@@ -111,7 +107,6 @@
         <!--Pagination block-->
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
-                <?php $urlQuery = $urlHelper->buildURLQuery($parameterBag); ?>
                 <li class="page-item" <?php if($page === 1) echo "hidden"; ?>>
                     <a class="page-link" href="?page=<?php echo ($page < 2) ? $page . $urlQuery : $page-1 . $urlQuery ?>">Previous</a>
                 </li>

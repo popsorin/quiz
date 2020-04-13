@@ -11,7 +11,7 @@ use Framework\Http\Response;
 use Quiz\Entity\User;
 use Quiz\Factory\UserFactory;
 use Quiz\Service\Exception\InvalidUserException;
-use Quiz\Service\PaginatorService;
+use Quiz\Service\Paginator;
 use Quiz\Service\ParameterBag;
 use Quiz\Service\URLHelper;
 use Quiz\Service\UserService;
@@ -147,7 +147,7 @@ class UserController extends AbstractController
         $parameterBag = new ParameterBag($request->getParameters());
         $currentPage = $request->getParameter("page") ?? 1;
         $numberOfUsers = $this->userService->getCount($parameterBag->getParameters());
-        $paginator = new PaginatorService($numberOfUsers, $currentPage);
+        $paginator = new Paginator($numberOfUsers, $currentPage);
 
         $users = $this->userService->getAll($parameterBag->getParameters(), $paginator->getResultsPerPage(), $currentPage);
 
