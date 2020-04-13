@@ -43,6 +43,14 @@ class ParameterBag
     }
 
     /**
+     * @param array $parameters
+     */
+    public function addParameter(array $parameters = []): void
+    {
+        $this->parameters = array_replace($this->parameters, $parameters);
+    }
+
+    /**
      * @param string $key
      * @return string|null
      */
