@@ -12,7 +12,7 @@ use Quiz\Entity\User;
 use Quiz\Factory\UserFactory;
 use Quiz\Service\Exception\InvalidUserException;
 use Quiz\Service\PaginatorService;
-use Quiz\Service\ParameterBagService;
+use Quiz\Service\ParameterBag;
 use Quiz\Service\URLHelper;
 use Quiz\Service\UserService;
 use Quiz\Service\Validator\EntityValidatorInterface;
@@ -144,12 +144,12 @@ class UserController extends AbstractController
      */
     public function getAll(Request $request, array $attributes): Response
     {
-        $parameterBag = new ParameterBagService($request->getParameters());
+        $parameterBag = new ParameterBag($request->getParameters());
         $currentPage = $request->getParameter("page") ?? 1;
-        $numberOfUsers = $this->userService->getCount($parameterBag->getParameterBag());
+        $numberOfUsers = $this->userService->getCount($parameterBag->getParameters());
         $paginator = new PaginatorService($numberOfUsers, $currentPage);
 
-        $users = $this->userService->getAll($parameterBag->getParameterBag(), $paginator->getResultsPerPage(), $currentPage);
+        $users = $this->userService->getAll($parameterBag->getParameters(), $paginator->getResultsPerPage(), $currentPage);
 
         return $this->renderer->renderView(
             self::ADMIN_USER_LISTING_PAGE ,

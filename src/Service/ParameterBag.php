@@ -4,22 +4,22 @@
 namespace Quiz\Service;
 
 
-class ParameterBagService
+class ParameterBag
 {
     const OPERATIONS = ["search", "sort", "role", "type"];
 
     /**
      * @var array
      */
-    private $parameterBag;
+    private $parameters;
 
     /**
-     * ParameterBagService constructor.
+     * ParameterBag constructor.
      * @param array $parameters
      */
     public function __construct(array $parameters)
     {
-        $this->parameterBag = self::createFromRequestParameters($parameters);
+        $this->parameters = self::createFromRequestParameters($parameters);
     }
 
     /**
@@ -34,7 +34,7 @@ class ParameterBagService
     {
         $results = [];
         foreach (self::OPERATIONS as $operation) {
-            if(isset($parameters[$operation]) && $parameters[$operation] !== "") {
+            if($parameters[$operation] && $parameters[$operation] !== "") {
                 $results[$operation] = $parameters[$operation];
             }
         }
@@ -43,12 +43,20 @@ class ParameterBagService
     }
 
     /**
+     * @param array $parameters
+     */
+    public function addParameter(array $parameters = []): void
+    {
+        $this->parameters = array_replace($this->parameters, $parameters);
+    }
+
+    /**
      * @param string $key
      * @return string|null
      */
     public function getParameter(string $key): ?string
     {
-        return $this->parameterBag[$key];
+      return ($this->parameters[$key]) ?? null;
     }
 
     /**
@@ -56,11 +64,14 @@ class ParameterBagService
      */
     public function count(): int
     {
-        return count($this->parameterBag);
+        return count($this->parameters);
     }
 
-    public function getParameterBag(): array
+    /**
+     * @return array
+     */
+    public function getParameters(): array
     {
-        return $this->parameterBag;
+        return $this->parameters;
     }
 }
