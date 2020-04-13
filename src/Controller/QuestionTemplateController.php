@@ -11,7 +11,7 @@ use Framework\Http\Response;
 use Quiz\Entity\QuestionTemplate;
 use Quiz\Factory\QuestionTemplateFactory;
 use Quiz\Service\PaginatorService;
-use Quiz\Service\ParameterBagService;
+use Quiz\Service\ParameterBag;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizTemplateService;
 use Quiz\Service\URLHelper;
@@ -46,6 +46,9 @@ class QuestionTemplateController extends AbstractController
      */
     private $questionTemplateFactory;
 
+    /**
+     * @var URLHelper
+     */
     private $urlHelper;
 
     /**
@@ -122,13 +125,13 @@ class QuestionTemplateController extends AbstractController
      */
     public function getAll(Request $request, array $attributes): Response
     {
-        $parameterBag = new ParameterBagService($request->getParameters());
+        $parameterBag = new ParameterBag($request->getParameters());
         $currentPage = $request->getParameter("page") ?? 1;
-        $numberOfUsers = $this->questionTemplateService->getCount($parameterBag->getParameterBag());
+        $numberOfUsers = $this->questionTemplateService->getCount($parameterBag->getParameters());
         $paginator = new PaginatorService($numberOfUsers, $currentPage);
 
         $questionTemplates = $this->questionTemplateService->getAll(
-            $parameterBag->getParameterBag(),
+            $parameterBag->getParameters(),
             $paginator->getResultsPerPage(),
             $currentPage
         );
