@@ -12,7 +12,7 @@ use Quiz\Entity\User;
 use Quiz\Factory\UserFactory;
 use Quiz\Persistency\Repositories\UserRepository;
 use Quiz\Service\Exception\InvalidUserException;
-use Quiz\Service\AbstractParameterBag;
+use Quiz\Service\ParameterBag;
 use Quiz\Service\RequestParameterBag;
 use Quiz\Service\Paginator;
 use Quiz\Service\URLHelper;
@@ -148,12 +148,11 @@ class UserController extends AbstractController
         $numberOfUsers = $this->userRepository->getCount($requestParameterBag->getFilterParameters());
         $paginator = new Paginator($numberOfUsers, $currentPage);
         $urlQuery = $this->urlHelper->buildURLQuery($requestParameterBag);
-        $offset = $paginator->getResultsPerPage() * ($currentPage - 1);
 
         $users = $this->userRepository->findBy(
             array_merge($requestParameterBag->getFilterParameters(), $requestParameterBag->getSearchParameters()),
             $requestParameterBag->getSortParameters(),
-            $offset,
+            $paginator->getResultsPerPage() * ($currentPage - 1),
             $paginator->getResultsPerPage()
         );
 

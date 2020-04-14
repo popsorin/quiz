@@ -4,12 +4,12 @@
 namespace Quiz\Service;
 
 
-class RequestParameterBag extends AbstractParameterBag
+class RequestParameterBag extends ParameterBag
 {
     const OPERATIONS = ["search", "sort", "filter"];
 
     /**
-     * AbstractParameterBag constructor.
+     * ParameterBag constructor.
      * @param array $parameters
      */
     public function __construct(array $parameters)

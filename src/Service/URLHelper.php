@@ -7,10 +7,10 @@ namespace Quiz\Service;
 class URLHelper
 {
     /**
-     * @param AbstractParameterBag $parameterBag
+     * @param ParameterBag $parameterBag
      * @return string
      */
-    public function buildURLQuery(AbstractParameterBag $parameterBag): string
+    public function buildURLQuery(ParameterBag $parameterBag): string
     {
         if($parameterBag->count() === 0) {
             return "";

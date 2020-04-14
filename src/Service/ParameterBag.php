@@ -6,12 +6,21 @@ namespace Quiz\Service;
 
 use Quiz\Service\Parameter;
 
-abstract class AbstractParameterBag
+class ParameterBag
 {
     /**
      * @var array
      */
     protected $parameters;
+
+    /**
+     * ParameterBag constructor.
+     * @param array $parameters
+     */
+    public function __construct(array $parameters)
+    {
+        $this->parameters = $parameters;
+    }
 
     /**
      * @param array $parameters
