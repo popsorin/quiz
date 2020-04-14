@@ -67,10 +67,10 @@
             <form class="form-inline" action="/dashboard/users">
                 <div class="form-group">
                     <label for="roleSearch"></label>
-                    <select name="role" class="form-control" id="roleSearch">
+                    <select name="filter" class="form-control" id="roleSearch">
                         <option value="">no filter</option>
                         <?php foreach ($roles as $role): ?>
-                        <option value="<?php echo $role ?>"><?php echo $role ?></option>
+                        <option value="<?php echo "role:$role"?>"><?php echo $role ?></option>
                         <?php endforeach;?>
                     </select>
                 </div>
@@ -119,7 +119,6 @@
     <!--Pagination block-->
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            <?php $urlQuery = $urlHelper->buildURLQuery($parameterBag); ?>
             <li class="page-item" <?php if($page === 1) echo "hidden"; ?>>
                 <a class="page-link" href="?page=<?php echo ($page < 2) ? $page . $urlQuery : $page-1 . $urlQuery ?>">Previous</a>
             </li>
@@ -127,7 +126,7 @@
             <li class="page-item"><a class="page-link" href="?page=<?php echo $i+1 . $urlQuery ?>"><?php echo $i+1 ?></a></li>
             <?php endfor;?>
             <li class="page-item" <?php if($page === $totalPages) echo "hidden"; ?>>
-                <a class="page-link" href="?page=<?php echo ($page < $totalPages)? $page + 1 . $urlQuery : $page .  $urlQuery ?>">Next</a>
+                <a class="page-link" href="?page=<?php echo ($page < $totalPages) ? $page + 1 . $urlQuery : $page .  $urlQuery ?>">Next</a>
             </li>
         </ul>
     </nav>

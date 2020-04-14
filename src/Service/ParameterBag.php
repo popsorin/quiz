@@ -4,9 +4,11 @@
 namespace Quiz\Service;
 
 
+use Quiz\Service\Parameter;
+
 class ParameterBag
 {
-    const OPERATIONS = ["search", "sort", "role", "type"];
+    const OPERATIONS = ["search", "sort", "filter"];
 
     /**
      * @var array
@@ -34,8 +36,10 @@ class ParameterBag
     {
         $results = [];
         foreach (self::OPERATIONS as $operation) {
-            if($parameters[$operation] && $parameters[$operation] !== "") {
-                $results[$operation] = $parameters[$operation];
+            if($parameters[$operation] !== null && $parameters[$operation] !== "") {
+                $explode = explode(":", $parameters[$operation]);
+
+                $results[] = new Parameter($operation, $explode[0], $explode[1]);
             }
         }
 
@@ -57,6 +61,24 @@ class ParameterBag
     public function getParameter(string $key): ?string
     {
       return ($this->parameters[$key]) ?? null;
+    }
+
+    /**
+     *
+     * Returns a array with the objects for filtering
+     *
+     * @return array
+     */
+    public function getFilterParameters(): array
+    {
+        $result = [];
+        foreach ($this->parameters as $parameter) {
+            if($parameter->getOperation() === "filter") {
+                $result[$parameter->getField()] = $parameter->getValue();
+            }
+        }
+
+        return $result;
     }
 
     /**

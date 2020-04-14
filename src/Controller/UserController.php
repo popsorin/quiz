@@ -145,11 +145,13 @@ class UserController extends AbstractController
     public function getAll(Request $request, array $attributes): Response
     {
         $parameterBag = new ParameterBag($request->getParameters());
+        $urlQuery = $this->urlHelper->buildURLQuery($parameterBag);
         $currentPage = $request->getParameter("page") ?? 1;
-        $numberOfUsers = $this->userService->getCount($parameterBag->getParameters());
+        $numberOfUsers = $this->userService->getCount($parameterBag->getFilterParameters());
         $paginator = new Paginator($numberOfUsers, $currentPage);
 
-        $users = $this->userService->getAll($parameterBag->getParameters(), $paginator->getResultsPerPage(), $currentPage);
+
+        $users = $this->userService->getAll($parameterBag->getFilterParameters(), $paginator->getResultsPerPage(), $currentPage);
 
         return $this->renderer->renderView(
             self::ADMIN_USER_LISTING_PAGE ,
@@ -157,8 +159,7 @@ class UserController extends AbstractController
                 "users" => $users,
                 "paginator" => $paginator,
                 "roles" => self::USER_ROLE_TYPES,
-                "parameterBag" => $parameterBag,
-                "urlHelper" => $this->urlHelper
+                "urlQuery" => $urlQuery
             ]
         );
     }

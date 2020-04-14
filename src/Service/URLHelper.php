@@ -18,10 +18,14 @@ class URLHelper
 
         $url = "&";
         $parameterBag = $parameterBag->getParameters();
-        foreach ($parameterBag as $key=>$value) {
-            $url .= "$key=$value&";
+        foreach ($parameterBag as $parameter) {
+            $url = sprintf(
+                "%s=%s:%s&",
+                $parameter->getOperation(),
+                $parameter->getField(),
+                $parameter->getValue()
+            );
         }
-
         $url = substr($url, 0, -1);
 
         return $url;
