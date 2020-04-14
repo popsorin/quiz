@@ -4,19 +4,12 @@
 namespace Quiz\Service;
 
 
-use Quiz\Service\Parameter;
-
-class ParameterBag
+class RequestParameterBag extends AbstractParameterBag
 {
     const OPERATIONS = ["search", "sort", "filter"];
 
     /**
-     * @var array
-     */
-    private $parameters;
-
-    /**
-     * ParameterBag constructor.
+     * AbstractParameterBag constructor.
      * @param array $parameters
      */
     public function __construct(array $parameters)
@@ -36,7 +29,7 @@ class ParameterBag
     {
         $results = [];
         foreach (self::OPERATIONS as $operation) {
-            if($parameters[$operation] !== null && $parameters[$operation] !== "") {
+            if ($parameters[$operation] && $parameters[$operation] !== "") {
                 $explode = explode(":", $parameters[$operation]);
 
                 $results[] = new Parameter($operation, $explode[0], $explode[1]);
@@ -47,25 +40,44 @@ class ParameterBag
     }
 
     /**
-     * @param array $parameters
+     *
+     * Returns a array with the field and value for searching
+     *
+     * @return array
      */
-    public function addParameter(array $parameters = []): void
+    public function getSearchParameters()
     {
-        $this->parameters = array_replace($this->parameters, $parameters);
-    }
+        $results = [];
+        foreach ($this->parameters as $parameter) {
+            if ($parameter->getOperation() === "search") {
+                $results = [$parameter->getField() => $parameter->getValue()];
+            }
+        }
 
-    /**
-     * @param string $key
-     * @return string|null
-     */
-    public function getParameter(string $key): ?string
-    {
-      return ($this->parameters[$key]) ?? null;
+        return $results;
     }
 
     /**
      *
-     * Returns a array with the objects for filtering
+     * Returns a array with the field and value for sorting
+     *
+     * @return array
+     */
+    public function getSortParameters()
+    {
+        $results = [];
+        foreach ($this->parameters as $parameter) {
+            if ($parameter->getOperation() === "sort") {
+                $results = [$parameter->getField() => $parameter->getValue()];
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     *
+     * Returns a array with the field and value for filtering
      *
      * @return array
      */
@@ -73,27 +85,11 @@ class ParameterBag
     {
         $result = [];
         foreach ($this->parameters as $parameter) {
-            if($parameter->getOperation() === "filter") {
+            if ($parameter->getOperation() === "filter") {
                 $result[$parameter->getField()] = $parameter->getValue();
             }
         }
 
         return $result;
-    }
-
-    /**
-     * @return int
-     */
-    public function count(): int
-    {
-        return count($this->parameters);
-    }
-
-    /**
-     * @return array
-     */
-    public function getParameters(): array
-    {
-        return $this->parameters;
     }
 }

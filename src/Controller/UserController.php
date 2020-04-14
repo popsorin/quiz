@@ -10,11 +10,12 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Entity\User;
 use Quiz\Factory\UserFactory;
+use Quiz\Persistency\Repositories\UserRepository;
 use Quiz\Service\Exception\InvalidUserException;
+use Quiz\Service\AbstractParameterBag;
+use Quiz\Service\RequestParameterBag;
 use Quiz\Service\Paginator;
-use Quiz\Service\ParameterBag;
 use Quiz\Service\URLHelper;
-use Quiz\Service\UserService;
 use Quiz\Service\Validator\EntityValidatorInterface;
 
 class UserController extends AbstractController
@@ -31,9 +32,9 @@ class UserController extends AbstractController
     private $session;
 
     /**
-     * @var UserService
+     * @var UserRepository
      */
-    private $userService;
+    private $userRepository;
 
     /**
      * @var UserFactory
@@ -53,7 +54,7 @@ class UserController extends AbstractController
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
-     * @param UserService $service
+     * @param UserRepository $service
      * @param SessionInterface $session
      * @param UserFactory $factory
      * @param EntityValidatorInterface $validator
@@ -61,7 +62,7 @@ class UserController extends AbstractController
      */
     public function __construct(
         RendererInterface $renderer,
-        UserService $service,
+        UserRepository $service,
         SessionInterface $session,
         UserFactory $factory,
         EntityValidatorInterface $validator,
@@ -69,7 +70,7 @@ class UserController extends AbstractController
     ) {
         parent::__construct($renderer);
         $this->session = $session;
-        $this->userService = $service;
+        $this->userRepository = $service;
         $this->userFactory = $factory;
         $this->userValidator = $validator;
         $this->urlHelper = $urlHelper;
@@ -99,14 +100,12 @@ class UserController extends AbstractController
             );
         }
 
-        $this->userService->add($user);
+        $this->userRepository->insertOnDuplicateKeyUpdate($user);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
 
     /**
-     *
-     *
      * @param Request $request
      * @param array $attributes
      * @return Response
@@ -132,7 +131,7 @@ class UserController extends AbstractController
             );
         }
 
-        $this->userService->update($updatedUser);
+        $this->userRepository->insertOnDuplicateKeyUpdate($updatedUser);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/users"]);
     }
@@ -144,14 +143,20 @@ class UserController extends AbstractController
      */
     public function getAll(Request $request, array $attributes): Response
     {
-        $parameterBag = new ParameterBag($request->getParameters());
-        $urlQuery = $this->urlHelper->buildURLQuery($parameterBag);
+        $requestParameterBag = new RequestParameterBag($request->getParameters());
         $currentPage = $request->getParameter("page") ?? 1;
-        $numberOfUsers = $this->userService->getCount($parameterBag->getFilterParameters());
+        $numberOfUsers = $this->userRepository->getCount($requestParameterBag->getFilterParameters());
         $paginator = new Paginator($numberOfUsers, $currentPage);
+        $urlQuery = $this->urlHelper->buildURLQuery($requestParameterBag);
+        $offset = $paginator->getResultsPerPage() * ($currentPage - 1);
 
+        $users = $this->userRepository->findBy(
+            array_merge($requestParameterBag->getFilterParameters(), $requestParameterBag->getSearchParameters()),
+            $requestParameterBag->getSortParameters(),
+            $offset,
+            $paginator->getResultsPerPage()
+        );
 
-        $users = $this->userService->getAll($parameterBag->getFilterParameters(), $paginator->getResultsPerPage(), $currentPage);
 
         return $this->renderer->renderView(
             self::ADMIN_USER_LISTING_PAGE ,
@@ -172,7 +177,7 @@ class UserController extends AbstractController
      */
     public function showEditUserPage(Request $request, array $attributes): Response
     {
-        $user = $this->userService->findUserById($attributes["id"]);
+        $user = $this->userRepository->find($attributes["id"]);
 
         return $this->renderer->renderView(
             "admin-user-details.phtml",
@@ -207,7 +212,7 @@ class UserController extends AbstractController
      */
     public function delete(Request $request, array $attributes): Response
     {
-        $this->userService->delete($attributes["id"]);
+        $this->userRepository->deleteById($attributes["id"]);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/users"]);
     }

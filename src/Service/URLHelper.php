@@ -7,20 +7,20 @@ namespace Quiz\Service;
 class URLHelper
 {
     /**
-     * @param ParameterBag $parameterBag
+     * @param AbstractParameterBag $parameterBag
      * @return string
      */
-    public function buildURLQuery(ParameterBag $parameterBag): string
+    public function buildURLQuery(AbstractParameterBag $parameterBag): string
     {
         if($parameterBag->count() === 0) {
-           return "";
+            return "";
         }
 
-        $url = "&";
+        $url = "";
         $parameterBag = $parameterBag->getParameters();
         foreach ($parameterBag as $parameter) {
             $url = sprintf(
-                "%s=%s:%s&",
+                "&%s=%s:%s&",
                 $parameter->getOperation(),
                 $parameter->getField(),
                 $parameter->getValue()

@@ -184,7 +184,7 @@ $container->register(AnswerInstanceService::class, AnswerInstanceService::class)
 
 $container->register(UserController::class, UserController::class)
     ->addArgument($container->findDefinition(RendererInterface::class))
-    ->addArgument($container->findDefinition(UserService::class))
+    ->addArgument($container->findDefinition(UserRepository::class))
     ->addArgument($container->findDefinition(SessionInterface::class))
     ->addArgument($container->findDefinition(UserFactory::class))
     ->addArgument($container->findDefinition(UserValidator::class))
