@@ -60,10 +60,10 @@
                 <form class="form-inline" action="/dashboard/questions">
                     <div class="form-group">
                         <label for="roleSearch"></label>
-                        <select name="type" class="form-control" id="roleSearch">
+                        <select name="filter" class="form-control" id="roleSearch">
                             <option value="">no filter</option>
                             <?php foreach ($types as $type): ?>
-                                <option value="<?php echo $type ?>"><?php echo $type ?></option>
+                                <option value="<?php echo "type:$type" ?>"><?php echo $type ?></option>
                             <?php endforeach;?>
                         </select>
                     </div>

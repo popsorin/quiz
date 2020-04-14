@@ -10,10 +10,10 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Entity\QuestionTemplate;
 use Quiz\Factory\QuestionTemplateFactory;
+use Quiz\Persistency\Repositories\QuestionTemplateRepository;
 use Quiz\Service\Paginator;
-use Quiz\Service\ParameterBag;
-use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizTemplateService;
+use Quiz\Service\RequestParameterBag;
 use Quiz\Service\URLHelper;
 use ReflectionException;
 
@@ -37,9 +37,9 @@ class QuestionTemplateController extends AbstractController
     private $session;
 
     /**
-     * @var QuestionTemplateService
+     * @var QuestionTemplateRepository
      */
-    private $questionTemplateService;
+    private $questionTemplateRepository;
 
     /**
      * @var QuestionTemplateFactory
@@ -54,7 +54,7 @@ class QuestionTemplateController extends AbstractController
     /**
      * QuestionTemplateController constructor.
      * @param RendererInterface $renderer
-     * @param QuestionTemplateService $questionTemplateService
+     * @param QuestionTemplateRepository $questionTemplateRepository
      * @param SessionInterface $session
      * @param QuizTemplateService $quizTemplateService
      * @param QuestionTemplateFactory $questionTemplateFactory
@@ -62,7 +62,7 @@ class QuestionTemplateController extends AbstractController
      */
     public function __construct(
         RendererInterface $renderer,
-        QuestionTemplateService $questionTemplateService,
+        QuestionTemplateRepository $questionTemplateRepository,
         SessionInterface $session,
         QuizTemplateService $quizTemplateService,
         QuestionTemplateFactory $questionTemplateFactory,
@@ -71,7 +71,7 @@ class QuestionTemplateController extends AbstractController
         parent::__construct($renderer);
         $this->quizTemplateService = $quizTemplateService;
         $this->session = $session;
-        $this->questionTemplateService = $questionTemplateService;
+        $this->questionTemplateRepository = $questionTemplateRepository;
         $this->questionTemplateFactory = $questionTemplateFactory;
         $this->urlHelper = $urlHelper;
     }
@@ -86,7 +86,7 @@ class QuestionTemplateController extends AbstractController
     public function add(Request $request, array $attributes): Response
     {
         $questionTemplate = $this->questionTemplateFactory->createFromRequest($request);
-        $this->questionTemplateService->add($questionTemplate);
+        $this->questionTemplateRepository->insertOnDuplicateKeyUpdate($questionTemplate);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/questions"]);
     }
@@ -101,7 +101,7 @@ class QuestionTemplateController extends AbstractController
     {
         $questionTemplate = $this->questionTemplateFactory->createFromRequest($request);
         $questionTemplate->setId($attributes["id"]);
-        $this->questionTemplateService->update($questionTemplate);
+        $this->questionTemplateRepository->insertOnDuplicateKeyUpdate($questionTemplate);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/questions"]);
     }
@@ -113,7 +113,7 @@ class QuestionTemplateController extends AbstractController
      */
     public function delete(Request $request, array $attributes): Response
     {
-        $this->questionTemplateService->deleteById($attributes["id"]);
+        $this->questionTemplateRepository->deleteById($attributes["id"]);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/questions"]);
     }
@@ -125,16 +125,18 @@ class QuestionTemplateController extends AbstractController
      */
     public function getAll(Request $request, array $attributes): Response
     {
-        $parameterBag = new ParameterBag($request->getParameters());
+        $requestParameterBag = new RequestParameterBag($request->getParameters());
         $currentPage = $request->getParameter("page") ?? 1;
-        $numberOfUsers = $this->questionTemplateService->countQuestions($parameterBag->getParameters());
+        $filters = $requestParameterBag->getFilterParameters();
+        $numberOfUsers = $this->questionTemplateRepository->getCount($filters);
         $paginator = new Paginator($numberOfUsers, $currentPage);
-        $urlQuery = $this->urlHelper->buildURLQuery($parameterBag);
+        $urlQuery = $this->urlHelper->buildURLQuery($requestParameterBag);
 
-        $questionTemplates = $this->questionTemplateService->getAll(
-            $parameterBag->getParameters(),
-            $paginator->getResultsPerPage(),
-            $currentPage
+        $questionTemplates = $this->questionTemplateRepository->findBy(
+            array_merge($filters, $requestParameterBag->getSearchParameters()),
+            $requestParameterBag->getSortParameters(),
+            $paginator->getResultsPerPage() * ($currentPage - 1),
+            $paginator->getResultsPerPage()
         );
 
         return $this->renderer->renderView(
@@ -155,7 +157,7 @@ class QuestionTemplateController extends AbstractController
      */
     public function showEditQuestionPage(Request $request, array $attributes): Response
     {
-        $question = $this->questionTemplateService->getQuestionDetails($attributes["id"]);
+        $question = $this->questionTemplateRepository->find($attributes["id"]);
 
         return $this->renderer->renderView(
             "admin-question-details.phtml",
