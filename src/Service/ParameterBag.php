@@ -8,12 +8,10 @@ use Quiz\Service\Parameter;
 
 class ParameterBag
 {
-    const OPERATIONS = ["search", "sort", "filter"];
-
     /**
      * @var array
      */
-    private $parameters;
+    protected $parameters;
 
     /**
      * ParameterBag constructor.
@@ -21,29 +19,7 @@ class ParameterBag
      */
     public function __construct(array $parameters)
     {
-        $this->parameters = self::createFromRequestParameters($parameters);
-    }
-
-    /**
-     *
-     * Creates the parameter bag from the request
-     * This will be used for building the URL when the admin will search,sort or filter
-     *
-     * @param array $parameters
-     * @return array
-     */
-    private static function createFromRequestParameters(array $parameters): array
-    {
-        $results = [];
-        foreach (self::OPERATIONS as $operation) {
-            if($parameters[$operation] !== null && $parameters[$operation] !== "") {
-                $explode = explode(":", $parameters[$operation]);
-
-                $results[] = new Parameter($operation, $explode[0], $explode[1]);
-            }
-        }
-
-        return $results;
+        $this->parameters = $parameters;
     }
 
     /**
@@ -61,24 +37,6 @@ class ParameterBag
     public function getParameter(string $key): ?string
     {
       return ($this->parameters[$key]) ?? null;
-    }
-
-    /**
-     *
-     * Returns a array with the objects for filtering
-     *
-     * @return array
-     */
-    public function getFilterParameters(): array
-    {
-        $result = [];
-        foreach ($this->parameters as $parameter) {
-            if($parameter->getOperation() === "filter") {
-                $result[$parameter->getField()] = $parameter->getValue();
-            }
-        }
-
-        return $result;
     }
 
     /**
