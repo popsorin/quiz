@@ -19,12 +19,13 @@ class URLHelper
         $url = "&";
         $parameterBag = $parameterBag->getParameters();
         foreach ($parameterBag as $parameter) {
-            $operation = $parameter->getOperation();
-            $field = $parameter->getField();
-            $value = $parameter->getValue();
-            $url .=  "$operation=$field:$value&";
+            $url = sprintf(
+                "%s=%s:%s&",
+                $parameter->getOperation(),
+                $parameter->getField(),
+                $parameter->getValue()
+            );
         }
-
         $url = substr($url, 0, -1);
 
         return $url;

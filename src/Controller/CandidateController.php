@@ -70,7 +70,7 @@ class CandidateController extends AbstractController
     {
         $this->session->start();
         $user = $this->session->get("user");
-        if (!$user) {
+        if ($user !== null) {
 
             return self::createResponse($request, "301", "Location", ["/"]);
         }
