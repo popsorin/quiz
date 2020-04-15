@@ -128,8 +128,7 @@ class QuestionTemplateController extends AbstractController
         $requestParameterBag = new RequestParameterBag($request->getParameters());
         $currentPage = $request->getParameter("page") ?? 1;
         $filters = $requestParameterBag->getFilterParameters();
-        $numberOfUsers = $this->questionTemplateRepository->getCount($filters);
-        $paginator = new Paginator($numberOfUsers, $currentPage);
+        $paginator = new Paginator($this->questionTemplateRepository->getCount($filters), $currentPage);
         $urlQuery = $this->urlHelper->buildURLQuery($requestParameterBag);
 
         $questionTemplates = $this->questionTemplateRepository->findBy(
