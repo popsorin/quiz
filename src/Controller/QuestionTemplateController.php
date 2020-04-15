@@ -14,6 +14,7 @@ use Quiz\Service\Paginator;
 use Quiz\Service\ParameterBag;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizTemplateService;
+use Quiz\Service\RequestParameterBag;
 use Quiz\Service\URLHelper;
 use ReflectionException;
 
@@ -125,7 +126,7 @@ class QuestionTemplateController extends AbstractController
      */
     public function getAll(Request $request, array $attributes): Response
     {
-        $parameterBag = new ParameterBag($request->getParameters());
+        $parameterBag = new RequestParameterBag($request->getParameters());
         $currentPage = $request->getParameter("page") ?? 1;
         $numberOfUsers = $this->questionTemplateService->countQuestions($parameterBag->getParameters());
         $paginator = new Paginator($numberOfUsers, $currentPage);
