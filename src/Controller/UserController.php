@@ -147,7 +147,6 @@ class UserController extends AbstractController
         $currentPage = $request->getParameter("page") ?? 1;
         $numberOfUsers = $this->userRepository->getCount($requestParameterBag->getFilterParameters());
         $paginator = new Paginator($numberOfUsers, $currentPage);
-        $urlQuery = $this->urlHelper->buildURLQuery($requestParameterBag);
 
         $users = $this->userRepository->findBy(
             array_merge($requestParameterBag->getFilterParameters(), $requestParameterBag->getSearchParameters()),
@@ -163,7 +162,8 @@ class UserController extends AbstractController
                 "users" => $users,
                 "paginator" => $paginator,
                 "roles" => self::USER_ROLE_TYPES,
-                "urlQuery" => $urlQuery
+                "requestParameterBag" => $requestParameterBag,
+                "urlHelper" => $this->urlHelper
             ]
         );
     }

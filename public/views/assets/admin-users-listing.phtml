@@ -29,6 +29,7 @@
 
     <!--Custom css-->
     <link rel="stylesheet" href="css/custom-css.css">
+    <link rel="stylesheet" href="css/up-down-css.css">
 
     <title>Admin - Users listing</title>
 </head>
@@ -59,7 +60,9 @@
 
     <?php
     $page = $paginator->getCurrentPage();
-    $totalPages= $paginator->getTotalPages()
+    $totalPages= $paginator->getTotalPages();
+    $urlPaginatorQuery = $urlHelper->buildURLQuery($requestParameterBag, "");
+    $urlSortQuery = $urlHelper->buildURLQuery($requestParameterBag, "sort");
     ?>
     <!--Table actions block-->
     <div class="row">
@@ -70,7 +73,7 @@
                     <select name="filter" class="form-control" id="roleSearch">
                         <option value="">no filter</option>
                         <?php foreach ($roles as $role): ?>
-                        <option value="<?php echo "role:$role"?>"><?php echo $role ?></option>
+                        <option value="<?php echo sprintf("role:%s", $role) ?>"><?php echo $role ?></option>
                         <?php endforeach;?>
                     </select>
                 </div>
@@ -92,7 +95,10 @@
             <tr>
                 <!--Sorting arrow are displayed using the 'asc','dsc' classes-->
                 <th scope="col" class="sorting-header asc dsc">ID</th>
-                <th scope="col">Name</th>
+                <th scope="col">Name
+                    <a href="?<?php echo sprintf("%s", $urlSortQuery) ?>&sort=name:ASC">&uArr;</a>
+                    <a href="?<?php echo sprintf("%s", $urlSortQuery) ?>&sort=name:DESC">&dArr;</a>
+                </th>
                 <th scope="col">Email</th>
                 <th scope="col">Role</th>
                 <th scope="col">Actions</th>
@@ -120,13 +126,13 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <li class="page-item" <?php if($page === 1) echo "hidden"; ?>>
-                <a class="page-link" href="?page=<?php echo ($page < 2) ? $page . $urlQuery : $page-1 . $urlQuery ?>">Previous</a>
+                <a class="page-link" href="?page=<?php echo ($page < 2) ? sprintf("%s&%s", $page, $urlPaginatorQuery) : sprintf("%s&%s", $page-1, $urlPaginatorQuery) ?>">Previous</a>
             </li>
             <?php for ($i = 0; $i < $totalPages; $i++) : ?>
-            <li class="page-item"><a class="page-link" href="?page=<?php echo $i+1 . $urlQuery ?>"><?php echo $i+1 ?></a></li>
+            <li class="page-item"><a class="page-link" href="?page=<?php echo sprintf("%s&%s", $i+1 , $urlPaginatorQuery)  ?>"><?php echo $i+1 ?></a></li>
             <?php endfor;?>
             <li class="page-item" <?php if($page === $totalPages) echo "hidden"; ?>>
-                <a class="page-link" href="?page=<?php echo ($page < $totalPages) ? $page + 1 . $urlQuery : $page .  $urlQuery ?>">Next</a>
+                <a class="page-link" href="?page=<?php echo ($page < $totalPages) ? sprintf("%s&%s", $page + 1, $urlPaginatorQuery) : sprintf("%s&%s", $page, $urlPaginatorQuery) ?>">Next</a>
             </li>
         </ul>
     </nav>
