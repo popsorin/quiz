@@ -205,7 +205,7 @@ $container->register(LoginController::class, LoginController::class)
 
 $container->register(QuestionTemplateController::class, QuestionTemplateController::class)
     ->addArgument($container->findDefinition(RendererInterface::class))
-    ->addArgument($container->findDefinition(QuestionTemplateService::class))
+    ->addArgument($container->findDefinition(QuestionTemplateRepository::class))
     ->addArgument($container->findDefinition(SessionInterface::class))
     ->addArgument($container->findDefinition(QuizTemplateService::class))
     ->addArgument($container->findDefinition(QuestionTemplateFactory::class))
