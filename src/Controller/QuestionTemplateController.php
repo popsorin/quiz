@@ -27,11 +27,6 @@ class QuestionTemplateController extends AbstractController
     const QUESTION_TYPES = ["text", "code"];
 
     /**
-     * @var QuizTemplateService
-     */
-    private $quizTemplateService;
-
-    /**
      * @var SessionInterface
      */
     private $session;
@@ -56,7 +51,6 @@ class QuestionTemplateController extends AbstractController
      * @param RendererInterface $renderer
      * @param QuestionTemplateRepository $questionTemplateRepository
      * @param SessionInterface $session
-     * @param QuizTemplateService $quizTemplateService
      * @param QuestionTemplateFactory $questionTemplateFactory
      * @param URLHelper $urlHelper
      */
@@ -64,12 +58,10 @@ class QuestionTemplateController extends AbstractController
         RendererInterface $renderer,
         QuestionTemplateRepository $questionTemplateRepository,
         SessionInterface $session,
-        QuizTemplateService $quizTemplateService,
         QuestionTemplateFactory $questionTemplateFactory,
         URLHelper $urlHelper
     ) {
         parent::__construct($renderer);
-        $this->quizTemplateService = $quizTemplateService;
         $this->session = $session;
         $this->questionTemplateRepository = $questionTemplateRepository;
         $this->questionTemplateFactory = $questionTemplateFactory;
@@ -129,7 +121,7 @@ class QuestionTemplateController extends AbstractController
         $currentPage = $request->getParameter("page") ?? 1;
         $filters = $requestParameterBag->getFilterParameters();
         $paginator = new Paginator($this->questionTemplateRepository->getCount($filters), $currentPage);
-        $urlQuery = $this->urlHelper->buildURLQuery($requestParameterBag);
+        $urlQuery = $this->urlHelper->buildURLQuery($requestParameterBag, "");
 
         $questionTemplates = $this->questionTemplateRepository->findBy(
             array_merge($filters, $requestParameterBag->getSearchParameters()),

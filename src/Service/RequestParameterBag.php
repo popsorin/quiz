@@ -29,7 +29,7 @@ class RequestParameterBag extends ParameterBag
     {
         $results = [];
         foreach (self::OPERATIONS as $operation) {
-            if ($parameters[$operation] && $parameters[$operation] !== "") {
+            if (isset($parameters[$operation]) && $parameters[$operation] !== "") {
                 $explode = explode(":", $parameters[$operation]);
 
                 $results[] = new Parameter($operation, $explode[0], $explode[1]);
