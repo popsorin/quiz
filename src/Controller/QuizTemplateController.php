@@ -12,6 +12,7 @@ use Quiz\Factory\QuizTemplateFactory;
 use Quiz\Service\Paginator;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizTemplateService;
+use ReflectionException;
 
 class QuizTemplateController extends AbstractController
 {
@@ -88,6 +89,7 @@ class QuizTemplateController extends AbstractController
      * @param Request $request
      * @param array $attributes
      * @return Response
+     * @throws ReflectionException
      */
     public function update(Request $request, array $attributes): Response
     {
@@ -101,6 +103,7 @@ class QuizTemplateController extends AbstractController
             "description",
             "questions"
         );
+       $quizTemplate->setId($attributes["id"]);
        $this->quizTemplateService->update($quizTemplate, $questionsIds);
 
        return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
@@ -147,7 +150,7 @@ class QuizTemplateController extends AbstractController
      */
     public function showNewQuizPage(Request $request, array $attributes): Response
     {
-        $questions = $this->questionTemplateService->getAll(0, 0);
+        $questions = $this->questionTemplateService->getAll([],0, 0);
 
 
         return $this->renderer->renderView(
@@ -166,7 +169,7 @@ class QuizTemplateController extends AbstractController
         $id = $attributes['id'] ??  0;
         $quiz = $this->quizTemplateService->getQuizDetails($id);
         $thisQuizQuestions = $this->questionTemplateService->getAllQuestionIdsFromOneQuiz($id);
-        $questions = $this->questionTemplateService->getAll(0, 0);
+        $questions = $this->questionTemplateService->getAll([], 0, 0);
 
         return $this->renderer->renderView(
             "admin-quiz-details.phtml",

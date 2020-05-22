@@ -8,7 +8,7 @@ class QuizTemplate extends AbstractEntity
 {
     /**
      * @var int
-     * @MappedOn created_by
+     * @MappedOn createdBy
      */
     private $createdBy;
 

@@ -2,6 +2,7 @@
 
 namespace Quiz\Persistency\Repositories;
 
+use PDO;
 use ReallyOrm\Hydrator\HydratorInterface;
 use ReallyOrm\Repository\AbstractRepository;
 
@@ -9,13 +10,13 @@ class QuestionTemplateRepository extends AbstractRepository implements LinkedEnt
 {
     /**
      * QuestionTemplateRepository constructor.
-     * @param \PDO $pdo
+     * @param PDO $pdo
      * @param string $entityName
      * @param HydratorInterface $hydrator
      * @param string $tableName
      */
     public function __construct(
-        \PDO $pdo,
+        PDO $pdo,
         string $entityName,
         HydratorInterface $hydrator,
         string $tableName
@@ -33,7 +34,7 @@ class QuestionTemplateRepository extends AbstractRepository implements LinkedEnt
     public function insertIntoLinkTable(int $id, int $linkId): bool
     {
         $query = $this->pdo->prepare(
-            "INSERT INTO {$this->getLinkTableName()} (question_template_id, quiz_template_id) VALUES (?, ?)");
+            "INSERT INTO {$this->getLinkTableName()} (questionId, quizId) VALUES (?, ?)");
         $query->bindValue(1, $id);
         $query->bindValue(2, $linkId);
 
@@ -47,12 +48,12 @@ class QuestionTemplateRepository extends AbstractRepository implements LinkedEnt
     public function getQuestionIds(?int $id): array
     {
         $query = $this->pdo->prepare(
-            "SELECT (question_template_id) FROM {$this->getLinkTableName()} WHERE quiz_template_id = ?");
+            "SELECT (questionId) FROM {$this->getLinkTableName()} WHERE quizId = ?");
         $query->bindValue(1, $id);
         $query->execute();
         $result = [];
         while ($row = $query->fetch()) {
-            $result[] = $row['question_template_id'];
+            $result[] = $row['questionId'];
         }
 
         return $result;

@@ -16,7 +16,7 @@ class QuestionInstance extends AbstractEntity
 
     /**
      * @var int
-     * @MappedOn quiz_instance_id
+     * @MappedOn quizInstanceId
      */
     private $quizInstanceId;
 
@@ -28,7 +28,7 @@ class QuestionInstance extends AbstractEntity
 
     /**
      * @var int
-     * @MappedOn question_template_id
+     * @MappedOn questionTemplateId
      */
     private $questionTemplateId;
 

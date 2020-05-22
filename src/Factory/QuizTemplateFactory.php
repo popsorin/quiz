@@ -8,36 +8,30 @@ use Framework\Contracts\SessionInterface;
 use Framework\Http\Request;
 use Framework\Http\Session;
 use Quiz\Entity\QuizTemplate;
+use ReallyOrm\Entity\EntityInterface;
+use ReflectionException;
 
-class QuizTemplateFactory
+class QuizTemplateFactory extends AbstractFactory
 {
-    /**
-     * @param Request $request
-     * @param SessionInterface $session
-     * @param array $attributes
-     * @param string $nameKey
-     * @param string $descriptionKey
-     * @param string $questionNumberKey
-     * @return QuizTemplate
-     */
-    public function createFromRequest(
-        Request $request,
-        SessionInterface $session,
-        array $attributes,
-        string $nameKey,
-        string $descriptionKey,
-        string $questionNumberKey
-    ): QuizTemplate {
-        $session->start();
-        $parameters = $request->getParameters();
-        $name = (isset($parameters[$nameKey])) ? $parameters[$nameKey] : "";
-        $description = (isset($parameters[$descriptionKey])) ? $parameters[$descriptionKey] : "";
-        $nrQuestions = (isset($parameters[$questionNumberKey])) ? count($parameters[$questionNumberKey]) : 0;
-        $id = (isset($attributes["id"])) ? $attributes["id"] : 0;
-        $createdBy = ($session->get("id")) ? $session->get("id") : 0;
-        $quizTemplate = new QuizTemplate($createdBy, $name, $description, $nrQuestions);
-        $quizTemplate->setId($id);
 
-        return $quizTemplate;
+    /**
+     * It counts the number of questions that are received in the request
+     * @param Request $request
+     * @return EntityInterface
+     * @throws ReflectionException
+     */
+    public function createFromRequest(Request $request): EntityInterface
+    {
+        $entity = parent::createFromRequest($request);
+        $entity->setNrQuestions(count($request->getParameter("questions")));
+        return $entity;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityName(): string
+    {
+        return QuizTemplate::class;
     }
 }

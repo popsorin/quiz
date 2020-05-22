@@ -207,7 +207,6 @@ $container->register(QuestionTemplateController::class, QuestionTemplateControll
     ->addArgument($container->findDefinition(RendererInterface::class))
     ->addArgument($container->findDefinition(QuestionTemplateRepository::class))
     ->addArgument($container->findDefinition(SessionInterface::class))
-    ->addArgument($container->findDefinition(QuizTemplateService::class))
     ->addArgument($container->findDefinition(QuestionTemplateFactory::class))
     ->addArgument($container->findDefinition(URLHelper::class))
     ->addTag("controller");
@@ -241,7 +240,6 @@ $container->register(QuestionInstanceController::class, QuestionInstanceControll
     ->addArgument($container->findDefinition(RendererInterface::class))
     ->addArgument($container->findDefinition(SessionInterface::class))
     ->addArgument($container->findDefinition(QuestionInstanceService::class))
-    ->addArgument($container->findDefinition(QuestionTemplateService::class))
     ->addArgument($container->findDefinition(QuizInstanceService::class))
     ->addTag("controller");
 

@@ -33,7 +33,7 @@ class QuizTemplateRepository extends AbstractRepository
     public function insertIntoLinkTable(int $id, int $linkId): bool
     {
         $query = $this->pdo->prepare(
-            "INSERT INTO {$this->getLinkTableName()} (question_template_id, quiz_template_id) VALUES (?, ?)");
+            "INSERT INTO {$this->getLinkTableName()} (questionId, quizId) VALUES (?, ?)");
         $query->bindValue(1, $id);
         $query->bindValue(2, $linkId);
 
@@ -46,7 +46,7 @@ class QuizTemplateRepository extends AbstractRepository
      */
     public function deleteQuestionsFromLinkedTable(int $quizId): bool
     {
-        $query = $this->pdo->prepare("DELETE FROM " . $this->getLinkTableName() . " WHERE quiz_template_id = ?");
+        $query = $this->pdo->prepare("DELETE FROM " . $this->getLinkTableName() . " WHERE quizId = ?");
         $query->bindValue(1, $quizId);
 
         return $query->execute();
