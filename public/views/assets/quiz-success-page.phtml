@@ -28,17 +28,17 @@
 <body>
     <!--Header-->
     <div class="d-flex flex-column flex-md-row align-items-center p-3 mb-3 bg-light border-bottom shadow-sm">
-        <h5 class="my-0 mr-md-auto font-weight-normal">Project name</h5>
+        <h5 class="my-0 mr-md-auto font-weight-normal">Quiz</h5>
         <nav class="my-2 my-md-0 mr-md-3">
-            <span class="p-2 text-dark">Hello, Candidate name!</span>
+            <span class="p-2 text-dark">Hello!</span>
         </nav>
-        <a class="btn btn-danger" href="#">Logout</a>
+        <a class="btn btn-danger" href="/logout">Logout</a>
     </div>
 
     <!--Breadcrumbs-->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb px-3 py-0 mb-3">
-            <li class="breadcrumb-item" ><a href="#">Dashboard</a></li>
+            <li class="breadcrumb-item" ><a href="/homepage">Homepage</a></li>
             <li class="breadcrumb-item active" aria-current="page">Quiz success page</li>
         </ol>
     </nav>
@@ -47,7 +47,34 @@
         <!--Page title block-->
         <div class="text-center">
             <h1>Congrats!</h1>
-            <img src="img/giphy.gif" alt="">
+                <div class="form-group">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th scope="col">Question</th>
+                        <th scope="col">Answer</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php for($i = 0 ; $i < count($questions);$i++): ?>
+                    <tr>
+                        <td>
+                        <div class="card-header">
+                            <span>
+                        <?php echo $questions[$i]->getText() ?>
+                        </span>
+                        </div>
+                        </td>
+                        <td>
+                        <div class="card-body">
+                           <?php echo $answers[$i]->getText() ?>
+                        </div>
+                        </td>
+                    <?php endfor; ?>
+                    </tr>
+                    </tbody>
+                    </table>
+                </div>
         </div>
     </div>
 </body>

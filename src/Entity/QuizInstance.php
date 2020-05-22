@@ -1,16 +1,28 @@
 <?php
 
+
 namespace Quiz\Entity;
 
 use ReallyOrm\Entity\AbstractEntity;
 
-class QuizTemplate extends AbstractEntity
+
+class QuizInstance extends AbstractEntity
 {
     /**
      * @var int
-     * @MappedOn created_by
+     * @MappedOn quiz_template_id
      */
-    private $createdBy;
+    private $quizId;
+    /**
+     * @var int
+     * @MappedOn user_id
+     */
+    private $userId;
+    /**
+     * @var int
+     * @MappedOn score
+     */
+    private $score;
 
     /**
      * @var string
@@ -31,41 +43,83 @@ class QuizTemplate extends AbstractEntity
     private $nrQuestions;
 
     /**
-     * QuizTemplate constructor.
-     * @param int $createdBy
+     * QuizInstance constructor.
+     * @param int $quizId
+     * @param int $userId
+     * @param int $score
      * @param string $name
      * @param string $description
      * @param int $nrQuestions
      */
-    public function __construct(int $createdBy, string $name, string $description, int $nrQuestions)
+    public function __construct(int $quizId, int $userId, int $score, string $name, string $description, int $nrQuestions)
     {
-        $this->createdBy = $createdBy;
+        $this->quizId = $quizId;
+        $this->userId = $userId;
+        $this->score = $score;
         $this->name = $name;
         $this->description = $description;
         $this->nrQuestions = $nrQuestions;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getCreatedBy(): int
+    public function getQuizId(): int
     {
-        return $this->createdBy;
+        return $this->quizId;
     }
 
     /**
-     * @param int $createdBy
+     * @param int $quizId
      * @return self
      */
-    public function setCreatedBy(int $createdBy): self
+    public function setQuizId(int $quizId): self
     {
-        $this->createdBy = $createdBy;
+        $this->quizId = $quizId;
 
         return $this;
     }
 
     /**
-     * @return string
+     * @return int|null
+     */
+    public function getUserId(): int
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @param int $userId
+     * @return self
+     */
+    public function setUserId(int $userId): self
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getScore(): ?int
+    {
+        return $this->score;
+    }
+
+    /**
+     * @param int $score
+     * @return self
+     */
+    public function setScore(int $score): self
+    {
+        $this->score = $score;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
      */
     public function getName(): string
     {
@@ -84,9 +138,9 @@ class QuizTemplate extends AbstractEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -103,7 +157,7 @@ class QuizTemplate extends AbstractEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getNrQuestions(): int
     {
@@ -112,8 +166,7 @@ class QuizTemplate extends AbstractEntity
 
     /**
      * @param int $nrQuestions
-     * @return self|null
-
+     * @return self
      */
     public function setNrQuestions(int $nrQuestions): self
     {

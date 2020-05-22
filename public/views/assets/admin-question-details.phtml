@@ -22,55 +22,41 @@
     <!--Custom css-->
     <link rel="stylesheet" href="css/custom-css.css">
 
-    <title>Admin - Quiz details</title>
+    <title>Admin - Question details</title>
 </head>
 
 <body>
     <!--Header-->
     <div class="d-flex flex-column flex-md-row align-items-center p-3 mb-3 bg-light border-bottom shadow-sm">
-        <h5 class="my-0 mr-md-auto font-weight-normal">Project name</h5>
+        <h5 class="my-0 mr-md-auto font-weight-normal">Quiz</h5>
         <nav class="my-2 my-md-0 mr-md-3">
-            <span class="p-2 text-dark">Hello, Admin name!</span>
+            <span class="p-2 text-dark">Hello!</span>
         </nav>
-        <a class="btn btn-secondary" href="#">Logout</a>
+        <a class="btn btn-secondary" href="/logout">Logout</a>
     </div>
 
     <!--Breadcrumbs-->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb px-3 py-0 mb-3">
-            <li class="breadcrumb-item" ><a href="#">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Quiz details</li>
+            <li class="breadcrumb-item" ><a href="/dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Question details</li>
         </ol>
     </nav>
 
     <div class="container">
         <!--Page title block-->
         <div class="text-center">
-            <h1>New quiz / Edit quiz</h1>
+            <h1>New question / Edit question</h1>
         </div>
+        <!--Question details form-->
+        <form method="POST">
+            <div class="form-group">
+                <input type="text" name="text" value="<?php echo $question->getText() ?>" class="form-control" id="userName" placeholder="<?php echo $question->getText() ?>">
 
-        <!--Quiz details form-->
-        <form>
-            <div class="form-group">
-                <label for="quizName">Name</label>
-                <input type="text" class="form-control" id="quizName" placeholder="Quiz name">
             </div>
-            <div class="form-group">
-                <label for="quizDescription">Description</label>
-                <input type="text" class="form-control" id="quizDescription" placeholder="Quiz description">
-            </div>
-            <div class="form-group">
-                <label for="quizQuestions">Questions</label>
-                <select class="form-control" id="quizQuestions" multiple>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-            </div>
+
             <div class="text-center">
-                <button type="submit" class="btn btn-primary">Save quiz</button>
+                <button type="submit" class="btn btn-primary">Save question</button>
             </div>
         </form>
     </div>

@@ -7,28 +7,50 @@ namespace Quiz\Controller;
 use Exception;
 use Framework\Contracts\RendererInterface;
 use Framework\Contracts\SessionInterface;
+use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
-use Framework\Http\Session;
 use Quiz\Entity\User;
-use Quiz\Persistency\Repositories\UserRepository;
+use Quiz\Factory\UserFactory;
+use Quiz\Service\Exception\WrongPasswordException;
+use Quiz\Service\LoginService;
 use ReallyOrm\Repository\RepositoryInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
-class LoginController extends Controller
+class LoginController extends AbstractController
 {
+    /**
+     * @var SessionInterface
+     */
+    private $session;
+
+    /**
+     * @var LoginService
+     */
+    private $loginService;
+
+    /**
+     * @var UserFactory
+     */
+    private $userFactory;
+
     /**
      * LoginController constructor.
      * @param RendererInterface $renderer
-     * @param RepositoryManager $repository
+     * @param LoginService $service
      * @param SessionInterface $session
+     * @param UserFactory $userFactory
      */
     public function __construct(
         RendererInterface $renderer,
-        RepositoryManager $repository,
-        SessionInterface $session
+        LoginService $service,
+        SessionInterface $session,
+        UserFactory $userFactory
     ) {
-        parent::__construct($renderer, $repository, $session);
+        parent::__construct($renderer);
+        $this->loginService = $service;
+        $this->session = $session;
+        $this->userFactory = $userFactory;
     }
 
     /**
@@ -36,15 +58,21 @@ class LoginController extends Controller
      * @param array $attributes
      * @return Response
      */
-    public function displayLogin(Request $request, array $attributes)
+    public function displayLogin(Request $request, array $attributes): Response
     {
         $this->session->start();
-        if ($this->session->get("name") === null) {
+        $user = $this->session->get("user");
+        if (!$user) {
             return $this->renderer->renderView("login.html", $attributes);
         }
 
 
-        return self::createResponse($request, "301", "Location", ["dashboard"]);
+        if($this->session->get("role")=== "admin") {
+
+            return $this->createResponse($request, "301", "Location", ["/dashboard"]);
+        }
+
+        return $this->createResponse($request, "301", "Location", ["/homepage"]);
     }
 
     /**
@@ -53,31 +81,42 @@ class LoginController extends Controller
      * @return Response
      * @throws Exception
      */
-    public function login(Request $request, array $attributes)
+    public function login(Request $request, array $attributes): Response
     {
         $this->session->start();
-        $repository = $this->repository->getRepository(User::class);
-        $credentials = self::extractArray($request);
-        $entity = $repository->findOneBy([$credentials['name']]);
-        if(!password_verify($credentials["password"], $entity->getPassword())) {
-            //redirect back to the page
-            throw new Exception("Wrong password");
+        $user = $this->userFactory->createFromRequest($request, "name", "email", "password", "role");
+        try {
+
+            $entity = $this->loginService->login(["email" => $user->getEmail(), "password" => $user->getPassword()]);
         }
-        $this->session->set("name", $credentials['name']);
+        catch (WrongPasswordException $exception) {
+            return $this->createResponse($request, "301", "Location", ["/"]);
+        }
+
+        $this->session->set("user", $user);
+        
         if($entity->getRole() === "admin") {
 
-            return self::createResponse($request, "301", "Location", ["dashboard"]);
+            return $this->createResponse($request, "301", "Location", ["/dashboard"]);
         }
 
-        return self::createResponse($request, "301", "Location", ["homepage"]);
+        return $this->createResponse($request, "301", "Location", ["/homepage"]);
     }
 
-    public function logout(Request $request, array $attributes)
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
+    public function logout(Request $request, array $attributes): Response
     {
         $this->session->start();
-        if($this->session->get("name")){
+        $user = $this->session->get("user");
+        if($user){
             $this->session->destroy();
-            return self::createResponse($request, "301", "Location", ["/"]);
         }
+
+        return $this->createResponse($request, "301", "Location", ["/"]);
+
     }
 }

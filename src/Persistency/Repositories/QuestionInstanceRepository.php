@@ -6,22 +6,17 @@ use PDO;
 use ReallyOrm\Hydrator\HydratorInterface;
 use ReallyOrm\Repository\AbstractRepository;
 
-class UserRepository extends AbstractRepository
+class QuestionInstanceRepository extends AbstractRepository
 {
     /**
-     * change AbstractRepository in orm
-     * UserRepository constructor.
+     * QuestionInstanceRepository constructor.
      * @param PDO $pdo
      * @param string $entityName
      * @param HydratorInterface $hydrator
      * @param string $tableName
      */
-    public function __construct(
-        PDO $pdo,
-        string $entityName,
-        HydratorInterface $hydrator,
-        string $tableName
-    ) {
+    public function __construct(PDO $pdo, string $entityName, HydratorInterface $hydrator, string $tableName)
+    {
         parent::__construct($pdo, $entityName, $hydrator);
         $this->tableName = $tableName;
     }

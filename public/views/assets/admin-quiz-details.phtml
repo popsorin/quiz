@@ -22,46 +22,65 @@
     <!--Custom css-->
     <link rel="stylesheet" href="css/custom-css.css">
 
-    <title>Candidate - Quiz page</title>
+    <title>Admin - Quiz details</title>
 </head>
 
 <body>
     <!--Header-->
     <div class="d-flex flex-column flex-md-row align-items-center p-3 mb-3 bg-light border-bottom shadow-sm">
-        <h5 class="my-0 mr-md-auto font-weight-normal">Project name</h5>
+        <h5 class="my-0 mr-md-auto font-weight-normal">Quiz</h5>
         <nav class="my-2 my-md-0 mr-md-3">
-            <span class="p-2 text-dark">Hello, Candidate name!</span>
+            <span class="p-2 text-dark">Hello!</span>
         </nav>
-        <a class="btn btn-danger" href="#">Logout</a>
+        <a class="btn btn-secondary" href="/logout">Logout</a>
     </div>
 
     <!--Breadcrumbs-->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb px-3 py-0 mb-3">
-            <li class="breadcrumb-item" ><a href="#">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Quiz page</li>
+            <li class="breadcrumb-item" ><a href="/dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Quiz details</li>
         </ol>
     </nav>
 
     <div class="container">
         <!--Page title block-->
         <div class="text-center">
-            <h1>Quiz name</h1>
+            <h1>New quiz / Edit quiz</h1>
         </div>
 
-        <!--Quiz form-->
-        <div class="">
-            <p class="font-weight-bold">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ac efficitur dolor. Morbi sed dictum felis, ac pharetra nulla. Morbi sit amet sollicitudin tellus, maximus molestie tellus ?</p>
-        </div>
-        <form>
+        <!--Quiz details form-->
+        <?php $name = isset($quiz) ? $quiz->getName() : "";
+              $description = isset($quiz) ? $quiz->getDescription() : "" ?>
+        <form METHOD="POST">
             <div class="form-group">
-                <textarea class="form-control" id="questionResponse" placeholder="Question response"></textarea>
+                <label for="quizName">Name</label>
+                <input type="text" name="name" value="<?php echo $name ?>" class="form-control" id="userName" placeholder="<?php echo $name ?>">
+            </div>
+            <div class="form-group">
+
+            </div>
+            <div class="form-group">
+                <label for="quizDescription">Description</label>
+                <input type="text" name="description" value="<?php echo $description ?>" class="form-control" id="userName" placeholder="<?php echo $description ?>">
+            </div>
+            <div class="form-group">
+                <label for="quizQuestions">Questions</label>
+                <select class="form-control" id="quizQuestions" multiple name="questions[]">
+                    <?php foreach ($questions as $question): ?>
+                        <option value="<?php echo $question->getId() ?>" <?php echo (isset($thisQuizQuestions) && in_array($question->getId(), $thisQuizQuestions)) ? 'selected' : $question->getText() ?>><?php echo $question->getText() ?></option>
+                    <?php endforeach;?>
+                </select>
             </div>
             <div class="text-center">
-                <button type="submit" class="btn btn-primary">Next</button> /
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-primary">Save quiz</button>
+            </div>
+            <div>
+                <?php $errorMessage = (isset($errorMessage) && $errorMessage !== "") ? $errorMessage : "" ; echo $errorMessage ?>
             </div>
         </form>
     </div>
+
+
 </body>
 </html>

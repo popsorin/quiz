@@ -11,4 +11,5 @@ $container = require __DIR__.'/../config/services.php';
 $application = Application::create($container);
 $request = Request::createFromGlobals();
 $response = $application->handle($request);
+
 $response->send();

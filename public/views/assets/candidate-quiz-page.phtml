@@ -22,53 +22,40 @@
     <!--Custom css-->
     <link rel="stylesheet" href="css/custom-css.css">
 
-    <title>Admin - User details</title>
+    <title>Candidate - Quiz page</title>
 </head>
 
 <body>
     <!--Header-->
     <div class="d-flex flex-column flex-md-row align-items-center p-3 mb-3 bg-light border-bottom shadow-sm">
-        <h5 class="my-0 mr-md-auto font-weight-normal">Project name</h5>
+        <h5 class="my-0 mr-md-auto font-weight-normal">Quiz</h5>
         <nav class="my-2 my-md-0 mr-md-3">
-            <span class="p-2 text-dark">Hello, Admin name!</span>
+            <span class="p-2 text-dark">Hello!</span>
         </nav>
-        <a class="btn btn-danger" href="logout">Logout</a>
+        <a class="btn btn-danger" href="/logout">Logout</a>
     </div>
 
     <!--Breadcrumbs-->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb px-3 py-0 mb-3">
-            <li class="breadcrumb-item" ><a href="#">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">User details</li>
+            <li class="breadcrumb-item" ><a href="/homepage">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Quiz page</li>
         </ol>
     </nav>
 
     <div class="container">
         <!--Page title block-->
         <div class="text-center">
-            <h1>New user / Edit user</h1>
+            <h1>Quiz name</h1>
         </div>
 
-        <!--User details form-->
-        <form>
+        <!--Quiz form-->
+        <div class="">
+           <?php echo $question->getText()?>
+        </div>
+        <form method="POST">
             <div class="form-group">
-                <label for="userName">Name</label>
-                <input type="text" name="name" class="form-control" id="userName" placeholder="User name">
-            </div>
-            <div class="form-group">
-                <label for="userEmail">Email</label>
-                <input type="email" class="form-control" id="userEmail" placeholder="User email">
-            </div>
-            <div class="form-group">
-                <label for="userPassword">Password</label>
-                <input type="password" name="password" class="form-control" id="userPassword" placeholder="User password">
-            </div>
-            <div class="form-group">
-                <label for="userRole">Role</label>
-                <select class="form-control" id="userRole">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                </select>
+                <textarea class="form-control" name = "answer" id="questionResponse" placeholder="Question response"></textarea>
             </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">Save</button>
