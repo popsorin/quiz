@@ -149,4 +149,12 @@ class QuestionInstance extends AbstractEntity
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getEntityName(): string
+    {
+        return QuestionInstance::class;
+    }
 }

@@ -105,4 +105,12 @@ class User extends AbstractEntity
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getEntityName(): string
+    {
+        return User::class;
+    }
 }

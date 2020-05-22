@@ -66,4 +66,12 @@ class AnswerTextInstance extends AbstractEntity
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getEntityName(): string
+    {
+        return AnswerTextInstance::class;
+    }
 }

@@ -120,4 +120,12 @@ class AnswerChoiceInstance extends AbstractEntity
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getEntityName(): string
+    {
+        return AnswerChoiceInstance::class;
+    }
 }

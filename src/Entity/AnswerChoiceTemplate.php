@@ -93,4 +93,12 @@ class AnswerChoiceTemplate extends AbstractEntity
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getEntityName(): string
+    {
+        return AnswerChoiceTemplate::class;
+    }
 }

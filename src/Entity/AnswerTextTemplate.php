@@ -68,4 +68,12 @@ class AnswerTextTemplate extends AbstractEntity
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getEntityName(): string
+    {
+        return AnswerTextTemplate::class;
+    }
 }

@@ -174,4 +174,12 @@ class QuizInstance extends AbstractEntity
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getEntityName(): string
+    {
+        return QuizInstance::class;
+    }
 }
