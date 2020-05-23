@@ -50,13 +50,6 @@ return [
                 Router::CONFIG_KEY_ACTION => 'getAll',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
-        'user_controller_users_getAll' =>
-            [
-                Router::CONFIG_KEY_PATH => '/dashboard/users',
-                Router::CONFIG_KEY_CONTROLLER_NAME => 'User',
-                Router::CONFIG_KEY_ACTION => 'getAll',
-                Router::CONFIG_KEY_METHOD => 'GET'
-            ],
         'question_templates_controller_delete' =>
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/questions/delete/(?<id>\d+)',

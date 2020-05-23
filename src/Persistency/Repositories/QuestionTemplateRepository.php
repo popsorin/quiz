@@ -66,6 +66,6 @@ class QuestionTemplateRepository extends AbstractRepository implements LinkedEnt
      */
     public function getLinkTableName(): string
     {
-        return 'quiz_question_template';
+        return 'QuestionQuizTemplate';
     }
 }

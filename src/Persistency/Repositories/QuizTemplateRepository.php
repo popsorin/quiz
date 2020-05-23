@@ -59,6 +59,6 @@ class QuizTemplateRepository extends AbstractRepository
      */
     public function getLinkTableName(): string
     {
-        return 'quiz_question_template';
+        return 'QuestionQuizTemplate';
     }
 }

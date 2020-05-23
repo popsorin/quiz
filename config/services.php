@@ -86,35 +86,35 @@ $container->register(UserRepository::class, UserRepository::class)
     ->addArgument("%PDO%")
     ->addArgument(User::class)
     ->addArgument($container->findDefinition(HydratorInterface::class))
-    ->addArgument("user")
+    ->addArgument("User")
     ->addTag("repository");
 
 $container->register(QuestionTemplateRepository::class, QuestionTemplateRepository::class)
     ->addArgument("%PDO%")
     ->addArgument(QuestionTemplate::class)
     ->addArgument($container->findDefinition(HydratorInterface::class))
-    ->addArgument("question_template")
+    ->addArgument("QuestionTemplate")
     ->addTag("repository");
 
 $container->register(QuizTemplateRepository::class, QuizTemplateRepository::class)
     ->addArgument("%PDO%")
     ->addArgument(QuizTemplate::class)
     ->addArgument($container->findDefinition(HydratorInterface::class))
-    ->addArgument("quiz_template")
+    ->addArgument("QuizTemplate")
     ->addTag("repository");
 
 $container->register(QuizInstanceRepository::class, QuizInstanceRepository::class)
     ->addArgument("%PDO%")
     ->addArgument(QuizInstance::class)
     ->addArgument($container->findDefinition(HydratorInterface::class))
-    ->addArgument("quiz_instance")
+    ->addArgument("QuizInstance")
     ->addTag("repository");
 
 $container->register(QuestionInstanceRepository::class, QuestionInstanceRepository::class)
     ->addArgument("%PDO%")
     ->addArgument(QuestionInstance::class)
     ->addArgument($container->findDefinition(HydratorInterface::class))
-    ->addArgument("question_instance")
+    ->addArgument("QuestionInstance")
     ->addTag("repository");
 
 $container->register(AnswerTextTemplateRepository::class, AnswerTextTemplateRepository::class)
@@ -128,21 +128,21 @@ $container->register(AnswerChoiceTemplateRepository::class, AnswerChoiceTemplate
     ->addArgument("%PDO%")
     ->addArgument(AnswerChoiceTemplate::class)
     ->addArgument($container->findDefinition(HydratorInterface::class))
-    ->addArgument("answer_choice_template")
+    ->addArgument("AnswerChoiceTemplate")
     ->addTag("repository");
 
 $container->register(AnswerTextInstanceRepository::class, AnswerTextInstanceRepository::class)
     ->addArgument("%PDO%")
     ->addArgument(AnswerTextInstance::class)
     ->addArgument($container->findDefinition(HydratorInterface::class))
-    ->addArgument("answer_text_instance")
+    ->addArgument("AnswerTextInstance")
     ->addTag("repository");
 
 $container->register(AnswerChoiceInstanceRepository::class, AnswerChoiceInstanceRepository::class)
     ->addArgument("%PDO%")
     ->addArgument(AnswerChoiceInstance::class)
     ->addArgument($container->findDefinition(HydratorInterface::class))
-    ->addArgument("answer_choice_instance")
+    ->addArgument("AnswerChoiceInstance")
     ->addTag("repository");
 
 foreach ($container->findTaggedServiceIds("repository") as $id => $attributes) {

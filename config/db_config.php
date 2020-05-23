@@ -2,8 +2,8 @@
 
 return [
         'host' => 'localhost',
-        'db' => 'user',
-        'user' => 'root',
+        'db' => 'quiz',
+        'user' => 'sorinpop',
         'pass' => '123456789',
         'charset' => 'utf8mb4',
         "PDOOptions" => [
