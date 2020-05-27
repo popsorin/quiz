@@ -9,6 +9,7 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
+use Quiz\Persistency\Repositories\QuizInstanceRepository;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizInstanceService;
 use Quiz\Service\QuizTemplateService;
@@ -26,9 +27,9 @@ class ResultsController extends AbstractController
     private $session;
 
     /**
-     * @var QuizInstanceService
+     * @var QuizInstanceRepository
      */
-    private $quizInstanceService;
+    private $quizInstanceRepository;
 
     /**
      * @var UserService
@@ -38,20 +39,20 @@ class ResultsController extends AbstractController
     /**
      * ResultsController constructor.
      * @param SessionInterface $session
-     * @param QuizInstanceService $quizInstanceService
+     * @param QuizInstanceRepository $quizInstanceRepository
      * @param RendererInterface $renderer
      * @param UserService $userService
      */
     public function __construct(
         SessionInterface $session,
-        QuizInstanceService $quizInstanceService,
+        QuizInstanceRepository $quizInstanceRepository,
         RendererInterface $renderer,
         UserService $userService
     )
     {
         parent::__construct($renderer);
         $this->session = $session;
-        $this->quizInstanceService = $quizInstanceService;
+        $this->quizInstanceRepository = $quizInstanceRepository;
         $this->userService = $userService;
     }
 
@@ -62,7 +63,7 @@ class ResultsController extends AbstractController
      */
     public function getResults(Request $request, array $attributes): Response
     {
-        $quizInstances = $this->quizInstanceService->getALL();
+        $quizInstances = $this->quizInstanceRepository->findBy([], [],0,0);
         $users = $this->userService->getAllByQuizInstances($quizInstances);
 
         return $this->renderer->renderView(
@@ -81,7 +82,7 @@ class ResultsController extends AbstractController
      */
     public function getCandidateResult(Request $request, array $attributes): Response
     {
-        $quizInstances = $this->quizInstanceService->getALL();
+        $quizInstances = $this->quizInstanceRepository->getALL();
         $users = $this->userService->getAllByQuizInstances($quizInstances);
 
         return $this->renderer->renderView(
