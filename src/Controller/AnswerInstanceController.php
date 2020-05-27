@@ -16,6 +16,7 @@ use Quiz\Factory\AnswerTextInstanceFactory;
 use Quiz\Service\AnswerInstanceService;
 use Quiz\Service\QuestionInstanceService;
 use ReallyOrm\Entity\EntityInterface;
+use ReflectionException;
 
 class AnswerInstanceController extends AbstractController
 {
@@ -76,13 +77,14 @@ class AnswerInstanceController extends AbstractController
      * @param Request $request
      * @param array $attributes
      * @return Response
+     * @throws ReflectionException
      */
     public function add(Request $request, array $attributes): Response
     {
         $offset = (int)$attributes["currentQuestionInstanceNumber"];
         $quizInstanceId = (int)$attributes["quizInstanceId"];
 
-        $questionInstance = $this->questionInstanceService->getOne($quizInstanceId, $offset-1);
+        $questionInstance = $this->questionInstanceService->getOneQuestion($quizInstanceId, $offset-1);
         $answer = $this->makeAnswer($request, $questionInstance->getType());
         $answer->setQuestionInstanceId($questionInstance->getId());
         $this->answerInstanceService->add($answer, $questionInstance->getType());
@@ -95,13 +97,14 @@ class AnswerInstanceController extends AbstractController
      * @param Request $request
      * @param string $answerType
      * @return AnswerChoiceInstance|AnswerTextInstance
+     * @throws ReflectionException
      */
     private function makeAnswer(Request $request, string $answerType): EntityInterface
     {
         if($answerType === "text") {
-           return $this->answerTextInstanceFactory->createFromRequest($request, "questionInstanceId", "answer") ;
+           return $this->answerTextInstanceFactory->createFromRequest($request) ;
         }
 
-        return $this->answerChoiceInstanceFactory->createFromRequest($request,"answer", "questionInstance", "isSelected", "isCorrect");
+        return $this->answerChoiceInstanceFactory->createFromRequest($request);
     }
 }

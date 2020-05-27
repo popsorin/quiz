@@ -36,7 +36,7 @@ class CandidateController extends AbstractController
     /**
      * @var AnswerInstanceService
      */
-    private $answerInstanceServoce;
+    private $answerInstanceService;
 
     /**
      * CandidateController constructor.
@@ -58,7 +58,7 @@ class CandidateController extends AbstractController
         $this->session = $session;
         $this->quizTemplateService = $quizTemplateService;
         $this->questionInstanceService = $questionInstanceService;
-        $this->answerInstanceServoce = $answerInstanceService;
+        $this->answerInstanceService = $answerInstanceService;
     }
 
     /**
@@ -70,7 +70,7 @@ class CandidateController extends AbstractController
     {
         $this->session->start();
         $user = $this->session->get("user");
-        if ($user !== null) {
+        if ($user === null) {
 
             return self::createResponse($request, "301", "Location", ["/"]);
         }
@@ -98,7 +98,7 @@ class CandidateController extends AbstractController
     {
         $quizInstanceId = $attributes["quizInstanceId"];
         $questions = $this->questionInstanceService->getAllByQuizInstanceId($quizInstanceId,0,0);
-        $answers = $this->answerInstanceServoce->getAll($questions);
+        $answers = $this->answerInstanceService->getAll($questions);
       
         return $this->renderer->renderView(
             "quiz-success-page.phtml",

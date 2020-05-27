@@ -47,7 +47,7 @@ class QuestionInstanceService
      */
     public function getAllByQuizInstanceId(int $quizInstanceId, int $offset, int $size): array
     {
-       return $this->repositoryManager->getRepository(QuestionInstance::class)->findBy(["quiz_instance_id" => $quizInstanceId], [], $offset, $size);
+       return $this->repositoryManager->getRepository(QuestionInstance::class)->findBy(["quizInstanceId" => $quizInstanceId], [], $offset, $size);
     }
 
     /**
@@ -55,9 +55,9 @@ class QuestionInstanceService
      * @param int $offset
      * @return QuestionInstance
      */
-    public function getOne(int $quizInstanceId, int $offset): QuestionInstance
+    public function getOneQuestion(int $quizInstanceId, int $offset): QuestionInstance
     {
-        return $this->repositoryManager->getRepository(QuestionInstance::class)->findBy(["quiz_instance_id" => $quizInstanceId], [], $offset, 1)[0];
+        return $this->repositoryManager->getRepository(QuestionInstance::class)->findBy(["quizInstanceId" => $quizInstanceId], [], $offset, 1)[0];
     }
 
     /**

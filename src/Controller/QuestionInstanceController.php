@@ -63,11 +63,11 @@ class QuestionInstanceController extends AbstractController
         $quizInstanceId = $attributes["quizInstanceId"];
         $nrQuestions = $this->quizInstanceService->getNumberOfQuestions($quizInstanceId);
 
-        if($nrQuestions < $currentQuestionInstanceNumber) {
+        if($nrQuestions <= $currentQuestionInstanceNumber) {
             return $this->createResponse($request, 301,"Location", ["/homepage/success/$quizInstanceId"]);
         }
 
-        $questionInstance = $this->questionInstanceService->getOne($quizInstanceId, $currentQuestionInstanceNumber-1);
+        $questionInstance = $this->questionInstanceService->getOneQuestion($quizInstanceId, $currentQuestionInstanceNumber);
 
         return $this->renderer->renderView(
             self::LISTING_PAGE,

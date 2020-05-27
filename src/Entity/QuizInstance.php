@@ -10,12 +10,12 @@ class QuizInstance extends AbstractEntity
 {
     /**
      * @var int
-     * @MappedOn quiz_template_id
+     * @MappedOn quizTemplateId
      */
-    private $quizId;
+    private $quizTemplateId;
     /**
      * @var int
-     * @MappedOn user_id
+     * @MappedOn userId
      */
     private $userId;
     /**
@@ -53,7 +53,7 @@ class QuizInstance extends AbstractEntity
      */
     public function __construct(int $quizId, int $userId, int $score, string $name, string $description, int $nrQuestions)
     {
-        $this->quizId = $quizId;
+        $this->quizTemplateId = $quizId;
         $this->userId = $userId;
         $this->score = $score;
         $this->name = $name;
@@ -64,18 +64,18 @@ class QuizInstance extends AbstractEntity
     /**
      * @return int|null
      */
-    public function getQuizId(): int
+    public function getQuizTemplateId(): int
     {
-        return $this->quizId;
+        return $this->quizTemplateId;
     }
 
     /**
-     * @param int $quizId
+     * @param int $quizTemplateId
      * @return self
      */
-    public function setQuizId(int $quizId): self
+    public function setQuizTemplateId(int $quizTemplateId): self
     {
-        $this->quizId = $quizId;
+        $this->quizTemplateId = $quizTemplateId;
 
         return $this;
     }

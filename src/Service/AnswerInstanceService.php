@@ -47,7 +47,7 @@ class AnswerInstanceService
         $answers = [];
         foreach ($questions as $question) {
             $repository = $this->getRepository($question->getType());
-            $answer = $repository->findOneBy(["question_instance_id" => $question->getId()]);
+            $answer = $repository->findOneBy(["questionInstanceId" => $question->getId()]);
             $answers[] = $answer;
         }
 

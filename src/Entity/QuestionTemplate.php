@@ -44,11 +44,11 @@ class QuestionTemplate extends AbstractEntity
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getAnswer(): string
     {
-        return $this->answer;
+        return ($this->answer) ?? "";
     }
 
     /**
