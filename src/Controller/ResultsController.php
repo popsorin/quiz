@@ -9,7 +9,10 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
+use Quiz\Persistency\Repositories\AnswerTextInstanceRepository;
+use Quiz\Persistency\Repositories\QuestionInstanceRepository;
 use Quiz\Persistency\Repositories\QuizInstanceRepository;
+use Quiz\Service\AnswerInstanceService;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizInstanceService;
 use Quiz\Service\QuizTemplateService;
@@ -19,7 +22,7 @@ class ResultsController extends AbstractController
 {
     const RESULTS_PER_PAGE = 4;
     const RESULTS_LISTING_PAGE = "admin-results-listing.phtml";
-    const RESULT_PAGE = "admin-results-listing.phtml";
+    const RESULT_PAGE = "admin-results.phtml";
 
     /**
      * @var SessionInterface
@@ -32,6 +35,16 @@ class ResultsController extends AbstractController
     private $quizInstanceRepository;
 
     /**
+     * @var QuestionInstanceRepository
+     */
+    private $questionInstanceRepository;
+
+    /**
+     * @var AnswerInstanceService
+     */
+    private $answerInstanceService;
+
+    /**
      * @var UserService
      */
     private $userService;
@@ -40,12 +53,16 @@ class ResultsController extends AbstractController
      * ResultsController constructor.
      * @param SessionInterface $session
      * @param QuizInstanceRepository $quizInstanceRepository
+     * @param QuestionInstanceRepository $questionInstanceRepository
+     * @param AnswerInstanceService $answerInstanceService
      * @param RendererInterface $renderer
      * @param UserService $userService
      */
     public function __construct(
         SessionInterface $session,
         QuizInstanceRepository $quizInstanceRepository,
+        QuestionInstanceRepository $questionInstanceRepository,
+        AnswerInstanceService $answerInstanceService,
         RendererInterface $renderer,
         UserService $userService
     )
@@ -54,6 +71,8 @@ class ResultsController extends AbstractController
         $this->session = $session;
         $this->quizInstanceRepository = $quizInstanceRepository;
         $this->userService = $userService;
+        $this->questionInstanceRepository = $questionInstanceRepository;
+        $this->answerInstanceService = $answerInstanceService;
     }
 
     /**
@@ -82,14 +101,17 @@ class ResultsController extends AbstractController
      */
     public function getCandidateResult(Request $request, array $attributes): Response
     {
-        $quizInstances = $this->quizInstanceRepository->getALL();
-        $users = $this->userService->getAllByQuizInstances($quizInstances);
+        $quizInstance = $this->quizInstanceRepository->find($attributes["quizInstanceId"]);
+        $user = $this->userService->findUserById($quizInstance->getUserId());
+        $questionsInstances = $this->questionInstanceRepository->getQuestionsInstances($quizInstance->getId());
+        $answersInstances = $this->answerInstanceService->getAll($questionsInstances);
 
         return $this->renderer->renderView(
             self::RESULT_PAGE,
             [
-                "quizzes" => $quizInstances,
-                "users" => $users
+                "user" => $user,
+                "questionsInstances" => $questionsInstances,
+                "answersInstances" => $answersInstances
             ]
         );
     }

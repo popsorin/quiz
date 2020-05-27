@@ -84,7 +84,7 @@ class AnswerInstanceController extends AbstractController
         $offset = (int)$attributes["currentQuestionInstanceNumber"];
         $quizInstanceId = (int)$attributes["quizInstanceId"];
 
-        $questionInstance = $this->questionInstanceService->getOneQuestion($quizInstanceId, $offset-1);
+        $questionInstance = $this->questionInstanceService->getOneQuestion($quizInstanceId, $offset);
         $answer = $this->makeAnswer($request, $questionInstance->getType());
         $answer->setQuestionInstanceId($questionInstance->getId());
         $this->answerInstanceService->add($answer, $questionInstance->getType());

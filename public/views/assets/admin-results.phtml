@@ -52,48 +52,26 @@
         <!--User details block-->
         <div class="user-block mb-3">
             <span>User: </span>
-            <span class="h5">User name</span>
+            <span class="h5"><?php echo $user->getName() ?></span>
         </div>
 
         <!--Quiz block-->
+        <?php for ($i = 0;$i < count($questionsInstances); $i++): ?>
         <div class="card border-secondary mb-3">
             <div class="card-header">
                 <p class="mb-1">Question: </p>
                 <span>
-                    Some quick example text to build on the card title and make up the bulk of the card's content. Some quick example text to build on the card title and make up the bulk of the card's content.
+                    <?php echo $questionsInstances[$i]->getText() ?>
                 </span>
             </div>
             <div class="card-body">
                 <p class="mb-1">Answer: </p>
-                <span>Some quick example text to build on the card title and make up the bulk of the card's content.</span>
-            </div>
-        </div>
-
-        <div class="card border-secondary mb-3">
-            <div class="card-header">
-                <p class="mb-1">Question: </p>
                 <span>
-                    Some quick example text to build on the card title and make up the bulk of the card's content. Some quick example text to build on the card title and make up the bulk of the card's content.
+                    <?php echo $answersInstances[$i]->getText() ?>
                 </span>
             </div>
-            <div class="card-body">
-                <p class="mb-1">Answer: </p>
-                <span>Some quick example text to build on the card title and make up the bulk of the card's content.</span>
-            </div>
         </div>
-
-        <div class="card border-secondary mb-3">
-            <div class="card-header">
-                <p class="mb-1">Question: </p>
-                <span>
-                    Some quick example text to build on the card title and make up the bulk of the card's content. Some quick example text to build on the card title and make up the bulk of the card's content.
-                </span>
-            </div>
-            <div class="card-body">
-                <p class="mb-1">Answer: </p>
-                <span>Some quick example text to build on the card title and make up the bulk of the card's content.</span>
-            </div>
-        </div>
+        <?php endfor; ?>
 
         <!--Results form-->
         <form>

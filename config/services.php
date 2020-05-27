@@ -255,6 +255,8 @@ $container->register(AnswerInstanceController::class, AnswerInstanceController::
 $container->register(ResultsController::class, ResultsController::class)
     ->addArgument($container->findDefinition(SessionInterface::class))
     ->addArgument($container->findDefinition(QuizInstanceRepository::class))
+    ->addArgument($container->findDefinition(QuestionInstanceRepository::class))
+    ->addArgument($container->findDefinition(AnswerInstanceService::class))
     ->addArgument($container->findDefinition(RendererInterface::class))
     ->addArgument($container->findDefinition(UserService::class))
     ->addTag("controller");
