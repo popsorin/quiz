@@ -169,11 +169,18 @@ return [
                 Router::CONFIG_KEY_ACTION => 'save',
                 Router::CONFIG_KEY_METHOD => 'POST'
             ],
-        'quiz_instance_controller_getCandidateResults' =>
+        'results_controller_getResults' =>
             [
                 Router::CONFIG_KEY_PATH => '/dashboard/results',
                 Router::CONFIG_KEY_CONTROLLER_NAME => 'Results',
-                Router::CONFIG_KEY_ACTION => 'getCandidateResults',
+                Router::CONFIG_KEY_ACTION => 'getResults',
+                Router::CONFIG_KEY_METHOD => 'GET'
+            ],
+        'results_controller_getCandidateResults' =>
+            [
+                Router::CONFIG_KEY_PATH => '/dashboard/results/quiz/(?<quizInstanceId>\d+)',
+                Router::CONFIG_KEY_CONTROLLER_NAME => 'Results',
+                Router::CONFIG_KEY_ACTION => 'getCandidateResult',
                 Router::CONFIG_KEY_METHOD => 'GET'
             ],
         'login_controller_displayLogin' =>

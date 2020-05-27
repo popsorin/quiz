@@ -17,7 +17,8 @@ use Quiz\Service\UserService;
 class ResultsController extends AbstractController
 {
     const RESULTS_PER_PAGE = 4;
-    const LISTING_PAGE = "admin-results-listing.phtml";
+    const RESULTS_LISTING_PAGE = "admin-results-listing.phtml";
+    const RESULT_PAGE = "admin-results-listing.phtml";
 
     /**
      * @var SessionInterface
@@ -59,13 +60,32 @@ class ResultsController extends AbstractController
      * @param array $attributes
      * @return Response
      */
-    public function getCandidateResults(Request $request, array $attributes): Response
+    public function getResults(Request $request, array $attributes): Response
     {
         $quizInstances = $this->quizInstanceService->getALL();
         $users = $this->userService->getAllByQuizInstances($quizInstances);
 
         return $this->renderer->renderView(
-            self::LISTING_PAGE,
+            self::RESULTS_LISTING_PAGE,
+            [
+                "quizzes" => $quizInstances,
+                "users" => $users
+            ]
+        );
+    }
+
+    /**
+     * @param Request $request
+     * @param array $attributes
+     * @return Response
+     */
+    public function getCandidateResult(Request $request, array $attributes): Response
+    {
+        $quizInstances = $this->quizInstanceService->getALL();
+        $users = $this->userService->getAllByQuizInstances($quizInstances);
+
+        return $this->renderer->renderView(
+            self::RESULT_PAGE,
             [
                 "quizzes" => $quizInstances,
                 "users" => $users
