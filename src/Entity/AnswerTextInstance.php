@@ -8,7 +8,7 @@ class AnswerTextInstance extends AbstractEntity
 {
     /**
      * @var int
-     * @MappedOn question_instance_id
+     * @MappedOn questionInstanceId
      */
     private $questionInstanceId;
 

@@ -8,7 +8,7 @@ class AnswerChoiceTemplate extends AbstractEntity
 {
     /**
      * @var int
-     * @MappedOn question_template_id
+     * @MappedOn questionTemplateId
      */
     private $questionTemplateId;
 
@@ -20,7 +20,7 @@ class AnswerChoiceTemplate extends AbstractEntity
 
     /**
      * @var bool
-     * @MappedOn is_correct
+     * @MappedOn isCorrect
      */
     private $isCorrect;
 

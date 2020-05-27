@@ -9,7 +9,7 @@ class AnswerTextTemplate extends AbstractEntity
 
     /**
      * @var int
-     * @MappedOn question_template_id
+     * @MappedOn questionTemplateId
      *
      */
     private $questionTemplateId;

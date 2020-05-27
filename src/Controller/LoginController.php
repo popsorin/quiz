@@ -84,7 +84,7 @@ class LoginController extends AbstractController
     public function login(Request $request, array $attributes): Response
     {
         $this->session->start();
-        $user = $this->userFactory->createFromRequest($request, "name", "email", "password", "role");
+        $user = $this->userFactory->createFromRequest($request);
         try {
 
             $entity = $this->loginService->login(["email" => $user->getEmail(), "password" => $user->getPassword()]);
@@ -93,7 +93,7 @@ class LoginController extends AbstractController
             return $this->createResponse($request, "301", "Location", ["/"]);
         }
 
-        $this->session->set("user", $user);
+        $this->session->set("user", $entity);
         
         if($entity->getRole() === "admin") {
 

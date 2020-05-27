@@ -78,13 +78,14 @@ class QuizInstanceController extends AbstractController
      */
     public function startQuiz(Request $request, array $attributes): Response
     {
+        $this->session->start();
         $quizTemplateId = $attributes["quizTemplateId"];
         $quizTemplate = $this->quizTemplateService->getOneQuiz(["id" => $quizTemplateId]);
-        $quizInstance = $this->quizInstanceService->makeQuizInstance($quizTemplate, $quizTemplateId, $this->session->get("id"));
+        $quizInstance = $this->quizInstanceService->makeQuizInstance($quizTemplate, $quizTemplateId, $this->session->get("user")->getId());
         $this->quizInstanceService->add($quizInstance);
 
         $quizInstanceId = $quizInstance->getId();
-        $questionTemplates = $this->questionTemplateService->getQuestions($quizTemplateId);
+        $questionTemplates = $this->questionTemplateService->getQuestions((int)$quizTemplateId);
         foreach ($questionTemplates as $questionTemplate)
         {
             $questionInstance =$this->questionInstanceService->getQuestionInstance($questionTemplate, $quizInstanceId, $questionTemplate->getId());
