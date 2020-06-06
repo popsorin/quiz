@@ -17,6 +17,7 @@ use Quiz\Service\RequestParameterBag;
 use Quiz\Service\Paginator;
 use Quiz\Service\URLHelper;
 use Quiz\Service\Validator\EntityValidatorInterface;
+use ReflectionException;
 
 class UserController extends AbstractController
 {
@@ -80,10 +81,11 @@ class UserController extends AbstractController
      * @param Request $request
      * @param array $attributes
      * @return Response
+     * @throws ReflectionException
      */
     public function add(Request $request, array $attributes): Response
     {
-        $user = $this->userFactory->createFromRequest($request, "name", "email", "password", "role");
+        $user = $this->userFactory->createFromRequest($request);
 
         try {
             $this->userValidator->validate($user);
@@ -109,11 +111,12 @@ class UserController extends AbstractController
      * @param Request $request
      * @param array $attributes
      * @return Response
+     * @throws ReflectionException
      */
     public function update(Request $request, array $attributes): Response
     {
         $id = $attributes["id"];
-        $updatedUser = $this->userFactory->createFromRequest($request, "name", "email", "password","role");
+        $updatedUser = $this->userFactory->createFromRequest($request);
         $updatedUser->setId($id);
 
         try {
