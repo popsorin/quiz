@@ -72,14 +72,7 @@ class QuizTemplateController extends AbstractController
     public function add(Request $request, array $attributes): Response
     {
         $questionsIds = $request->getParameter("questions");
-        $quizTemplate = $this->quizTemplateFactory->createFromRequest(
-            $request,
-            $this->session,
-            $attributes,
-            "name",
-            "description",
-            "questions"
-        );
+        $quizTemplate = $this->quizTemplateFactory->createFromRequest($request);
         $this->quizTemplateService->add($quizTemplate, $questionsIds);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
@@ -93,16 +86,9 @@ class QuizTemplateController extends AbstractController
      */
     public function update(Request $request, array $attributes): Response
     {
-        $this->session->start();
-        $questionsIds = $request->getParameter("questions");
-        $quizTemplate = $this->quizTemplateFactory->createFromRequest(
-            $request,
-            $this->session,
-            $attributes,
-            "name",
-            "description",
-            "questions"
-        );
+       $this->session->start();
+       $questionsIds = $request->getParameter("questions");
+       $quizTemplate = $this->quizTemplateFactory->createFromRequest($request);
        $quizTemplate->setId($attributes["id"]);
        $this->quizTemplateService->update($quizTemplate, $questionsIds);
 
@@ -151,7 +137,6 @@ class QuizTemplateController extends AbstractController
     public function showNewQuizPage(Request $request, array $attributes): Response
     {
         $questions = $this->questionTemplateService->getAll([],0, 0);
-
 
         return $this->renderer->renderView(
             "admin-quiz-details.phtml", [
