@@ -9,7 +9,7 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Entity\User;
-use Quiz\Factory\UserFactory;
+use Quiz\Factory\UserFactoryRequest;
 use Quiz\Persistency\Repositories\UserRepository;
 use Quiz\Service\Exception\InvalidUserException;
 use Quiz\Service\ParameterBag;
@@ -38,7 +38,7 @@ class UserController extends AbstractController
     private $userRepository;
 
     /**
-     * @var UserFactory
+     * @var UserFactoryRequest
      */
     private $userFactory;
 
@@ -57,7 +57,7 @@ class UserController extends AbstractController
      * @param RendererInterface $renderer
      * @param UserRepository $service
      * @param SessionInterface $session
-     * @param UserFactory $factory
+     * @param UserFactoryRequest $factory
      * @param EntityValidatorInterface $validator
      * @param URLHelper $urlHelper
      */
@@ -65,7 +65,7 @@ class UserController extends AbstractController
         RendererInterface $renderer,
         UserRepository $service,
         SessionInterface $session,
-        UserFactory $factory,
+        UserFactoryRequest $factory,
         EntityValidatorInterface $validator,
         URLHelper $urlHelper
     ) {

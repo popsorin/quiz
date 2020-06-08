@@ -5,15 +5,15 @@ namespace Quiz\Factory;
 
 
 use Framework\Http\Request;
-use Quiz\Entity\AnswerTextInstance;
+use Quiz\Entity\User;
 
-class AnswerTextInstanceFactory extends AbstractFactory
+class UserFactoryRequest extends RequestAbstractFactory
 {
     /**
      * @return string
      */
     public function getEntityName(): string
     {
-        return AnswerTextInstance::class;
+        return User::class;
     }
 }

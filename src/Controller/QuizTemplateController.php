@@ -8,7 +8,7 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
-use Quiz\Factory\QuizTemplateFactory;
+use Quiz\Factory\QuizTemplateFactoryRequest;
 use Quiz\Service\Paginator;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizTemplateService;
@@ -36,7 +36,7 @@ class QuizTemplateController extends AbstractController
     private $quizTemplateService;
 
     /**
-     * @var QuizTemplateFactory
+     * @var QuizTemplateFactoryRequest
      */
     private $quizTemplateFactory;
 
@@ -46,14 +46,14 @@ class QuizTemplateController extends AbstractController
      * @param QuizTemplateService $service
      * @param SessionInterface $session
      * @param QuestionTemplateService $questionTemplateService
-     * @param QuizTemplateFactory $quizTemplateFactory
+     * @param QuizTemplateFactoryRequest $quizTemplateFactory
      */
     public function __construct(
         RendererInterface $renderer,
         QuizTemplateService $service,
         SessionInterface $session,
         QuestionTemplateService $questionTemplateService,
-        QuizTemplateFactory $quizTemplateFactory
+        QuizTemplateFactoryRequest $quizTemplateFactory
     )
     {
         parent::__construct($renderer);

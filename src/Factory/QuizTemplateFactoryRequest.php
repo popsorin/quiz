@@ -11,7 +11,7 @@ use Quiz\Entity\QuizTemplate;
 use ReallyOrm\Entity\EntityInterface;
 use ReflectionException;
 
-class QuizTemplateFactory extends AbstractFactory
+class QuizTemplateFactoryRequest extends RequestAbstractFactory
 {
 
     /**

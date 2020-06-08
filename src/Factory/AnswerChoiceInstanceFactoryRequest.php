@@ -1,19 +1,18 @@
 <?php
 
-
 namespace Quiz\Factory;
 
 
 use Framework\Http\Request;
-use Quiz\Entity\User;
+use Quiz\Entity\AnswerChoiceInstance;
 
-class UserFactory extends AbstractFactory
+class AnswerChoiceInstanceFactoryRequest extends RequestAbstractFactory
 {
     /**
      * @return string
      */
     public function getEntityName(): string
     {
-        return User::class;
+        return AnswerChoiceInstance::class;
     }
 }

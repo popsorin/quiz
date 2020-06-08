@@ -11,8 +11,8 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Entity\AnswerChoiceInstance;
 use Quiz\Entity\AnswerTextInstance;
-use Quiz\Factory\AnswerChoiceInstanceFactory;
-use Quiz\Factory\AnswerTextInstanceFactory;
+use Quiz\Factory\AnswerChoiceInstanceFactoryRequest;
+use Quiz\Factory\AnswerTextInstanceFactoryRequest;
 use Quiz\Service\AnswerInstanceService;
 use Quiz\Service\QuestionInstanceService;
 use ReallyOrm\Entity\EntityInterface;
@@ -38,12 +38,12 @@ class AnswerInstanceController extends AbstractController
     private $session;
 
     /**
-     * @var AnswerChoiceInstanceFactory
+     * @var AnswerChoiceInstanceFactoryRequest
      */
     private $answerChoiceInstanceFactory;
 
     /**
-     * @var AnswerTextInstanceFactory
+     * @var AnswerTextInstanceFactoryRequest
      */
     private $answerTextInstanceFactory;
 
@@ -53,16 +53,16 @@ class AnswerInstanceController extends AbstractController
      * @param AnswerInstanceService $answerInstanceService
      * @param QuestionInstanceService $questionInstanceService
      * @param SessionInterface $session
-     * @param AnswerChoiceInstanceFactory $answerChoiceInstanceFactory
-     * @param AnswerTextInstanceFactory $answerTextInstanceFactory
+     * @param AnswerChoiceInstanceFactoryRequest $answerChoiceInstanceFactory
+     * @param AnswerTextInstanceFactoryRequest $answerTextInstanceFactory
      */
     public function __construct(
         RendererInterface $renderer,
         AnswerInstanceService $answerInstanceService,
         QuestionInstanceService $questionInstanceService,
         SessionInterface $session,
-        AnswerChoiceInstanceFactory $answerChoiceInstanceFactory,
-        AnswerTextInstanceFactory $answerTextInstanceFactory
+        AnswerChoiceInstanceFactoryRequest $answerChoiceInstanceFactory,
+        AnswerTextInstanceFactoryRequest $answerTextInstanceFactory
     )
     {
         parent::__construct($renderer);

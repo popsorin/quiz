@@ -9,7 +9,7 @@ use ReallyOrm\Entity\EntityInterface;
 use ReflectionClass;
 use ReflectionException;
 
-abstract class AbstractFactory
+abstract class RequestAbstractFactory
 {
     /**
      * @param Request $request
