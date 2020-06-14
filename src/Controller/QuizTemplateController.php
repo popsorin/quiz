@@ -8,7 +8,7 @@ use Framework\Contracts\SessionInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
-use Quiz\Factory\QuizTemplateFactory;
+use Quiz\Factory\QuizTemplateFactoryRequest;
 use Quiz\Service\Paginator;
 use Quiz\Service\QuestionTemplateService;
 use Quiz\Service\QuizTemplateService;
@@ -36,7 +36,7 @@ class QuizTemplateController extends AbstractController
     private $quizTemplateService;
 
     /**
-     * @var QuizTemplateFactory
+     * @var QuizTemplateFactoryRequest
      */
     private $quizTemplateFactory;
 
@@ -46,14 +46,14 @@ class QuizTemplateController extends AbstractController
      * @param QuizTemplateService $service
      * @param SessionInterface $session
      * @param QuestionTemplateService $questionTemplateService
-     * @param QuizTemplateFactory $quizTemplateFactory
+     * @param QuizTemplateFactoryRequest $quizTemplateFactory
      */
     public function __construct(
         RendererInterface $renderer,
         QuizTemplateService $service,
         SessionInterface $session,
         QuestionTemplateService $questionTemplateService,
-        QuizTemplateFactory $quizTemplateFactory
+        QuizTemplateFactoryRequest $quizTemplateFactory
     )
     {
         parent::__construct($renderer);
@@ -72,14 +72,7 @@ class QuizTemplateController extends AbstractController
     public function add(Request $request, array $attributes): Response
     {
         $questionsIds = $request->getParameter("questions");
-        $quizTemplate = $this->quizTemplateFactory->createFromRequest(
-            $request,
-            $this->session,
-            $attributes,
-            "name",
-            "description",
-            "questions"
-        );
+        $quizTemplate = $this->quizTemplateFactory->createFromRequest($request);
         $this->quizTemplateService->add($quizTemplate, $questionsIds);
 
         return $this->createResponse($request, "301", "Location", ["/dashboard/quizzes"]);
@@ -93,16 +86,9 @@ class QuizTemplateController extends AbstractController
      */
     public function update(Request $request, array $attributes): Response
     {
-        $this->session->start();
-        $questionsIds = $request->getParameter("questions");
-        $quizTemplate = $this->quizTemplateFactory->createFromRequest(
-            $request,
-            $this->session,
-            $attributes,
-            "name",
-            "description",
-            "questions"
-        );
+       $this->session->start();
+       $questionsIds = $request->getParameter("questions");
+       $quizTemplate = $this->quizTemplateFactory->createFromRequest($request);
        $quizTemplate->setId($attributes["id"]);
        $this->quizTemplateService->update($quizTemplate, $questionsIds);
 
@@ -151,7 +137,6 @@ class QuizTemplateController extends AbstractController
     public function showNewQuizPage(Request $request, array $attributes): Response
     {
         $questions = $this->questionTemplateService->getAll([],0, 0);
-
 
         return $this->renderer->renderView(
             "admin-quiz-details.phtml", [

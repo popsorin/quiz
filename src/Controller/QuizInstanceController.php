@@ -92,7 +92,7 @@ class QuizInstanceController extends AbstractController
             $this->questionInstanceService->add($questionInstance);
         }
 
-        return $this->createResponse($request, 301, "Location", ["/homepage/quiz/$quizInstanceId/question/1"]);
+        return $this->createResponse($request, 301, "Location", ["/homepage/quiz/$quizInstanceId/question/0"]);
 
     }
 

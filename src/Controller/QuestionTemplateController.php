@@ -9,7 +9,7 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Entity\QuestionTemplate;
-use Quiz\Factory\QuestionTemplateFactory;
+use Quiz\Factory\QuestionTemplateFactoryRequest;
 use Quiz\Persistency\Repositories\QuestionTemplateRepository;
 use Quiz\Service\Paginator;
 use Quiz\Service\QuizTemplateService;
@@ -37,7 +37,7 @@ class QuestionTemplateController extends AbstractController
     private $questionTemplateRepository;
 
     /**
-     * @var QuestionTemplateFactory
+     * @var QuestionTemplateFactoryRequest
      */
     private $questionTemplateFactory;
 
@@ -51,14 +51,14 @@ class QuestionTemplateController extends AbstractController
      * @param RendererInterface $renderer
      * @param QuestionTemplateRepository $questionTemplateRepository
      * @param SessionInterface $session
-     * @param QuestionTemplateFactory $questionTemplateFactory
+     * @param QuestionTemplateFactoryRequest $questionTemplateFactory
      * @param URLHelper $urlHelper
      */
     public function __construct(
         RendererInterface $renderer,
         QuestionTemplateRepository $questionTemplateRepository,
         SessionInterface $session,
-        QuestionTemplateFactory $questionTemplateFactory,
+        QuestionTemplateFactoryRequest $questionTemplateFactory,
         URLHelper $urlHelper
     ) {
         parent::__construct($renderer);

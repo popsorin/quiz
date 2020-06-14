@@ -28,7 +28,7 @@
 <body>
     <!--Header-->
     <div class="d-flex flex-column flex-md-row align-items-center p-3 mb-3 bg-light border-bottom shadow-sm">
-        <h5 class="my-0 mr-md-auto font-weight-normal">Quiz</h5>
+        <h5 class="my-0 mr-md-auto font-weight-normal">IQuiz</h5>
         <nav class="my-2 my-md-0 mr-md-3">
             <span class="p-2 text-dark">Hello!</span>
         </nav>
@@ -51,8 +51,15 @@
         <!--Question details form-->
         <form method="POST">
             <div class="form-group">
+                Text
                 <input type="text" name="text" value="<?php echo $question->getText() ?>" class="form-control" id="userName" placeholder="<?php echo $question->getText() ?>">
-
+            </div>
+            <div class="form-group">
+                <label for="quizQuestions"></label>
+                <select class="form-control" id="quizQuestions" name="type">
+                    <option value="choice">Choice</option>
+                    <option value="text">Text</option>
+                </select>
             </div>
 
             <div class="text-center">

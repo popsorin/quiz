@@ -28,11 +28,11 @@ use Quiz\Entity\QuestionTemplate;
 use Quiz\Entity\QuizInstance;
 use Quiz\Entity\QuizTemplate;
 use Quiz\Entity\User;
-use Quiz\Factory\AnswerChoiceInstanceFactory;
-use Quiz\Factory\AnswerTextInstanceFactory;
-use Quiz\Factory\QuestionTemplateFactory;
-use Quiz\Factory\QuizTemplateFactory;
-use Quiz\Factory\UserFactory;
+use Quiz\Factory\AnswerChoiceInstanceFactoryRequest;
+use Quiz\Factory\AnswerTextInstanceFactoryRequest;
+use Quiz\Factory\QuestionTemplateFactoryRequest;
+use Quiz\Factory\QuizTemplateFactoryRequest;
+use Quiz\Factory\UserFactoryRequest;
 use Quiz\Persistency\Repositories\AnswerChoiceInstanceRepository;
 use Quiz\Persistency\Repositories\AnswerChoiceTemplateRepository;
 use Quiz\Persistency\Repositories\AnswerTextInstanceRepository;
@@ -154,14 +154,14 @@ foreach ($container->findTaggedServiceIds("repository") as $id => $attributes) {
 $container->findDefinition(HydratorInterface::class)
     ->addArgument($container->findDefinition(RepositoryManagerInterface::class));
 
-$container->register(UserFactory::class, UserFactory::class);
-$container->register(AnswerChoiceInstanceFactory::class, AnswerChoiceInstanceFactory::class);
-$container->register(AnswerTextInstanceFactory::class, AnswerTextInstanceFactory::class);
-$container->register(QuizTemplateFactory::class, QuizTemplateFactory::class);
+$container->register(UserFactoryRequest::class, UserFactoryRequest::class);
+$container->register(AnswerChoiceInstanceFactoryRequest::class, AnswerChoiceInstanceFactoryRequest::class);
+$container->register(AnswerTextInstanceFactoryRequest::class, AnswerTextInstanceFactoryRequest::class);
+$container->register(QuizTemplateFactoryRequest::class, QuizTemplateFactoryRequest::class);
 
 $container->register(UserValidator::class, UserValidator::class)
     ->addArgument($container->findDefinition(UserRepository::class));
-$container->register(QuestionTemplateFactory::class, QuestionTemplateFactory::class);
+$container->register(QuestionTemplateFactoryRequest::class, QuestionTemplateFactoryRequest::class);
 
 $container->register(URLHelper::class, URLHelper::class);
 
@@ -186,7 +186,7 @@ $container->register(UserController::class, UserController::class)
     ->addArgument($container->findDefinition(RendererInterface::class))
     ->addArgument($container->findDefinition(UserRepository::class))
     ->addArgument($container->findDefinition(SessionInterface::class))
-    ->addArgument($container->findDefinition(UserFactory::class))
+    ->addArgument($container->findDefinition(UserFactoryRequest::class))
     ->addArgument($container->findDefinition(UserValidator::class))
     ->addArgument($container->findDefinition(URLHelper::class))
     ->addTag("controller");
@@ -200,14 +200,14 @@ $container->register(LoginController::class, LoginController::class)
     ->addArgument($container->findDefinition(RendererInterface::class))
     ->addArgument($container->findDefinition(LoginService::class))
     ->addArgument($container->findDefinition(SessionInterface::class))
-    ->addArgument($container->findDefinition(UserFactory::class))
+    ->addArgument($container->findDefinition(UserFactoryRequest::class))
     ->addTag("controller");
 
 $container->register(QuestionTemplateController::class, QuestionTemplateController::class)
     ->addArgument($container->findDefinition(RendererInterface::class))
     ->addArgument($container->findDefinition(QuestionTemplateRepository::class))
     ->addArgument($container->findDefinition(SessionInterface::class))
-    ->addArgument($container->findDefinition(QuestionTemplateFactory::class))
+    ->addArgument($container->findDefinition(QuestionTemplateFactoryRequest::class))
     ->addArgument($container->findDefinition(URLHelper::class))
     ->addTag("controller");
 
@@ -216,7 +216,7 @@ $container->register(QuizTemplateController::class, QuizTemplateController::clas
     ->addArgument($container->findDefinition(QuizTemplateService::class))
     ->addArgument($container->findDefinition(SessionInterface::class))
     ->addArgument($container->findDefinition(QuestionTemplateService::class))
-    ->addArgument($container->findDefinition(QuizTemplateFactory::class))
+    ->addArgument($container->findDefinition(QuizTemplateFactoryRequest::class))
     ->addTag("controller");
 
 $container->register(CandidateController::class, CandidateController::class)
@@ -248,13 +248,15 @@ $container->register(AnswerInstanceController::class, AnswerInstanceController::
     ->addArgument($container->findDefinition(AnswerInstanceService::class))
     ->addArgument($container->findDefinition(QuestionInstanceService::class))
     ->addArgument($container->findDefinition(SessionInterface::class))
-    ->addArgument($container->findDefinition(AnswerChoiceInstanceFactory::class))
-    ->addArgument($container->findDefinition(AnswerTextInstanceFactory::class))
+    ->addArgument($container->findDefinition(AnswerChoiceInstanceFactoryRequest::class))
+    ->addArgument($container->findDefinition(AnswerTextInstanceFactoryRequest::class))
     ->addTag("controller");
 
 $container->register(ResultsController::class, ResultsController::class)
     ->addArgument($container->findDefinition(SessionInterface::class))
     ->addArgument($container->findDefinition(QuizInstanceRepository::class))
+    ->addArgument($container->findDefinition(QuestionInstanceRepository::class))
+    ->addArgument($container->findDefinition(AnswerInstanceService::class))
     ->addArgument($container->findDefinition(RendererInterface::class))
     ->addArgument($container->findDefinition(UserService::class))
     ->addTag("controller");

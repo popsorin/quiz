@@ -22,4 +22,22 @@ class AnswerTextInstanceRepository extends AbstractRepository
         parent::__construct($pdo, $entityName, $hydrator);
         $this->tableName = $tableName;
     }
+
+    /**
+     * @param int $questionInstanceId
+     * @return array
+     */
+    public function getAnswersTextInstances(int $questionInstanceId): array
+    {
+        $statement = $this->pdo->prepare("SELECT * FROM {$this->tableName} WHERE questionInstanceId = ?");
+        $statement->bindParam(1, $questionInstanceId);
+        $statement->execute();
+
+        $results = [];
+        while($row = $statement->fetch()) {
+            $results = array_merge($results, $row);
+        }
+
+        return $results;
+    }
 }

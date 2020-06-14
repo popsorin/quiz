@@ -3,6 +3,7 @@
 namespace Quiz\Persistency\Repositories;
 
 use PDO;
+use Quiz\Entity\QuestionInstance;
 use ReallyOrm\Hydrator\HydratorInterface;
 use ReallyOrm\Repository\AbstractRepository;
 
@@ -20,4 +21,24 @@ class QuestionInstanceRepository extends AbstractRepository
         parent::__construct($pdo, $entityName, $hydrator);
         $this->tableName = $tableName;
     }
+
+    /**
+     * @param int $quizId
+     * @return array
+     */
+    public function getQuestionsInstances(int $quizId): array
+    {
+        $statement = $this->pdo->prepare("SELECT * FROM {$this->tableName} WHERE quizInstanceId = ?");
+        $statement->bindParam(1, $quizId);
+        $statement->execute();
+
+        $results = [];
+        while($row = $statement->fetch()) {
+            $entity = $this->hydrator->hydrate(QuestionInstance::class, $row);
+            $results[] = $entity;
+        }
+
+        return $results;
+    }
+
 }

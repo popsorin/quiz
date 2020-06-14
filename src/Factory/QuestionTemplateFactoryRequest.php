@@ -9,7 +9,7 @@ use Quiz\Entity\QuestionTemplate;
 use ReflectionClass;
 use ReflectionException;
 
-class QuestionTemplateFactory extends AbstractFactory
+class QuestionTemplateFactoryRequest extends RequestAbstractFactory
 {
     /**
      * @return string

@@ -11,7 +11,7 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Entity\User;
-use Quiz\Factory\UserFactory;
+use Quiz\Factory\UserFactoryRequest;
 use Quiz\Service\Exception\WrongPasswordException;
 use Quiz\Service\LoginService;
 use ReallyOrm\Repository\RepositoryInterface;
@@ -30,7 +30,7 @@ class LoginController extends AbstractController
     private $loginService;
 
     /**
-     * @var UserFactory
+     * @var UserFactoryRequest
      */
     private $userFactory;
 
@@ -39,13 +39,13 @@ class LoginController extends AbstractController
      * @param RendererInterface $renderer
      * @param LoginService $service
      * @param SessionInterface $session
-     * @param UserFactory $userFactory
+     * @param UserFactoryRequest $userFactory
      */
     public function __construct(
         RendererInterface $renderer,
         LoginService $service,
         SessionInterface $session,
-        UserFactory $userFactory
+        UserFactoryRequest $userFactory
     ) {
         parent::__construct($renderer);
         $this->loginService = $service;

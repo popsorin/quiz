@@ -9,7 +9,7 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Quiz\Entity\User;
-use Quiz\Factory\UserFactory;
+use Quiz\Factory\UserFactoryRequest;
 use Quiz\Persistency\Repositories\UserRepository;
 use Quiz\Service\Exception\InvalidUserException;
 use Quiz\Service\ParameterBag;
@@ -17,6 +17,7 @@ use Quiz\Service\RequestParameterBag;
 use Quiz\Service\Paginator;
 use Quiz\Service\URLHelper;
 use Quiz\Service\Validator\EntityValidatorInterface;
+use ReflectionException;
 
 class UserController extends AbstractController
 {
@@ -37,7 +38,7 @@ class UserController extends AbstractController
     private $userRepository;
 
     /**
-     * @var UserFactory
+     * @var UserFactoryRequest
      */
     private $userFactory;
 
@@ -56,7 +57,7 @@ class UserController extends AbstractController
      * @param RendererInterface $renderer
      * @param UserRepository $service
      * @param SessionInterface $session
-     * @param UserFactory $factory
+     * @param UserFactoryRequest $factory
      * @param EntityValidatorInterface $validator
      * @param URLHelper $urlHelper
      */
@@ -64,7 +65,7 @@ class UserController extends AbstractController
         RendererInterface $renderer,
         UserRepository $service,
         SessionInterface $session,
-        UserFactory $factory,
+        UserFactoryRequest $factory,
         EntityValidatorInterface $validator,
         URLHelper $urlHelper
     ) {
@@ -80,10 +81,11 @@ class UserController extends AbstractController
      * @param Request $request
      * @param array $attributes
      * @return Response
+     * @throws ReflectionException
      */
     public function add(Request $request, array $attributes): Response
     {
-        $user = $this->userFactory->createFromRequest($request, "name", "email", "password", "role");
+        $user = $this->userFactory->createFromRequest($request);
 
         try {
             $this->userValidator->validate($user);
@@ -109,11 +111,12 @@ class UserController extends AbstractController
      * @param Request $request
      * @param array $attributes
      * @return Response
+     * @throws ReflectionException
      */
     public function update(Request $request, array $attributes): Response
     {
         $id = $attributes["id"];
-        $updatedUser = $this->userFactory->createFromRequest($request, "name", "email", "password","role");
+        $updatedUser = $this->userFactory->createFromRequest($request);
         $updatedUser->setId($id);
 
         try {
