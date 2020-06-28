@@ -63,7 +63,7 @@ class LoginController extends AbstractController
         $this->session->start();
         $user = $this->session->get("user");
         if (!$user) {
-            return $this->renderer->renderView("login.html", $attributes);
+            return $this->renderer->renderView("login.phtml", $attributes);
         }
 
 
@@ -90,7 +90,10 @@ class LoginController extends AbstractController
             $entity = $this->loginService->login(["email" => $user->getEmail(), "password" => $user->getPassword()]);
         }
         catch (WrongPasswordException $exception) {
-            return $this->createResponse($request, "301", "Location", ["/"]);
+            return $this->renderer->renderView("login.phtml",
+                [
+                    "message" => "Email or password are wrong"
+                ]);
         }
 
         $this->session->set("user", $entity);
